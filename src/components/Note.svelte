@@ -4,7 +4,7 @@
     export let note: Note;
 </script>
 
-<div class="card card-bordered bg-base-100 w-full my-2">
+<div class="card card-bordered bg-base-100 w-full my-2 shadow-sm hover:shadow-lg">
     <div class="card-body -my-6">
         <div class="card-title overflow-hidden">
             <div class="text-sm text-base-content truncate">

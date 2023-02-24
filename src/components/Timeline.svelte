@@ -28,9 +28,9 @@ import type { Channels } from "misskey-js/built/streaming.types"
 
 <div class="missli-timeline w-96 bg-base-200 relative rounded">
     <div
-        class="absolute w-full flex justify-center bg-base-100 border-b border-b-base-300 z-10"
+        class="absolute w-full flex justify-center z-10"
     >
-        <btn class="btn btn-xs btn-outline w-10/12 my-1">
+        <btn class="btn btn-xs btn-outline w-10/12 my-1 bg-base-100">
             {timelineName}
         </btn>
     </div>
