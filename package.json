@@ -12,6 +12,7 @@
     "story:dev": "histoire dev",
     "story:build": "histoire build",
     "story:preview": "histoire preview",
+    "deploy": "gh-pages -d dist",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
@@ -30,6 +31,7 @@
   },
   "dependencies": {
     "daisyui": "^2.51.0",
+    "gh-pages": "^5.0.0",
     "misskey-js": "^0.0.15"
   }
 }
