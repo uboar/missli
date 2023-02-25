@@ -12,12 +12,21 @@
             id: "@userid@test.instance"
         },
     };
+    let hostUrl = "localhost:3000"
 </script>
 
 <Hst.Story>
-    <Note {note} />
+    <Note {note} {hostUrl} />
 
     <svelte:fragment slot="controls">
+        <div class="form-control">
+            <span class="label-text">ホストURL</span>
+            <input
+                type="text"
+                class="input input-sm"
+                bind:value={hostUrl}
+            />
+        </div>
         <div class="form-control">
             <span class="label-text">ユーザーネーム</span>
             <input
@@ -27,11 +36,11 @@
             />
         </div>
         <div class="form-control">
-            <span class="label-text">ユーザーID</span>
+            <span class="label-text">リモートURL</span>
             <input
                 type="text"
                 class="input input-sm"
-                bind:value={note.user.id}
+                bind:value={note.user.host}
             />
         </div>
         <div class="form-control">

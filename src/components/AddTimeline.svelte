@@ -19,16 +19,20 @@
         console.log(users)
         timelines.update((val) => 
             [...val, {
+                id: new Date().valueOf(),
                 channel: channelTypes[selectedChannel].value as any,
-                notes: [],
                 userDataIndex: selectedUserNum,
-                channelName: `${channelTypes[selectedChannel].name} / ${users[selectedUserNum].hostUrl}`
+                channelName: `${channelTypes[selectedChannel].name} / ${users[selectedUserNum].hostUrl}`,
+                width: "24rem",
+                showNoteNum: 100,
+                bufferNoteNum: 1000,
+                color: "#808080"
             }]
         )
     }
 </script>
 
-<div class="flex w-96">
+<div class="flex w-96 p-4">
     <div class="card card-bordered border-accent-focus w-full h-fit">
         <div class="card-body">
             <div class="card-title">タイムラインを追加</div>
@@ -39,9 +43,9 @@
                         bind:value={selectedUserNum}
                         class="select select-bordered w-full"
                     >
-                        {#each users as user, index}
+                        {#each users as user, index (user.sessionId)}
                             <option value={index}
-                                >{user.user.name}@{user.hostUrl}</option
+                                >{user.userName}@{user.hostUrl}</option
                             >
                         {/each}
                     </select>

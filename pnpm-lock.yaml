@@ -9,6 +9,7 @@ specifiers:
   gh-pages: ^5.0.0
   histoire: ^0.15.8
   misskey-js: ^0.0.15
+  moment: ^2.29.4
   postcss: ^8.4.21
   svelte: ^3.55.1
   svelte-check: ^2.10.3
@@ -21,6 +22,7 @@ dependencies:
   daisyui: 2.51.0_gbtt6ss3tbiz4yjtvdr6fbrj44
   gh-pages: 5.0.0
   misskey-js: 0.0.15
+  moment: 2.29.4
 
 devDependencies:
   '@histoire/plugin-svelte': 0.15.8_zv5jpimbpampypsbzeytlgzkqy
@@ -1614,6 +1616,10 @@ packages:
       pkg-types: 1.0.2
       ufo: 1.1.0
     dev: true
+
+  /moment/2.29.4:
+    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
+    dev: false
 
   /mri/1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}

@@ -32,6 +32,7 @@
   "dependencies": {
     "daisyui": "^2.51.0",
     "gh-pages": "^5.0.0",
-    "misskey-js": "^0.0.15"
+    "misskey-js": "^0.0.15",
+    "moment": "^2.29.4"
   }
 }

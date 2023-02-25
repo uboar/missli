@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { userDataArray, selfUrl } from "../lib/userdata";
+    import { userDataArray, selfUrl, setCookie } from "../lib/userdata";
+    import type { userData } from "../lib/userdata";
     import { Stream } from "misskey-js";
 
     let hostUrl = "";
@@ -23,16 +24,21 @@
 
                 if (!sessionRes.ok) throw "認証に失敗しました";
 
-                userDataArray.update((val) => [
-                    ...val,
-                    {
-                        ...sessionRes,
-                        hostUrl: hostUrl,
-                        stream: new Stream(`https://${hostUrl}`, {
-                            token: sessionRes.token,
-                        }),
-                    },
-                ]);
+                const userdata: userData = {
+                    ok: sessionRes.ok,
+                    id: new Date().valueOf(),
+                    userName: sessionRes.user.username,
+                    sessionId: sessionId,
+                    token: sessionRes.token,
+                    hostUrl: hostUrl,
+                    stream: new Stream(`https://${hostUrl}`, {
+                        token: sessionRes.token,
+                    }),
+                };
+
+                setCookie(userdata);
+
+                userDataArray.update((val) => [...val, userdata]);
             }
         } catch (err) {
             console.error(err);
@@ -68,7 +74,7 @@
                 disabled={busy}
                 bind:value={hostUrl}
                 placeholder="インスタンスURL(例:misskey.io)"
-                tabindex=0
+                tabindex="0"
             />
             <input
                 type="submit"
@@ -77,8 +83,8 @@
                 } btn btn-primary btn-lg`}
                 on:click={openMiAuth}
                 on:keypress={openMiAuth}
-                value="{busy ? "セッションID取得中..." : "認証する"}"
-                />
+                value={busy ? "セッションID取得中..." : "認証する"}
+            />
         </div>
     </div>
 </div>
