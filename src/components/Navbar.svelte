@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Settings from "./Settings.svelte";
 </script>
 
 <div class="navbar bg-primary fixed z-50 shadow-lg">
@@ -43,13 +44,9 @@
 </div>
 
 <input type="checkbox" id="settings-modal" class="modal-toggle" />
-<label for="settings-modal" class="modal cursor-pointer">
+<div class="modal">
     <div class="modal-box w-11/12 max-w-5xl">
-        <h2 class="text-lg -mb-4">設定</h2>
-        <div class="divider" />
-        <div>
-            とりあえず何か書いとけ
-        </div>
+        <Settings />
         <div class="divider -mb-6" />
         <div class="modal-action -mb-4">
             <label for="settings-modal" class="btn btn-primary w-40"
@@ -57,4 +54,4 @@
             >
         </div>
     </div>
-</label>
+</div>

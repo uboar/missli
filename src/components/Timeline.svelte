@@ -45,10 +45,13 @@
     });
 
     const timelineDelete = () => {
+        if (streamChannel) streamChannel.dispose();
+        showOptions = false;
         timelines.update((val) => {
             const ret = val.filter((v) => v.id !== options.id);
             return ret;
         });
+        location.href = window.location.origin + window.location.pathname;
     };
 
     onDestroy(() => {
