@@ -170,7 +170,7 @@
                     >
                 {/if}
                 {#each showNotes as note (note.id)}
-                    <Note {note} hostUrl={user.hostUrl} />
+                    <Note {note} {user}/>
                 {/each}
                 {#if beginNotes > 0}
                     <button

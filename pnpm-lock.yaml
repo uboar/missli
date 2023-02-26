@@ -9,6 +9,7 @@ specifiers:
   daisyui: ^2.51.0
   gh-pages: ^5.0.0
   histoire: ^0.15.8
+  mfm-js: ^0.23.3
   misskey-js: ^0.0.15
   moment: ^2.29.4
   postcss: ^8.4.21
@@ -23,6 +24,7 @@ dependencies:
   '@vitejs/plugin-basic-ssl': 1.0.1_vite@4.1.4
   daisyui: 2.51.0_gbtt6ss3tbiz4yjtvdr6fbrj44
   gh-pages: 5.0.0
+  mfm-js: 0.23.3
   misskey-js: 0.0.15
   moment: 2.29.4
 
@@ -1549,6 +1551,12 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
+  /mfm-js/0.23.3:
+    resolution: {integrity: sha512-o8scYmbey6rMUmWAlT3k3ntt6khaCLdxlmHhAWV5wTTMj2OK1atQvZfRUq0SIVm1Jig08qlZg/ps71xUqrScNA==}
+    dependencies:
+      twemoji-parser: 14.0.0
+    dev: false
+
   /micromatch/4.0.5:
     resolution: {integrity: sha512-DMy+ERcEW2q8Z2Po+WNXuw3c5YaUSFjAO5GsJqfEl7UjvtIuFKO6ZrKvcItdy98dwFI2N1tg3zNIdKaQT+aNdA==}
     engines: {node: '>=8.6'}
@@ -2270,6 +2278,10 @@ packages:
   /tslib/2.5.0:
     resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
     dev: true
+
+  /twemoji-parser/14.0.0:
+    resolution: {integrity: sha512-9DUOTGLOWs0pFWnh1p6NF+C3CkQ96PWmEFwhOVmT3WbecRC+68AIqpsnJXygfkFcp4aXbOp8Dwbhh/HQgvoRxA==}
+    dev: false
 
   /type-check/0.3.2:
     resolution: {integrity: sha512-ZCmOJdvOWDBYJlzAoFkC+Q0+bUyEOS1ltgp1MGU03fqHG+dbi9tBFU2Rd9QKiDZFAYrhPh2JUf7rZRIuHRKtOg==}

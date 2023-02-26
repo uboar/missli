@@ -1,6 +1,6 @@
 
 import { writable } from "svelte/store";
-import { Stream } from "misskey-js";
+import { Stream, api } from "misskey-js";
 import type { Channels } from "misskey-js/built/streaming.types"
 import type { Note } from "misskey-js/built/entities";
 
@@ -12,6 +12,8 @@ export type userData = {
     userName: string
     hostUrl: string
     stream?: Stream
+    cli?: any
+    emojis?: any
 }
 
 export type timelineOptions = {
@@ -42,7 +44,7 @@ export const setCookie = (userData: userData) => {
     document.cookie = `${cookieBuff.id}=${encodeURIComponent(JSON.stringify(cookieBuff))}; Max-Age=50000000`
 }
 
-export const getCookie = (): Array<userData> => {
+export const getCookie = async (): Promise<Array<userData>> => {
     const cookies = document.cookie;
     
     if(cookies === '') return [];
@@ -56,13 +58,21 @@ export const getCookie = (): Array<userData> => {
         })
 
         for (let i = 0; i < users.length; i++) {
+            users[i].cli = new api.APIClient({
+                origin: `https://${users[i].hostUrl}`,
+                credential: users[i].token
+            })
             users[i].stream = new Stream(`https://${users[i].hostUrl}`, {
                 token: users[i].token,
             })
+
+            users[i].emojis = (await users[i].cli.request("emojis")).emojis;
         }
     } catch (err) {
         window.alert("クッキーの読み込みでエラーが発生しました。")
     }
+
+    console.log(users)
     return users
 }
 

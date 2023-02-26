@@ -2,12 +2,12 @@
     import type { Note } from "misskey-js/built/entities";
     import moment from "moment";
     import "moment/locale/ja";
-    export let hostUrl: string;
+    import type { userData } from "../lib/userdata";
+    import Mfm from "./Mfm.svelte";
+    export let user: userData;
     export let note: Note;
 
     moment.locale("ja");
-
-    const noteDate = moment(note.createdAt).fromNow();
 
     $: useridStr = `@${note.user.username}${
         note.user.host ? `@${note.user.host}` : ""
@@ -35,7 +35,7 @@
                 </div>
                 <a
                     class="text-xs overflow-hidden text-ellipsis link link-hover"
-                    href={`https://${hostUrl}/${useridStr}`}
+                    href={`https://${user.hostUrl}/${useridStr}`}
                     target="_blank"
                     rel="noreferrer"
                 >
@@ -44,7 +44,9 @@
             </div>
         </div>
         {#if note.text}
-            <p class="text-ellipsis overflow-hidden">{note.text}</p>
+            <p class="text-ellipsis overflow-hidden">
+                <Mfm text={note.text} hostUrl={user.hostUrl} localEmojis={user.emojis} remoteEmojis={note.emojis}></Mfm>
+            </p>
         {/if}
 
         <!-- メディア内容 -->
@@ -80,7 +82,7 @@
                         </div>
                         <a
                             class="text-xs overflow-hidden text-ellipsis link link-accent link-hover"
-                            href={`https://${hostUrl}/${renoteUseridStr}`}
+                            href={`https://${user.hostUrl}/${renoteUseridStr}`}
                             target="_blank"
                             rel="noreferrer"
                         >
@@ -90,7 +92,7 @@
                 </div>
                 {#if note.renote.text}
                     <p class="text-ellipsis overflow-hidden">
-                        {note.renote.text}
+                        <Mfm text={note.renote.text} hostUrl={user.hostUrl} localEmojis={user.emojis} remoteEmojis={note.renote.emojis}></Mfm>
                     </p>
                 {/if}
 
@@ -113,11 +115,11 @@
         {/if}
         <a
             class="text-right text-xs link"
-            href={`https://${hostUrl}/notes/${note.id}`}
+            href={`https://${user.hostUrl}/notes/${note.id}`}
             target="_blank"
             rel="noreferrer"
         >
-            {noteDate}
+            {moment(note.createdAt).fromNow()}
         </a>
     </div>
 </div>

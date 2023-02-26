@@ -9,8 +9,14 @@
   } from "./lib/userdata";
   import Timeline from "./components/Timeline.svelte";
   import AddTimeline from "./components/AddTimeline.svelte";
+  import { onMount } from "svelte";
 
-  $userDataArray = getCookie();
+  let loading = true;
+
+  onMount(async () => {
+    $userDataArray = await getCookie();
+    loading = false;
+  });
 
   const timelineLocal = JSON.parse(
     localStorage.getItem("timelines")
@@ -27,7 +33,9 @@
   <Navbar />
   <div class="flex flex-col h-full w-fit">
     <div class="pb-16" />
-    {#if $userDataArray.length === 0}
+    {#if loading}
+      <progress class="progress w-full my-8" />
+    {:else if $userDataArray.length === 0}
       <Auth />
     {:else}
       <div class="flex flex-row w-fit h-full">

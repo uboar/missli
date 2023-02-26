@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { userDataArray, selfUrl, setCookie } from "../lib/userdata";
     import type { userData } from "../lib/userdata";
-    import { Stream } from "misskey-js";
+    import { Stream, api } from "misskey-js";
 
     let hostUrl = "";
     let busy = false;
@@ -24,7 +24,7 @@
 
                 if (!sessionRes.ok) throw "認証に失敗しました";
 
-                const userdata: userData = {
+                let userdata: userData = {
                     ok: sessionRes.ok,
                     id: new Date().valueOf(),
                     userName: sessionRes.user.username,
@@ -34,12 +34,19 @@
                     stream: new Stream(`https://${hostUrl}`, {
                         token: sessionRes.token,
                     }),
+                    cli: new api.APIClient({
+                        origin: `https://${hostUrl}`,
+                        credential: sessionRes.token,
+                    })
                 };
+
+                userdata.emojis = (await userdata.cli.request("emojis")).emojis;
 
                 setCookie(userdata);
 
                 userDataArray.update((val) => [...val, userdata]);
-                location.href = window.location.origin + window.location.pathname
+                location.href =
+                    window.location.origin + window.location.pathname;
             }
         } catch (err) {
             console.error(err);

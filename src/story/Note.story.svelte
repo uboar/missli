@@ -6,11 +6,19 @@
     export let Hst: Hst;
 
     let note: NoteType = {
-        text: "わはは",
+        text: `<center>
+Hello $[tada everynyan! 🎉]
+
+I'm @ai, A bot of misskey!
+
+https://github.com/syuilo/ai
+</center>`,
         user: {
-            username: "ユーザー名",
-            id: "@userid@test.instance"
+            name: "username",
+            username: "userid",
+            avatarUrl: "https://nicomedkey.cc/proxy/avatar.webp?url=https%3A%2F%2Fs3.nicomedkey.cc%2Ffiles%2Fb8b4e7f5-590e-452f-947a-fdbf2e6bf9bb.png&avatar=1"
         },
+        "createdAt": "2023-02-25T12:19:16.667Z",
         files: [],
     };
     let hostUrl = "localhost:3000"
@@ -22,11 +30,7 @@
     <svelte:fragment slot="controls">
         <div class="form-control">
             <span class="label-text">ホストURL</span>
-            <input
-                type="text"
-                class="input input-sm"
-                bind:value={hostUrl}
-            />
+            <input type="text" class="input input-sm" bind:value={hostUrl} />
         </div>
         <div class="form-control">
             <span class="label-text">ユーザーネーム</span>
