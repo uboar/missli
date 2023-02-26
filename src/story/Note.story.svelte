@@ -3,6 +3,7 @@
     import "../tailwind.css";
     import type { Note as NoteType } from "misskey-js/built/entities";
     import Note from "../components/Note.svelte";
+    import type { userData } from "../lib/userdata";
     export let Hst: Hst;
 
     let note: NoteType = {
@@ -16,21 +17,29 @@ https://github.com/syuilo/ai
         user: {
             name: "username",
             username: "userid",
-            avatarUrl: "https://nicomedkey.cc/proxy/avatar.webp?url=https%3A%2F%2Fs3.nicomedkey.cc%2Ffiles%2Fb8b4e7f5-590e-452f-947a-fdbf2e6bf9bb.png&avatar=1"
+            avatarUrl:
+                "https://nicomedkey.cc/proxy/avatar.webp?url=https%3A%2F%2Fs3.nicomedkey.cc%2Ffiles%2Fb8b4e7f5-590e-452f-947a-fdbf2e6bf9bb.png&avatar=1",
         },
-        "createdAt": "2023-02-25T12:19:16.667Z",
+        createdAt: "2023-02-25T12:19:16.667Z",
         files: [],
     };
-    let hostUrl = "localhost:3000"
+    let user: userData = {
+        ok: true,
+        id: "aaaaaaaa",
+        sessionId: "aaaaaaaaaaa",
+        token: "aaaaaaaaa",
+        userName: "username",
+        hostUrl: "localhost:3000",
+    };
 </script>
 
 <Hst.Story>
-    <Note {note} {hostUrl} />
+    <Note {note} {user} />
 
     <svelte:fragment slot="controls">
         <div class="form-control">
             <span class="label-text">ホストURL</span>
-            <input type="text" class="input input-sm" bind:value={hostUrl} />
+            <input type="text" class="input input-sm" bind:value={user.hostUrl} />
         </div>
         <div class="form-control">
             <span class="label-text">ユーザーネーム</span>
