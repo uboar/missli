@@ -30,6 +30,7 @@
     "vite": "^4.1.0"
   },
   "dependencies": {
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
     "daisyui": "^2.51.0",
     "gh-pages": "^5.0.0",
     "misskey-js": "^0.0.15",

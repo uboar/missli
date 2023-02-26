@@ -69,6 +69,6 @@ export const getCookie = (): Array<userData> => {
 }
 
 export const selfUrl = () => {
-    if (import.meta.env.MODE === "development") return "http://localhost:5173"
+    if (import.meta.env.MODE === "development") return "https://localhost:5173"
     else return "https://uboar.github.io/missli"
 } 
