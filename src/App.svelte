@@ -16,8 +16,6 @@
     localStorage.getItem("timelines")
   ) as unknown as Array<timelineOptions>;
 
-  console.log(timelineLocal);
-
   if (timelineLocal) $timelines = timelineLocal;
 
   timelines.subscribe((val) => {
@@ -25,22 +23,24 @@
   });
 </script>
 
-<main>
+<main data-theme="cupcake" class="h-screen">
   <Navbar />
-  <div class="pb-16" />
-  {#if $userDataArray.length === 0}
-    <Auth />
-  {:else}
-    <div class="flex flex-row w-fit">
-      {#each $timelines as timeline}
-        <Timeline
-          user={$userDataArray[timeline.userDataIndex]}
-          bind:options={timeline}
-        />
-      {/each}
-      <div class="flex flex-col">
-        <AddTimeline />
+  <div class="flex flex-col h-full w-fit">
+    <div class="pb-16" />
+    {#if $userDataArray.length === 0}
+      <Auth />
+    {:else}
+      <div class="flex flex-row w-fit h-full">
+        {#each $timelines as timeline}
+          <Timeline
+            user={$userDataArray[timeline.userDataIndex]}
+            bind:options={timeline}
+          />
+        {/each}
+        <div class="flex flex-col">
+          <AddTimeline />
+        </div>
       </div>
-    </div>
-  {/if}
+    {/if}
+  </div>
 </main>

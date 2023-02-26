@@ -39,6 +39,7 @@
                 setCookie(userdata);
 
                 userDataArray.update((val) => [...val, userdata]);
+                location.href = window.location.origin + window.location.pathname
             }
         } catch (err) {
             console.error(err);

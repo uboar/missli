@@ -45,7 +45,7 @@
 </script>
 
 <div
-    class="missli-timeline bg-base-200 relative rounded"
+    class="h-full bg-base-200 relative rounded"
     style="width:{options.width}"
 >
     <div class="absolute w-full flex justify-center z-10">
@@ -82,22 +82,28 @@
                     <span class="label-text">タイムラインの大きさ</span>
                     <div class="btn-group">
                         <button
-                            class="btn w-1/3"
+                            class="btn btn-outline btn-sm w-1/4"
                             on:click={() => {
                                 options.width = "24rem";
                             }}>小</button
                         >
                         <button
-                            class="btn w-1/3"
+                            class="btn btn-outline btn-sm w-1/4"
                             on:click={() => {
                                 options.width = "36rem";
                             }}>中</button
                         >
                         <button
-                            class="btn w-1/3"
+                            class="btn btn-outline btn-sm w-1/4"
                             on:click={() => {
                                 options.width = "48rem";
                             }}>大</button
+                        >
+                        <button
+                            class="btn btn-outline btn-sm w-1/4"
+                            on:click={() => {
+                                options.width = "100vw";
+                            }}>画面幅</button
                         >
                     </div>
                     <div class="w-full flex justify-center absolute bottom-0">
@@ -129,9 +135,3 @@
         {/if}
     </div>
 </div>
-
-<style>
-    .missli-timeline {
-        height: 90dvh;
-    }
-</style>
