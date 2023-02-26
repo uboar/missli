@@ -73,7 +73,7 @@
 </script>
 
 <div class="flex justify-center m-4">
-    <div class="card bg-base-300 md:w-1/2 w-full">
+    <div class="card bg-base-300 w-full">
         <div class="card-body">
             <div class="card-title mb-2">ユーザーを追加する</div>
             <input

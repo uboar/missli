@@ -36,7 +36,7 @@
     {#if loading}
       <progress class="progress w-full my-8" />
     {:else if $userDataArray.length === 0}
-      <Auth />
+      <div class="mt-4 text-2xl w-screen text-center">↗にある⚙（設定）からユーザーを追加してください！</div>
     {:else}
       <div class="flex flex-row w-fit h-full">
         {#each $timelines as timeline}
