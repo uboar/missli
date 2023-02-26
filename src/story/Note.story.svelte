@@ -11,6 +11,7 @@
             username: "ユーザー名",
             id: "@userid@test.instance"
         },
+        files: [],
     };
     let hostUrl = "localhost:3000"
 </script>

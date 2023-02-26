@@ -22,16 +22,16 @@
         width: "24rem",
         showNoteNum: 100,
         bufferNoteNum: 1000,
-        initialNotes: []
-    }
+        initialNotes: [],
+    };
 
     let notes: Array<NoteType> = [];
 
     onMount(() => {
         options = {
             ...defaultOption,
-            ...options
-        }
+            ...options,
+        };
 
         if (options.initialNotes.length > 0) notes = options.initialNotes;
         if (dummy) return;
@@ -53,14 +53,11 @@
 
     onDestroy(() => {
         showOptions = false;
-        streamChannel.dispose();
+        if (streamChannel) streamChannel.dispose();
     });
 </script>
 
-<div
-    class="h-full bg-base-200 relative rounded"
-    style="width:{options.width}"
->
+<div class="h-full bg-base-200 relative rounded" style="width:{options.width}">
     <div class="absolute w-full flex justify-center z-10">
         <button
             class="btn btn-xs bg-base-200 btn-outline w-10/12 my-1"
@@ -119,12 +116,6 @@
                             }}>画面幅</button
                         >
                     </div>
-                    <div class="w-full flex justify-center absolute bottom-0">
-                        <button
-                            class="btn btn-error btn-outline w-10/12 mt-4 absolute bottom-0"
-                            on:click={timelineDelete}>タイムラインを削除</button
-                        >
-                    </div>
                     <span class="label-text">ノートの表示件数</span>
                     <input
                         type="number"
@@ -137,6 +128,22 @@
                         class="input input-sm"
                         bind:value={options.bufferNoteNum}
                     />
+
+                    <button
+                        class="btn btn-error btn-block mt-4"
+                        on:click={timelineDelete}>タイムラインを削除</button
+                    >
+                    <div class="w-full flex justify-center absolute bottom-0">
+                        <button
+                            class="btn btn-primary btn-outline w-10/12 my-4"
+                            on:click={() => {
+                                showOptions = !showOptions;
+                            }}
+                            on:keypress={() => {
+                                showOptions = !showOptions;
+                            }}>閉じる</button
+                        >
+                    </div>
                 </div>
             </div>
         {:else}

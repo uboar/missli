@@ -4,5 +4,8 @@ import { HstSvelte } from '@histoire/plugin-svelte'
 export default defineConfig({
   plugins: [
     HstSvelte(),
-  ]
+  ],
+  viteNodeInlineDeps: [
+    /moment/,
+  ],
 })

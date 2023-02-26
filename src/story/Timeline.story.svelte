@@ -22,17 +22,19 @@
     };
 
     let user: userData = {
-    ok: true,
-    id: new Date().valueOf(),
-    sessionId: "xxxxxxxx",
-    token: "xxxxxxxxx",
-    userName: "aaaaa",
-    hostUrl: "localhost:3000"
-    }
+        ok: true,
+        id: new Date().valueOf(),
+        sessionId: "xxxxxxxx",
+        token: "xxxxxxxxx",
+        userName: "aaaaa",
+        hostUrl: "localhost:3000",
+    };
 </script>
 
 <Hst.Story>
-    <Timeline dummy {options} {user} />
+    <div class="flex h-screen">
+        <Timeline dummy {options} {user} />
+    </div>
 
     <svelte:fragment slot="controls">
         <div class="form-control">
