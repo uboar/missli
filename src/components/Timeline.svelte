@@ -26,6 +26,10 @@
     };
 
     let notes: Array<NoteType> = [];
+    let beginNotes = 0;
+    let scrollPos: HTMLElement
+
+    $: showNotes = notes.slice(beginNotes, options.showNoteNum + beginNotes);
 
     onMount(() => {
         options = {
@@ -40,7 +44,7 @@
         if (!options) return;
         streamChannel = user.stream.useChannel(options.channel);
         streamChannel.on("note", (payload: NoteType) => {
-            notes = [payload, ...notes];
+            notes = [payload, ...notes].slice(0, options.bufferNoteNum);
         });
     });
 
@@ -77,6 +81,7 @@
     </div>
     <div
         class="flex w-full timeline-body absolute pt-8 h-full overflow-y-scroll z-0 overflow-x-hidden"
+        bind:this={scrollPos}
     >
         {#if showOptions}
             <div class="relative w-full p-2">
@@ -151,9 +156,46 @@
             </div>
         {:else}
             <div class="relative w-full z-10">
-                {#each notes as note (note.id)}
+                {#if beginNotes > 0}
+                    <button
+                        class="btn btn-block btn-secondary my-2"
+                        on:click={() => {
+                            scrollPos.scrollTop = 0;
+                            beginNotes = 0;
+                        }}
+                        on:keypress={() => {
+                            scrollPos.scrollTop = 0;
+                            beginNotes = 0;
+                        }}>最初に戻る</button
+                    >
+                {/if}
+                {#each showNotes as note (note.id)}
                     <Note {note} hostUrl={user.hostUrl} />
                 {/each}
+                {#if beginNotes > 0}
+                    <button
+                        class="btn btn-block btn-secondary my-2"
+                        on:click={() => {
+                            scrollPos.scrollTop = 0;
+                            beginNotes = 0;
+                        }}
+                        on:keypress={() => {
+                            scrollPos.scrollTop = 0;
+                            beginNotes = 0;
+                        }}>最初に戻る</button
+                    >
+                {/if}
+                {#if notes.length > options.showNoteNum && notes.length - options.showNoteNum > beginNotes}
+                    <button
+                        class="btn btn-block btn-primary my-2"
+                        on:click={() => {
+                            beginNotes += options.showNoteNum / 2;
+                        }}
+                        on:keypress={() => {
+                            beginNotes += options.showNoteNum / 2;
+                        }}>もっと表示</button
+                    >
+                {/if}
             </div>
         {/if}
     </div>

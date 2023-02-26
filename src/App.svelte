@@ -23,7 +23,7 @@
   });
 </script>
 
-<main data-theme="cupcake" class="h-screen">
+<main data-theme="light" class="h-screen">
   <Navbar />
   <div class="flex flex-col h-full w-fit">
     <div class="pb-16" />
@@ -37,7 +37,7 @@
             bind:options={timeline}
           />
         {/each}
-        <div class="flex flex-col">
+        <div class="flex flex-col bg-base-100">
           <AddTimeline />
         </div>
       </div>
