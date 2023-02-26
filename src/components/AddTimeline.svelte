@@ -16,17 +16,12 @@
     ];
 
     const addTimeline = () => {
-        console.log(users)
         timelines.update((val) => 
             [...val, {
                 id: new Date().valueOf(),
                 channel: channelTypes[selectedChannel].value as any,
                 userDataIndex: selectedUserNum,
                 channelName: `${channelTypes[selectedChannel].name} / ${users[selectedUserNum].hostUrl}`,
-                width: "24rem",
-                showNoteNum: 100,
-                bufferNoteNum: 1000,
-                color: "#808080"
             }]
         )
     }

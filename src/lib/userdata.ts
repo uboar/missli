@@ -16,13 +16,13 @@ export type userData = {
 
 export type timelineOptions = {
     id: number,
-    userDataIndex: number
-    channel: keyof Channels
-    channelName: string
-    color: string
-    width: string
-    showNoteNum: number
-    bufferNoteNum: number
+    userDataIndex?: number
+    channel?: keyof Channels
+    channelName?: string
+    color?: string
+    width?: string
+    showNoteNum?: number
+    bufferNoteNum?: number
     initialNotes?: Array<Note>
 }
 
@@ -44,8 +44,6 @@ export const setCookie = (userData: userData) => {
 
 export const getCookie = (): Array<userData> => {
     const cookies = document.cookie;
-
-    console.log(cookies)
     
     if(cookies === '') return [];
 

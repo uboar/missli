@@ -13,19 +13,33 @@
     let streamChannel: Connection;
     let showOptions = false;
 
-    let color = "#808080";
+    const defaultOption: timelineOptions = {
+        id: new Date().valueOf(),
+        userDataIndex: 0,
+        channel: "globalTimeline",
+        channelName: "タイムライン",
+        color: "#808080",
+        width: "24rem",
+        showNoteNum: 100,
+        bufferNoteNum: 1000,
+        initialNotes: []
+    }
 
     let notes: Array<NoteType> = [];
 
     onMount(() => {
-        if (options.initialNotes) notes = options.initialNotes;
+        options = {
+            ...defaultOption,
+            ...options
+        }
+
+        if (options.initialNotes.length > 0) notes = options.initialNotes;
         if (dummy) return;
 
         if (!user) return;
         if (!options) return;
         streamChannel = user.stream.useChannel(options.channel);
         streamChannel.on("note", (payload: NoteType) => {
-            console.log(payload);
             notes = [payload, ...notes];
         });
     });
@@ -33,7 +47,6 @@
     const timelineDelete = () => {
         timelines.update((val) => {
             const ret = val.filter((v) => v.id !== options.id);
-            console.log(ret);
             return ret;
         });
     };
@@ -51,7 +64,7 @@
     <div class="absolute w-full flex justify-center z-10">
         <button
             class="btn btn-xs bg-base-200 btn-outline w-10/12 my-1"
-            style="color: {color}"
+            style="color: {options.color}"
             on:click={() => {
                 showOptions = !showOptions;
             }}
@@ -77,7 +90,7 @@
                     />
                     <div class="flex flex-row my-8">
                         <span class="label-text mr-8">タイムラインの色</span>
-                        <input type="color" bind:value={color} />
+                        <input type="color" bind:value={options.color} />
                     </div>
                     <span class="label-text">タイムラインの大きさ</span>
                     <div class="btn-group">
