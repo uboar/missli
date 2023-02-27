@@ -73,7 +73,7 @@
         if (node.type === "inlineCode") {
             let elem = document.createElement("span");
             elem.className =
-                "font-mono bg-base-300 text-secondary px-1 rounded";
+                "font-mono bg-base-300 text-primary px-1 rounded";
             elem.innerText = node.props.code;
             parentElemnt.appendChild(elem);
         }

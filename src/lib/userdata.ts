@@ -28,6 +28,13 @@ export type timelineOptions = {
     initialNotes?: Array<Note>
 }
 
+export type settingsType = {
+    theme?: string
+}
+
+export const settings = writable<settingsType>({
+    theme: "light"
+})
 export const userDataArray = writable<Array<userData>>([])
 export const timelines = writable<Array<timelineOptions>>([])
 

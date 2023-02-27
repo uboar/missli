@@ -5,7 +5,9 @@
     userDataArray,
     timelines,
     getCookie,
+    settings,
     type timelineOptions,
+    type settingsType,
   } from "./lib/userdata";
   import Timeline from "./components/Timeline.svelte";
   import AddTimeline from "./components/AddTimeline.svelte";
@@ -22,21 +24,32 @@
     localStorage.getItem("timelines")
   ) as unknown as Array<timelineOptions>;
 
+  const settingsLocal = JSON.parse(
+    localStorage.getItem("settings")
+  ) as unknown as settingsType;
+
+  if (settingsLocal) $settings = { ...$settings, ...settingsLocal };
   if (timelineLocal) $timelines = timelineLocal;
 
   timelines.subscribe((val) => {
     localStorage.setItem("timelines", JSON.stringify(val));
   });
+
+  settings.subscribe((val) => {
+    localStorage.setItem("settings", JSON.stringify(val));
+  });
 </script>
 
-<main data-theme="light" class="screen">
+<main data-theme={$settings.theme} class="screen">
   <Navbar />
   <div class="flex flex-col h-full w-fit">
     <div class="pb-16" />
     {#if loading}
       <progress class="progress w-full my-8" />
     {:else if $userDataArray.length === 0}
-      <div class="mt-4 text-2xl w-screen text-center">↗にある⚙（設定）からユーザーを追加してください！</div>
+      <div class="mt-4 text-2xl w-screen text-center">
+        ↗にある⚙（設定）からユーザーを追加してください！
+      </div>
     {:else}
       <div class="flex flex-row w-fit h-full">
         {#each $timelines as timeline}
@@ -54,7 +67,7 @@
 </main>
 
 <style>
-  .screen{
+  .screen {
     height: 100svh;
   }
 </style>

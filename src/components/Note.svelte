@@ -175,7 +175,7 @@
         {#if note.reactions}
             <div>
                 {#each Object.entries(note.reactions) as [name, num]}
-                    <span class="badge badge-outline badge-accent h-5">
+                    <span class="badge badge-outline h-5">
                         {#if name.indexOf("@.") >= 0}
                             <img
                                 src={localEmojiSearch(
