@@ -184,7 +184,6 @@
                                 class="h-4"
                                 alt={name}
                             />
-                            {num}
                         {:else if name.indexOf("@") >= 0}
                             <img
                                 src={note.reactionEmojis[
@@ -194,8 +193,9 @@
                                 alt="name"
                             />
                         {:else}
-                            {name}{num}
+                            {name}
                         {/if}
+                        {num}
                     </span>
                 {/each}
             </div>
