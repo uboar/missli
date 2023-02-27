@@ -9,6 +9,17 @@
         url: string
     }>;
 
+    $: localEmojiSearch
+
+    const localEmojiSearch = (emojiName: string): string => {
+        try{
+            return localEmojis.find(v => v.name === emojiName).url
+        }catch(err){
+            console.error(err)
+            return "エラー"
+        }
+    }
+
     export let text = "";
     let parseedHTML: HTMLElement;
     export let hostUrl: string;
@@ -50,7 +61,7 @@
 
 
             if(remoteEmojis[node.props.name] === undefined){
-                elem.src = localEmojis.find(v => v.name === node.props.name).url
+                elem.src = localEmojiSearch(node.props.name)
             }else{
                 elem.src = remoteEmojis[node.props.name]
             }
@@ -75,12 +86,6 @@
         // イタリック
         if (node.type === "italic") {
             let elem = document.createElement("i");
-            parentElemnt.appendChild(elem);
-            node.children.forEach((child) => generateMfmElement(child, elem));
-        }
-        // 打ち消し線
-        if (node.type === "strike") {
-            let elem = document.createElement("s");
             parentElemnt.appendChild(elem);
             node.children.forEach((child) => generateMfmElement(child, elem));
         }

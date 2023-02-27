@@ -27,7 +27,7 @@
 
     let notes: Array<NoteType> = [];
     let beginNotes = 0;
-    let scrollPos: HTMLElement
+    let scrollPos: HTMLElement;
 
     $: showNotes = notes.slice(beginNotes, options.showNoteNum + beginNotes);
 
@@ -138,6 +138,11 @@
                     />
 
                     <button
+                        class="btn btn-outline btn-secondary mt-4 btn-sm"
+                        on:click={() => console.log(notes)}
+                    >ノートのバッファをコンソールに出力</button>
+                    
+                    <button
                         class="btn btn-error btn-block mt-4"
                         on:click={timelineDelete}>タイムラインを削除</button
                     >
@@ -170,7 +175,7 @@
                     >
                 {/if}
                 {#each showNotes as note (note.id)}
-                    <Note {note} {user}/>
+                    <Note {note} {user} />
                 {/each}
                 {#if beginNotes > 0}
                     <button

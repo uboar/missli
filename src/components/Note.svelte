@@ -9,6 +9,17 @@
 
     moment.locale("ja");
 
+    $: localEmojiSearch;
+
+    const localEmojiSearch = (emojiName: string): string => {
+        try {
+            return user.emojis.find((v) => v.name === emojiName).url;
+        } catch (err) {
+            console.error(err);
+            return "エラー";
+        }
+    };
+
     $: useridStr = `@${note.user.username}${
         note.user.host ? `@${note.user.host}` : ""
     }`;
@@ -45,23 +56,32 @@
         </div>
         {#if note.text}
             <p class="text-ellipsis overflow-hidden">
-                <Mfm text={note.text} hostUrl={user.hostUrl} localEmojis={user.emojis} remoteEmojis={note.emojis}></Mfm>
+                <Mfm
+                    text={note.text}
+                    hostUrl={user.hostUrl}
+                    localEmojis={user.emojis}
+                    remoteEmojis={note.emojis}
+                />
             </p>
         {/if}
 
         <!-- メディア内容 -->
         {#if note.files.length > 0}
             {#each note.files as file (file.id)}
-            {#if file.type.indexOf("image") >= 0}
-                <a class="card w-full rounded-lg my-2" 
-                        href={file.url} target="_blank" rel="noreferrer">
-                    <img
-                        src={file.thumbnailUrl}
-                        alt={file.name}
-                        class="rounded-lg"
-                    />
-                </a>
-            {/if}
+                {#if file.type.indexOf("image") >= 0}
+                    <a
+                        class="card w-full rounded-lg my-2"
+                        href={file.url}
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        <img
+                            src={file.thumbnailUrl}
+                            alt={file.name}
+                            class="rounded-lg"
+                        />
+                    </a>
+                {/if}
             {/each}
         {/if}
         <!-- リノート内容 -->
@@ -92,7 +112,12 @@
                 </div>
                 {#if note.renote.text}
                     <p class="text-ellipsis overflow-hidden">
-                        <Mfm text={note.renote.text} hostUrl={user.hostUrl} localEmojis={user.emojis} remoteEmojis={note.renote.emojis}></Mfm>
+                        <Mfm
+                            text={note.renote.text}
+                            hostUrl={user.hostUrl}
+                            localEmojis={user.emojis}
+                            remoteEmojis={note.renote.emojis}
+                        />
                     </p>
                 {/if}
 
@@ -100,8 +125,12 @@
                 {#if note.renote.files.length > 0}
                     {#each note.renote.files as file (file.id)}
                         {#if file.type.indexOf("image") >= 0}
-                            <a class="card w-full rounded-lg my-2" 
-                                    href={file.url} target="_blank" rel="noreferrer">
+                            <a
+                                class="card w-full rounded-lg my-2"
+                                href={file.url}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
                                 <img
                                     src={file.thumbnailUrl}
                                     alt={file.name}
@@ -111,6 +140,64 @@
                         {/if}
                     {/each}
                 {/if}
+
+                <!-- リアクション -->
+                <div>
+                    {#each Object.entries(note.renote.reactions) as [name, num]}
+                        <span class="badge badge-outline badge-accent h-5">
+                            {#if name.indexOf("@.") >= 0}
+                                <img
+                                    src={localEmojiSearch(
+                                        name.replace(/\:|@./gm, "")
+                                    )}
+                                    class="h-4"
+                                    alt={name}
+                                />
+                            {:else if name.indexOf("@") >= 0}
+                                <img
+                                    src={note.renote.reactionEmojis[
+                                        name.replace(/\:/gm, "")
+                                    ]}
+                                    class="h-4"
+                                    alt={name}
+                                />
+                            {:else}
+                                <span class="h-4">{name}</span>
+                            {/if}
+                            {num}
+                        </span>
+                    {/each}
+                </div>
+            </div>
+        {/if}
+
+        <!-- リアクション -->
+        {#if note.reactions}
+            <div>
+                {#each Object.entries(note.reactions) as [name, num]}
+                    <span class="badge badge-outline badge-accent h-5">
+                        {#if name.indexOf("@.") >= 0}
+                            <img
+                                src={localEmojiSearch(
+                                    name.replace(/\:|@./gm, "")
+                                )}
+                                class="h-4"
+                                alt={name}
+                            />
+                            {num}
+                        {:else if name.indexOf("@") >= 0}
+                            <img
+                                src={note.reactionEmojis[
+                                    name.replace(/\:/gm, "")
+                                ]}
+                                class="h-4"
+                                alt="name"
+                            />
+                        {:else}
+                            {name}{num}
+                        {/if}
+                    </span>
+                {/each}
             </div>
         {/if}
         <a
