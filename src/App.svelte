@@ -29,7 +29,7 @@
   });
 </script>
 
-<main data-theme="light" class="h-screen">
+<main data-theme="light" class="screen">
   <Navbar />
   <div class="flex flex-col h-full w-fit">
     <div class="pb-16" />
@@ -52,3 +52,9 @@
     {/if}
   </div>
 </main>
+
+<style>
+  .screen{
+    height: 100svh;
+  }
+</style>

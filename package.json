@@ -33,6 +33,7 @@
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "daisyui": "^2.51.0",
     "gh-pages": "^5.0.0",
+    "lodash": "^4.17.21",
     "mfm-js": "^0.23.3",
     "misskey-js": "^0.0.15",
     "moment": "^2.29.4"

@@ -5,6 +5,7 @@
     import type { Note as NoteType } from "misskey-js/built/entities";
     import type { Connection } from "misskey-js/built/streaming";
     import { timelines } from "../lib/userdata";
+    import uniqBy from "lodash/uniqBy"
 
     export let dummy: boolean = false;
     export let user: userData = null;
@@ -31,7 +32,7 @@
 
     $: showNotes = notes.slice(beginNotes, options.showNoteNum + beginNotes);
 
-    onMount(() => {
+    onMount(async () => {
         options = {
             ...defaultOption,
             ...options,
@@ -44,8 +45,13 @@
         if (!options) return;
         streamChannel = user.stream.useChannel(options.channel);
         streamChannel.on("note", (payload: NoteType) => {
-            notes = [payload, ...notes].slice(0, options.bufferNoteNum);
+            notes = uniqBy([payload, ...notes].slice(0, options.bufferNoteNum), 'id');
         });
+        
+        if(options.channel === "globalTimeline") notes = uniqBy([...(await user.cli.request('notes/global-timeline')), ...notes], 'id');
+        else if(options.channel === "hybridTimeline") notes = uniqBy([...(await user.cli.request('notes/hybrid-timeline')), ...notes], 'id');
+        else if(options.channel === "localTimeline") notes = uniqBy([...(await user.cli.request('notes/local-timeline')), ...notes], 'id');
+        else if(options.channel === "homeTimeline") notes = uniqBy([...(await user.cli.request('notes/timeline')), ...notes], 'id');
     });
 
     const timelineDelete = () => {

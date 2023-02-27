@@ -142,7 +142,7 @@
                 {/if}
 
                 <!-- リアクション -->
-                <div>
+                <div class="flex flex-row flex-wrap">
                     {#each Object.entries(note.renote.reactions) as [name, num]}
                         <span class="badge badge-outline badge-accent h-5">
                             {#if name.indexOf("@.") >= 0}
