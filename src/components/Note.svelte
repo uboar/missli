@@ -30,9 +30,7 @@
         : "";
 </script>
 
-<div
-    class="card card-bordered bg-base-100 w-full my-2 shadow-sm hover:shadow-lg"
->
+<div class="card card-bordered bg-base-100 w-full my-2 shadow-sm">
     <div class="card-body -my-6 -mx-4">
         <div class="card-title overflow-hidden">
             <div class="avatar">
@@ -66,24 +64,28 @@
         {/if}
 
         <!-- メディア内容 -->
-        {#if note.files.length > 0}
-            {#each note.files as file (file.id)}
-                {#if file.type.indexOf("image") >= 0}
-                    <a
-                        class="card w-full rounded-lg my-2"
-                        href={file.url}
-                        target="_blank"
-                        rel="noreferrer"
-                    >
-                        <img
-                            src={file.thumbnailUrl}
-                            alt={file.name}
-                            class="rounded-lg"
-                        />
-                    </a>
-                {/if}
-            {/each}
-        {/if}
+        <div class="carousel justify-center">
+            {#if note.files.length > 0}
+                {#each note.files as file (file.id)}
+                    {#if file.type.indexOf("image") >= 0}
+                        <a
+                            class="carousel-item rounded-lg my-2"
+                            href={file.url}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <img
+                                src={file.thumbnailUrl}
+                                alt={file.name}
+                                class="rounded-lg {file.isSensitive
+                                    ? 'blur'
+                                    : ''}"
+                            />
+                        </a>
+                    {/if}
+                {/each}
+            {/if}
+        </div>
         <!-- リノート内容 -->
         {#if note.renote}
             <div class="card card-bordered border-accent rounded p-1">
@@ -122,24 +124,28 @@
                 {/if}
 
                 <!-- メディア内容 -->
-                {#if note.renote.files.length > 0}
-                    {#each note.renote.files as file (file.id)}
-                        {#if file.type.indexOf("image") >= 0}
-                            <a
-                                class="card w-full rounded-lg my-2"
-                                href={file.url}
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                <img
-                                    src={file.thumbnailUrl}
-                                    alt={file.name}
-                                    class="rounded-lg"
-                                />
-                            </a>
-                        {/if}
-                    {/each}
-                {/if}
+                <div class="carousel justify-center">
+                    {#if note.renote.files.length > 0}
+                        {#each note.renote.files as file (file.id)}
+                            {#if file.type.indexOf("image") >= 0}
+                                <a
+                                    class="carousel-item rounded-lg my-2"
+                                    href={file.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    <img
+                                        src={file.thumbnailUrl}
+                                        alt={file.name}
+                                        class="rounded-lg {file.isSensitive
+                                            ? 'blur'
+                                            : ''}"
+                                    />
+                                </a>
+                            {/if}
+                        {/each}
+                    {/if}
+                </div>
 
                 <!-- リアクション -->
                 <div class="flex flex-row flex-wrap">

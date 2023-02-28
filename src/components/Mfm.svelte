@@ -65,7 +65,7 @@
             }else{
                 elem.src = remoteEmojis[node.props.name]
             }
-            elem.className = "h-6 float-left";
+            elem.className = "h-6 inline-flex";
             elem.alt = node.props.name;
             parentElemnt.appendChild(elem);
         }
