@@ -28,7 +28,7 @@
 
   let notes: Array<NoteType> = [];
   let beginNotes = 0;
-  let scrollPos: HTMLElement;
+  let scrollPos: HTMLElement = document.createElement("div");
   let errFlg = false;
 
   $: showNotes = notes.slice(beginNotes, options.showNoteNum + beginNotes);
@@ -92,18 +92,20 @@
 
 <div class="h-full bg-base-300 relative rounded" style="width:{options.width}">
   <div class="absolute w-full flex justify-center z-10">
-    <button
-      class="btn btn-xs bg-base-300 btn-outline w-10/12 my-1"
-      style="color: {options.color}"
-      on:click={() => {
-        showOptions = !showOptions;
-      }}
-      on:keypress={() => {
-        showOptions = !showOptions;
-      }}
-    >
-      {options.channelName}
-    </button>
+    <div class="flex flex-col w-full mx-8">
+      <button
+        class="btn btn-xs bg-base-300 btn-outline btn-block my-1"
+        style="color: {options.color}"
+        on:click={() => {
+          showOptions = !showOptions;
+        }}
+        on:keypress={() => {
+          showOptions = !showOptions;
+        }}
+      >
+        {options.channelName}
+      </button>
+    </div>
   </div>
   <div
     class="w-full timeline-body absolute pt-8 h-full overflow-y-scroll z-0 overflow-x-hidden inline-flex"
@@ -189,35 +191,20 @@
         </div>
       {:else}
         <div class="relative w-full z-10">
-          {#if beginNotes > 0}
-            <button
-              class="btn btn-block btn-secondary my-2"
-              on:click={() => {
-                scrollPos.scrollTop = 0;
-                beginNotes = 0;
-              }}
-              on:keypress={() => {
-                scrollPos.scrollTop = 0;
-                beginNotes = 0;
-              }}>最初に戻る</button
-            >
-          {/if}
           {#each showNotes as note (note.id)}
             <Note {note} {user} />
           {/each}
-          {#if beginNotes > 0}
-            <button
-              class="btn btn-block btn-secondary my-2"
-              on:click={() => {
-                scrollPos.scrollTop = 0;
-                beginNotes = 0;
-              }}
-              on:keypress={() => {
-                scrollPos.scrollTop = 0;
-                beginNotes = 0;
-              }}>最初に戻る</button
-            >
-          {/if}
+          <button
+            class="btn btn-block btn-secondary my-2"
+            on:click={() => {
+              scrollPos.scrollTop = 0;
+              beginNotes = 0;
+            }}
+            on:keypress={() => {
+              scrollPos.scrollTop = 0;
+              beginNotes = 0;
+            }}>最初に戻る</button
+          >
           {#if notes.length > options.showNoteNum && notes.length - options.showNoteNum > beginNotes}
             <button
               class="btn btn-block btn-primary my-2"
