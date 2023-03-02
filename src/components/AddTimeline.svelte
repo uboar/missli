@@ -23,42 +23,38 @@
   };
 </script>
 
-<div class="flex p-4">
-  <div class="card card-bordered border-accent-focus w-full h-fit">
-    <div class="card-body">
-      <div class="card-title">タイムラインを追加</div>
-      <div>
-        <div class="form-control w-full">
-          <span class="label-text">ユーザー</span>
-          <select
-            bind:value={selectedUserNum}
-            class="select select-bordered w-full"
-          >
-            {#each $users as user, index (user.id)}
-              <option value={index}>{user.userName}@{user.hostUrl}</option>
-            {/each}
-          </select>
-          <span class="label-text">タイムラインの種類</span>
-          <select
-            bind:value={selectedChannel}
-            class="select select-bordered w-full"
-          >
-            {#each channelTypes as channelType, index}
-              <option value={index}>{channelType.name}</option>
-            {/each}
-          </select>
+<div>
+  <div class="text-2xl">タイムラインを追加</div>
+  <div>
+    <div class="form-control w-full">
+      <span class="label-text">ユーザー</span>
+      <select
+        bind:value={selectedUserNum}
+        class="select select-bordered w-full"
+      >
+        {#each $users as user, index (user.id)}
+          <option value={index}>{user.userName}@{user.hostUrl}</option>
+        {/each}
+      </select>
+      <span class="label-text">タイムラインの種類</span>
+      <select
+        bind:value={selectedChannel}
+        class="select select-bordered w-full"
+      >
+        {#each channelTypes as channelType, index}
+          <option value={index}>{channelType.name}</option>
+        {/each}
+      </select>
 
-          <button
-            class={`${
-              selectedChannel !== null && selectedUserNum !== null
-                ? ""
-                : "btn-disabled"
-            } btn btn-primary mt-2`}
-            on:click={addTimeline}
-            on:keypress={addTimeline}>タイムラインを追加</button
-          >
-        </div>
-      </div>
+      <button
+        class={`${
+          selectedChannel !== null && selectedUserNum !== null
+            ? ""
+            : "btn-disabled"
+        } btn btn-primary mt-2`}
+        on:click={addTimeline}
+        on:keypress={addTimeline}>タイムラインを追加</button
+      >
     </div>
   </div>
 </div>

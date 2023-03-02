@@ -5,6 +5,8 @@ import type { Note } from "misskey-js/built/entities";
 import m from "moment/min/moment-with-locales.min.js";
 import "moment/locale/ja";
 
+m.locale("ja");
+
 export const moment = m;
 
 export type userData = {

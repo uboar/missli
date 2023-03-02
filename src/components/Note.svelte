@@ -4,6 +4,9 @@
   import { onDestroy, onMount } from "svelte";
   import { type userData, moment } from "../lib/userdata";
   import Mfm from "./Mfm.svelte";
+  import Media from "./note/Media.svelte";
+  import Reaction from "./note/Reaction.svelte";
+  import User from "./note/User.svelte";
 
   export let user: userData;
   export let note: Note;
@@ -19,15 +22,6 @@
       return "エラー";
     }
   };
-
-  $: useridStr = `@${note.user.username}${
-    note.user.host ? `@${note.user.host}` : ""
-  }`;
-  $: renoteUseridStr = note.renote
-    ? `@${note.renote.user.username}${
-        note.renote.user.host ? `@${note.renote.user.host}` : ""
-      }`
-    : "";
 
   onMount(() => {
     if (!stream) return;
@@ -47,37 +41,11 @@
   class="card card-bordered bg-base-100 w-full my-2 shadow-sm hover:bg-base-200"
 >
   <div class="card-body -my-6 -mx-4">
-    <a
-      class="card-title link link-hover rounded hover:bg-base-100 -mb-1"
-      href={`https://${user.hostUrl}/${useridStr}`}
-      target="_blank"
-      rel="noreferrer"
-    >
-      <!-- ユーザー名とアイコン -->
-      {#if note.renote && !note.text}
-        <div class="text-accent text-xs -mb-2">
-          🔁{note.user.name}がRenote
-        </div>
-      {:else}
-        <div class="avatar">
-          <div class="w-8 rounded-full -m-1">
-            <img src={note.user.avatarUrl} alt={note.user.username} />
-          </div>
-        </div>
-        <div class="w-full overflow-clip">
-          <div class="text-sm truncate -mb-1">
-            {#if note.user.name === null}
-              {note.user.username}
-            {:else}
-              {note.user.name}
-            {/if}
-          </div>
-          <div class="text-xs truncate">
-            {useridStr}
-          </div>
-        </div>
-      {/if}
-    </a>
+    <User
+      user={note.user}
+      hostUrl={user.hostUrl}
+      isRenote={note.renote && !note.text}
+    />
     {#if note.text}
       <p class="text-ellipsis overflow-hidden">
         <Mfm
@@ -90,54 +58,11 @@
     {/if}
 
     <!-- メディア内容 -->
-    <div class="carousel justify-center">
-      {#if note.files.length > 0}
-        {#each note.files as file (file.id)}
-          {#if file.type.indexOf("image") >= 0}
-            <a
-              class="carousel-item rounded-lg my-2"
-              href={file.url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <img
-                src={file.thumbnailUrl}
-                alt={file.name}
-                class="rounded-lg {file.isSensitive ? 'blur' : ''}"
-              />
-            </a>
-          {/if}
-        {/each}
-      {/if}
-    </div>
+    <Media files={note.files} />
     <!-- リノート内容 -->
     {#if note.renote}
       <div class="card card-bordered border-accent rounded p-1">
-        <a
-          class="card-title link link-hover rounded hover:bg-base-100 -mb-1 ml-1"
-          href={`https://${user.hostUrl}/${useridStr}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <!-- ユーザー名とアイコン -->
-          <div class="avatar">
-            <div class="w-8 rounded-full -m-1">
-              <img src={note.renote.user.avatarUrl} alt={renoteUseridStr} />
-            </div>
-          </div>
-          <div class="w-full overflow-clip">
-            <div class="text-sm truncate -mb-1">
-              {#if note.renote.user.name === null}
-                {note.renote.user.username}
-              {:else}
-                {note.renote.user.name}
-              {/if}
-            </div>
-            <div class="text-xs truncate">
-              {renoteUseridStr}
-            </div>
-          </div>
-        </a>
+        <User user={note.renote.user} hostUrl={user.hostUrl} />
         {#if note.renote.text}
           <p class="text-ellipsis overflow-hidden">
             <Mfm
@@ -150,54 +75,18 @@
         {/if}
 
         <!-- メディア内容 -->
-        <div class="carousel justify-center">
-          {#if note.renote.files.length > 0}
-            {#each note.renote.files as file (file.id)}
-              {#if file.type.indexOf("image") >= 0}
-                <a
-                  class="carousel-item rounded-lg my-2"
-                  href={file.url}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <img
-                    src={file.thumbnailUrl}
-                    alt={file.name}
-                    class="rounded-lg {file.isSensitive ? 'blur' : ''}"
-                  />
-                </a>
-              {/if}
-            {/each}
-          {/if}
-        </div>
+        <Media files={note.renote.files} />
 
         <!-- リアクション -->
         <div class="flex flex-row flex-wrap">
           {#each Object.entries(note.renote.reactions) as [name, num]}
-            {#if name.indexOf("@.") >= 0}
-              <span class="badge badge-outline badge-accent h-5">
-                <img
-                  src={localEmojiSearch(name.replace(/\:|@./gm, ""))}
-                  class="h-4"
-                  alt={name}
-                />
-                {num}
-              </span>
-            {:else if name.indexOf("@") >= 0}
-              <span class="badge badge-outline h-5">
-                <img
-                  src={note.renote.reactionEmojis[name.replace(/\:/gm, "")]}
-                  class="h-4"
-                  alt={name}
-                />
-                {num}
-              </span>
-            {:else}
-              <span class="badge badge-outline badge-accent h-5">
-                <span class="h-4">{name}</span>
-                {num}
-              </span>
-            {/if}
+            <Reaction
+              {user}
+              {name}
+              {num}
+              noteId={note.renote.id}
+              reactionEmojis={note.renote.reactionEmojis}
+            />
           {/each}
         </div>
       </div>
@@ -207,30 +96,13 @@
     {#if note.reactions}
       <div>
         {#each Object.entries(note.reactions) as [name, num]}
-          {#if name.indexOf("@.") >= 0}
-            <span class="badge badge-outline badge-primary h-5">
-              <img
-                src={localEmojiSearch(name.replace(/\:|@./gm, ""))}
-                class="h-4"
-                alt={name}
-              />
-              {num}
-            </span>
-          {:else if name.indexOf("@") >= 0}
-            <span class="badge badge-outline h-5">
-              <img
-                src={note.reactionEmojis[name.replace(/\:/gm, "")]}
-                class="h-4"
-                alt="name"
-              />
-              {num}
-            </span>
-          {:else}
-            <span class="badge badge-outline badge-primary h-5">
-              {name}
-              {num}
-            </span>
-          {/if}
+          <Reaction
+            {user}
+            {name}
+            {num}
+            noteId={note.id}
+            reactionEmojis={note.reactionEmojis}
+          />
         {/each}
       </div>
     {/if}
