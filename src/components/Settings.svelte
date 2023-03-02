@@ -60,6 +60,7 @@
   </div>
   {#if selectedTab === 0}
     <h1 class="text-2xl">連携しているアカウント</h1>
+    2023/03/02以前に本アプリを使用した事がある方は、権限設定が変更されているので、お手数ですが再認証して下さい。
     {#each $users as user, index (user.id)}
       <div class="card bg-base-300 card-compact w-full my-2">
         <div class="card-body">

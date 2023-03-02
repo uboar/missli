@@ -60,7 +60,7 @@
         await fetch("https://www.uuidgenerator.net/api/version4/1")
       ).text();
 
-      const url = `https://${hostUrl}/miauth/${sessionId}?name=MissLI&permission=write:notes,read:drive&callback=${selfUrl()}?authed=${hostUrl}`;
+      const url = `https://${hostUrl}/miauth/${sessionId}?name=MissLI&permission=write:notes,read:notifications,write:notifications,write:reactions,write:favorites,&callback=${selfUrl()}?authed=${hostUrl}`;
 
       location.href = url;
     } catch (err) {

@@ -23,6 +23,12 @@
     }
   };
 
+  const destroyEmoji = (emojiName: string, reactions: [key: number]) => {
+    // console.log("break")
+    // delete reactions[emojiName]
+    // reactions = reactions
+  };
+
   onMount(() => {
     if (!stream) return;
     stream.send("subNote", {
@@ -84,6 +90,9 @@
               {user}
               {name}
               {num}
+              on:destroy={() => {
+                destroyEmoji(name, note.renote.reactions);
+              }}
               noteId={note.renote.id}
               reactionEmojis={note.renote.reactionEmojis}
             />
@@ -100,6 +109,9 @@
             {user}
             {name}
             {num}
+            on:destroy={() => {
+              destroyEmoji(name, note.reactions);
+            }}
             noteId={note.id}
             reactionEmojis={note.reactionEmojis}
           />

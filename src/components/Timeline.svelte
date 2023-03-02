@@ -52,23 +52,24 @@
       notes = uniqBy([payload, ...notes].slice(0, options.bufferNoteNum), "id");
     });
     user.stream.on("noteUpdated", (e) => {
-      const noteIndex = notes.findIndex((v) => v.id === e.id)
+      const noteIndex = notes.findIndex((v) => v.id === e.id);
 
-      if(e.type === "reacted"){
-        if(e.body.reaction.indexOf("@.") < 0){
-          if(notes[noteIndex]["reactionEmojis"] === undefined) notes[noteIndex]["reactionEmojis"] = {};
-          notes[noteIndex].reactionEmojis[e.body.emoji.name] = e.body.emoji.url
+      if (e.type === "reacted") {
+        if (e.body.reaction.indexOf("@.") < 0) {
+          if (notes[noteIndex]["reactionEmojis"] === undefined)
+            notes[noteIndex]["reactionEmojis"] = {};
+          notes[noteIndex].reactionEmojis[e.body.emoji.name] = e.body.emoji.url;
         }
-        if(notes[noteIndex].reactions[e.body.reaction] === undefined){
+        if (notes[noteIndex].reactions[e.body.reaction] === undefined) {
           notes[noteIndex].reactions[e.body.reaction] = 1;
-        }else{
+        } else {
           notes[noteIndex].reactions[e.body.reaction]++;
         }
-      }else if(e.type === "deleted"){
+      } else if (e.type === "deleted") {
         notes.splice(noteIndex, 1);
         notes = [...notes];
       }
-    })
+    });
 
     if (options.channel === "globalTimeline")
       notes = uniqBy(
