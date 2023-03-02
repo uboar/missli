@@ -53,18 +53,18 @@ export const setCookie = (userData: userData) => {
 
 export const getCookie = async (): Promise<Array<userData>> => {
     const cookies = document.cookie;
-    
-    if(cookies === '') return [];
+
+    if (cookies === '') return [];
 
     const strArr = cookies.split("; ");
     const users: Array<userData> = []
 
-    try {
-        strArr.forEach(elem => {
-            users.push(JSON.parse(decodeURIComponent(elem.replace(/\d+=/, ""))))
-        })
+    strArr.forEach(elem => {
+        users.push(JSON.parse(decodeURIComponent(elem.replace(/\d+=/, ""))))
+    })
 
-        for (let i = 0; i < users.length; i++) {
+    for (let i = 0; i < users.length; i++) {
+        try {
             users[i].cli = new api.APIClient({
                 origin: `https://${users[i].hostUrl}`,
                 credential: users[i].token
@@ -74,9 +74,11 @@ export const getCookie = async (): Promise<Array<userData>> => {
             })
 
             users[i].emojis = (await users[i].cli.request("emojis")).emojis;
+        } catch (err) {
+            console.log(err);
+            window.alert(`${users[i].hostUrl}との認証に失敗しました。`);
+            users[i].ok = false;
         }
-    } catch (err) {
-        window.alert("クッキーの読み込みでエラーが発生しました。")
     }
 
     console.log(users)

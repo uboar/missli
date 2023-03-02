@@ -1,12 +1,11 @@
 <script lang="ts">
-    import type { Hst } from "@histoire/plugin-svelte"
-    import "../tailwind.css"
-    export let Hst: Hst
+  import type { Hst } from "@histoire/plugin-svelte";
+  import "../tailwind.css";
+  export let Hst: Hst;
 
-    import Settings from "../components/Settings.svelte"
-    
+  import Settings from "../components/Settings.svelte";
 </script>
 
 <Hst.Story>
-    <Settings />
+  <Settings />
 </Hst.Story>
