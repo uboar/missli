@@ -46,14 +46,14 @@
         {/each}
       </select>
 
-      <button
+      <label for="addtimeline-modal"
         class={`${
           selectedChannel !== null && selectedUserNum !== null
             ? ""
             : "btn-disabled"
         } btn btn-primary mt-2`}
         on:click={addTimeline}
-        on:keypress={addTimeline}>タイムラインを追加</button
+        on:keypress={addTimeline}>タイムラインを追加</label
       >
     </div>
   </div>
