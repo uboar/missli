@@ -50,6 +50,6 @@
 
 <style>
   .screen {
-    height: 100svh;
+    height: 98svh;
   }
 </style>

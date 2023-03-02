@@ -30,7 +30,7 @@
     : "";
 </script>
 
-<div class="card card-bordered bg-base-100 w-full my-2 shadow-sm">
+<div class="card card-bordered bg-base-100 w-full my-2 shadow-sm hover:bg-base-200">
   <div class="card-body -my-6 -mx-4">
     <div class="card-title overflow-hidden">
       <!-- ユーザー名とアイコン -->

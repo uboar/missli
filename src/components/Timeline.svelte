@@ -90,10 +90,10 @@
   });
 </script>
 
-<div class="h-full bg-base-200 relative rounded" style="width:{options.width}">
+<div class="h-full bg-base-300 relative rounded" style="width:{options.width}">
   <div class="absolute w-full flex justify-center z-10">
     <button
-      class="btn btn-xs bg-base-200 btn-outline w-10/12 my-1"
+      class="btn btn-xs bg-base-300 btn-outline w-10/12 my-1"
       style="color: {options.color}"
       on:click={() => {
         showOptions = !showOptions;
@@ -106,7 +106,7 @@
     </button>
   </div>
   <div
-    class="flex w-full timeline-body absolute pt-8 h-full overflow-y-scroll z-0 overflow-x-hidden"
+    class="w-full timeline-body absolute pt-8 h-full overflow-y-scroll z-0 overflow-x-hidden inline-flex"
     bind:this={scrollPos}
   >
     {#if !errFlg}

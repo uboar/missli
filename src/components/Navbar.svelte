@@ -2,7 +2,7 @@
   import Settings from "./Settings.svelte";
 </script>
 
-<div class="navbar bg-primary fixed z-50 shadow-lg">
+<div class="navbar bg-primary fixed z-50 shadow-lg w-screen">
   <div class="navbar-start">
     <a
       class="btn btn-ghost normal-case text-xl text-primary-content btn-sm"
