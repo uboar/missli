@@ -33,6 +33,7 @@
 <div class="card card-bordered bg-base-100 w-full my-2 shadow-sm">
   <div class="card-body -my-6 -mx-4">
     <div class="card-title overflow-hidden">
+      <!-- ユーザー名とアイコン -->
       <div class="avatar">
         <div class="w-8 rounded-full">
           <img src={note.user.avatarUrl} alt={note.user.username} />
@@ -40,7 +41,11 @@
       </div>
       <div class="flex flex-col">
         <div class="text-sm text-base-content truncate">
+          {#if note.user.name === null}
+          {note.user.username}
+          {:else}
           {note.user.name}
+          {/if}
         </div>
         <a
           class="text-xs overflow-hidden text-ellipsis link link-hover"
