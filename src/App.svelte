@@ -43,7 +43,7 @@
 <main data-theme={$settings.theme} class="screen">
   <Navbar />
   <div class="flex flex-col h-full w-fit">
-    <div class="pb-16" />
+    <div class="pb-10" />
     {#if loading}
       <progress class="progress w-full my-8" />
     {:else if $userDataArray.length === 0}
