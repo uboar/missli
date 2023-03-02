@@ -36,6 +36,9 @@
     "lodash": "^4.17.21",
     "mfm-js": "^0.23.3",
     "misskey-js": "^0.0.15",
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "prettier": "^2.8.4",
+    "prettier-plugin-svelte": "^2.9.0",
+    "prettier-plugin-tailwindcss": "^0.2.3"
   }
 }

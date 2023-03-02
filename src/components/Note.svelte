@@ -42,9 +42,9 @@
       <div class="flex flex-col">
         <div class="text-sm text-base-content truncate">
           {#if note.user.name === null}
-          {note.user.username}
+            {note.user.username}
           {:else}
-          {note.user.name}
+            {note.user.name}
           {/if}
         </div>
         <a
