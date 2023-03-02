@@ -1,16 +1,13 @@
 <script lang="ts">
   import type { Stream } from "misskey-js";
   import type { Note } from "misskey-js/built/entities";
-  import moment from "moment";
-  import "moment/locale/ja";
   import { onDestroy, onMount } from "svelte";
-  import type { userData } from "../lib/userdata";
+  import { type userData, moment } from "../lib/userdata";
   import Mfm from "./Mfm.svelte";
+
   export let user: userData;
   export let note: Note;
   export let stream: Stream = null;
-
-  moment.locale("ja");
 
   $: localEmojiSearch;
 
@@ -57,9 +54,9 @@
       rel="noreferrer"
     >
       <!-- ユーザー名とアイコン -->
-      {#if (note.renote) && (!note.text)}
+      {#if note.renote && !note.text}
         <div class="text-accent text-xs -mb-2">
-           🔁{note.user.name}がRenote
+          🔁{note.user.name}がRenote
         </div>
       {:else}
         <div class="avatar">
@@ -177,24 +174,30 @@
         <!-- リアクション -->
         <div class="flex flex-row flex-wrap">
           {#each Object.entries(note.renote.reactions) as [name, num]}
-            <span class="badge badge-outline badge-accent h-5">
-              {#if name.indexOf("@.") >= 0}
+            {#if name.indexOf("@.") >= 0}
+              <span class="badge badge-outline badge-accent h-5">
                 <img
                   src={localEmojiSearch(name.replace(/\:|@./gm, ""))}
                   class="h-4"
                   alt={name}
                 />
-              {:else if name.indexOf("@") >= 0}
+                {num}
+              </span>
+            {:else if name.indexOf("@") >= 0}
+              <span class="badge badge-outline h-5">
                 <img
                   src={note.renote.reactionEmojis[name.replace(/\:/gm, "")]}
                   class="h-4"
                   alt={name}
                 />
-              {:else}
+                {num}
+              </span>
+            {:else}
+              <span class="badge badge-outline badge-accent h-5">
                 <span class="h-4">{name}</span>
-              {/if}
-              {num}
-            </span>
+                {num}
+              </span>
+            {/if}
           {/each}
         </div>
       </div>
@@ -204,24 +207,30 @@
     {#if note.reactions}
       <div>
         {#each Object.entries(note.reactions) as [name, num]}
-          <span class="badge badge-outline h-5">
-            {#if name.indexOf("@.") >= 0}
+          {#if name.indexOf("@.") >= 0}
+            <span class="badge badge-outline badge-primary h-5">
               <img
                 src={localEmojiSearch(name.replace(/\:|@./gm, ""))}
                 class="h-4"
                 alt={name}
               />
-            {:else if name.indexOf("@") >= 0}
+              {num}
+            </span>
+          {:else if name.indexOf("@") >= 0}
+            <span class="badge badge-outline h-5">
               <img
                 src={note.reactionEmojis[name.replace(/\:/gm, "")]}
                 class="h-4"
                 alt="name"
               />
-            {:else}
+              {num}
+            </span>
+          {:else}
+            <span class="badge badge-outline badge-primary h-5">
               {name}
-            {/if}
-            {num}
-          </span>
+              {num}
+            </span>
+          {/if}
         {/each}
       </div>
     {/if}

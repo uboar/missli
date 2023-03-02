@@ -2,6 +2,10 @@ import { writable, get } from "svelte/store";
 import { Stream, api } from "misskey-js";
 import type { Channels } from "misskey-js/built/streaming.types";
 import type { Note } from "misskey-js/built/entities";
+import m from "moment/min/moment-with-locales.min.js";
+import "moment/locale/ja";
+
+export const moment = m;
 
 export type userData = {
   ok: boolean;

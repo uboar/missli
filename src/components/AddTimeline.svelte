@@ -23,7 +23,7 @@
   };
 </script>
 
-<div class="flex w-96 p-4">
+<div class="flex p-4">
   <div class="card card-bordered border-accent-focus w-full h-fit">
     <div class="card-body">
       <div class="card-title">タイムラインを追加</div>

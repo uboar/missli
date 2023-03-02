@@ -19,7 +19,6 @@
     $users = await getCookie();
     loading = false;
   });
-
 </script>
 
 <main data-theme={$settings.theme} class="screen">
@@ -27,7 +26,7 @@
   <div class="flex flex-col h-full w-fit">
     <div class="pb-10" />
     {#if loading}
-      <progress class="progress w-full my-8" />
+      <progress class="progress w-96 mt-8" />
     {:else if $users.length === 0}
       <div class="mt-4 text-2xl w-screen text-center">
         ↗にある⚙（設定）からユーザーを追加してください！
@@ -40,9 +39,6 @@
             bind:options={timeline}
           />
         {/each}
-        <div class="flex flex-col bg-base-100">
-          <AddTimeline />
-        </div>
       </div>
     {/if}
   </div>
