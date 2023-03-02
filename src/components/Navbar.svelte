@@ -1,5 +1,6 @@
 <script lang="ts">
   import AddTimeline from "./AddTimeline.svelte";
+  import Post from "./Post.svelte";
   import Settings from "./Settings.svelte";
 </script>
 
@@ -16,7 +17,20 @@
   </div>
   <div class="navbar-end">
     <label
-      class="btn group gap-2 btn-outline border-primary-content btn-sm p-1 mx-2 text-primary-content group-hover:text-primary-focus"
+      class="btn group gap-2 btn-outline border-accent btn-sm p-1 px-16 mx-2 text-accent hover:text-primary-focus"
+      for="post-modal"
+    >
+      <!-- ノートアイコン -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 fill-accent group-hover:fill-primary-focus"
+        viewBox="0 0 24 24"
+        ><title>send</title><path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg
+      >
+      ノート
+    </label>
+    <label
+      class="btn group gap-2 btn-outline border-primary-content btn-sm p-1 mx-2 text-primary-content hover:text-primary-focus"
       for="addtimeline-modal"
     >
       <!-- +アイコン -->
@@ -31,7 +45,7 @@
       タイムラインを追加
     </label>
     <label
-      class="btn group gap-2 btn-outline border-primary-content btn-sm p-1 mx-2 text-primary-content group-hover:text-primary-focus"
+      class="btn group gap-2 btn-outline border-primary-content btn-sm p-1 mx-2 text-primary-content hover:text-primary-focus"
       for="settings-modal"
     >
       <!-- 設定アイコン -->
@@ -48,14 +62,9 @@
   </div>
 </div>
 
-<input type="checkbox" id="settings-modal" class="modal-toggle" />
+<input type="checkbox" id="post-modal" class="modal-toggle" />
 <div class="modal">
-  <div class="modal-box w-11/12 max-w-5xl h-4/5 relative">
-    <Settings />
-    <div class="modal-action -mb-4 absolute bottom-7 right-4">
-      <label for="settings-modal" class="btn btn-primary w-40">閉じる</label>
-    </div>
-  </div>
+  <Post />
 </div>
 
 <input type="checkbox" id="addtimeline-modal" class="modal-toggle" />
@@ -64,6 +73,16 @@
     <AddTimeline />
     <div class="modal-action">
       <label for="addtimeline-modal" class="btn btn-primary w-40">閉じる</label>
+    </div>
+  </div>
+</div>
+
+<input type="checkbox" id="settings-modal" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box w-11/12 max-w-5xl h-4/5 relative">
+    <Settings />
+    <div class="modal-action -mb-4 absolute bottom-7 right-4">
+      <label for="settings-modal" class="btn btn-primary w-40">閉じる</label>
     </div>
   </div>
 </div>

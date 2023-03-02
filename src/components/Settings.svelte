@@ -65,8 +65,8 @@
       <div class="card bg-base-300 card-compact w-full my-2">
         <div class="card-body">
           <div class="card-actions flex">
-            <btn class="flex-1 text-xl font-bold">
-              @{user.userName}@{user.hostUrl}</btn
+            <div class="flex-1 text-xl font-bold">
+              @{user.userName}@{user.hostUrl}</div
             >
             <btn class="btn btn-error -my-2" on:click={deleteUser(index)} on:keypress={deleteUser(index)}
               >連携解除</btn
