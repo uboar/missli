@@ -1,11 +1,14 @@
 <script lang="ts">
+  import type { Stream } from "misskey-js";
   import type { Note } from "misskey-js/built/entities";
   import moment from "moment";
   import "moment/locale/ja";
+  import { onDestroy, onMount } from "svelte";
   import type { userData } from "../lib/userdata";
   import Mfm from "./Mfm.svelte";
   export let user: userData;
   export let note: Note;
+  export let stream: Stream = null;
 
   moment.locale("ja");
 
@@ -28,9 +31,24 @@
         note.renote.user.host ? `@${note.renote.user.host}` : ""
       }`
     : "";
+
+  onMount(() => {
+    if (!stream) return;
+    stream.send("subNote", {
+      id: note.id
+    })
+  });
+  onDestroy(() => {
+    if(!stream) return;
+    stream.send("unsubNote", {
+      id: note.id
+    })
+  })
 </script>
 
-<div class="card card-bordered bg-base-100 w-full my-2 shadow-sm hover:bg-base-200">
+<div
+  class="card card-bordered bg-base-100 w-full my-2 shadow-sm hover:bg-base-200"
+>
   <div class="card-body -my-6 -mx-4">
     <div class="card-title overflow-hidden">
       <!-- ユーザー名とアイコン -->

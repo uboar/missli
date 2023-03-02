@@ -51,6 +51,24 @@
     streamChannel.on("note", (payload: NoteType) => {
       notes = uniqBy([payload, ...notes].slice(0, options.bufferNoteNum), "id");
     });
+    user.stream.on("noteUpdated", (e) => {
+      const noteIndex = notes.findIndex((v) => v.id === e.id)
+
+      if(e.type === "reacted"){
+        if(e.body.reaction.indexOf("@.") < 0){
+          if(notes[noteIndex].reactionEmojis === undefined) notes[noteIndex]["reactionEmojis"] = {};
+          notes[noteIndex].reactionEmojis[e.body.emoji.name] = e.body.emoji.url
+        }
+        if(notes[noteIndex].reactions[e.body.reaction] === undefined){
+          notes[noteIndex].reactions[e.body.reaction] = 1;
+        }else{
+          notes[noteIndex].reactions[e.body.reaction]++;
+        }
+      }else if(e.type === "deleted"){
+        notes.splice(noteIndex, 1);
+        notes = [...notes];
+      }
+    })
 
     if (options.channel === "globalTimeline")
       notes = uniqBy(
@@ -192,7 +210,7 @@
       {:else}
         <div class="relative w-full z-10">
           {#each showNotes as note (note.id)}
-            <Note {note} {user} />
+            <Note {note} {user} stream={user.stream} />
           {/each}
           <button
             class="btn btn-block btn-secondary my-2"
