@@ -22,7 +22,7 @@
     color: "#808080",
     width: "24rem",
     showNoteNum: 100,
-    bufferNoteNum: 1000,
+    bufferNoteNum: 250,
     initialNotes: [],
   };
 
