@@ -9,14 +9,14 @@
 </script>
 
 <a
-  class="card-title link link-hover rounded hover:bg-base-100"
+  class="card-title link link-hover rounded-full hover:bg-base-300 -mb-1"
   href={`https://${hostUrl}/${useridStr}`}
   target="_blank"
   rel="noreferrer"
 >
   {#if isRenote}
-    <div class="text-accent text-xs -mb-2">
-      🔁{user.name}がRenote
+    <div class="text-accent text-xs">
+      🔁{user.name === null ? user.username : user.name}がRenote
     </div>
   {:else}
     <div class="avatar">
