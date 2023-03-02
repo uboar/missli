@@ -134,7 +134,7 @@
               {/if}
             </div>
             <div class="text-xs truncate">
-              {useridStr}
+              {renoteUseridStr}
             </div>
           </div>
         </a>
