@@ -52,71 +52,88 @@
       hostUrl={user.hostUrl}
       isRenote={note.renote && !note.text}
     />
-    {#if note.text}
-      <p class="text-ellipsis overflow-hidden">
-        <Mfm
-          text={note.text}
-          hostUrl={user.hostUrl}
-          localEmojis={user.emojis}
-          remoteEmojis={note.emojis}
-        />
-      </p>
-    {/if}
 
-    <!-- メディア内容 -->
-    <Media files={note.files} />
-    <!-- リノート内容 -->
-    {#if note.renote}
-      <div class="card card-bordered border-accent rounded p-1">
-        <User user={note.renote.user} hostUrl={user.hostUrl} />
-        {#if note.renote.text}
-          <p class="text-ellipsis overflow-hidden">
-            <Mfm
-              text={note.renote.text}
-              hostUrl={user.hostUrl}
-              localEmojis={user.emojis}
-              remoteEmojis={note.renote.emojis}
-            />
-          </p>
-        {/if}
+    {#if note.cw}
+      <a
+        class="alert shadow-md mb-2"
+        href={`https://${user.hostUrl}/notes/${note.id}`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        <div class="-m-2">
+          <div class="badge badge-warning">CW</div>
+          <div class=" link link-hover">
+            {note.cw}
+          </div>
+        </div>
+      </a>
+    {:else}
+      {#if note.text}
+        <p class="text-ellipsis overflow-hidden">
+          <Mfm
+            text={note.text}
+            hostUrl={user.hostUrl}
+            localEmojis={user.emojis}
+            remoteEmojis={note.emojis}
+          />
+        </p>
+      {/if}
 
-        <!-- メディア内容 -->
-        <Media files={note.renote.files} />
+      <!-- メディア内容 -->
+      <Media files={note.files} />
+      <!-- リノート内容 -->
+      {#if note.renote}
+        <div class="card card-bordered border-accent rounded p-1">
+          <User user={note.renote.user} hostUrl={user.hostUrl} />
+          {#if note.renote.text}
+            <p class="text-ellipsis overflow-hidden">
+              <Mfm
+                text={note.renote.text}
+                hostUrl={user.hostUrl}
+                localEmojis={user.emojis}
+                remoteEmojis={note.renote.emojis}
+              />
+            </p>
+          {/if}
 
-        <!-- リアクション -->
-        <div class="flex flex-row flex-wrap">
-          {#each Object.entries(note.renote.reactions) as [name, num]}
+          <!-- メディア内容 -->
+          <Media files={note.renote.files} />
+
+          <!-- リアクション -->
+          <div class="flex flex-row flex-wrap">
+            {#each Object.entries(note.renote.reactions) as [name, num]}
+              <Reaction
+                {user}
+                {name}
+                {num}
+                on:destroy={() => {
+                  destroyEmoji(name, note.renote.reactions);
+                }}
+                noteId={note.renote.id}
+                reactionEmojis={note.renote.reactionEmojis}
+              />
+            {/each}
+          </div>
+        </div>
+      {/if}
+
+      <!-- リアクション -->
+      {#if note.reactions}
+        <div>
+          {#each Object.entries(note.reactions) as [name, num]}
             <Reaction
               {user}
               {name}
               {num}
               on:destroy={() => {
-                destroyEmoji(name, note.renote.reactions);
+                destroyEmoji(name, note.reactions);
               }}
-              noteId={note.renote.id}
-              reactionEmojis={note.renote.reactionEmojis}
+              noteId={note.id}
+              reactionEmojis={note.reactionEmojis}
             />
           {/each}
         </div>
-      </div>
-    {/if}
-
-    <!-- リアクション -->
-    {#if note.reactions}
-      <div>
-        {#each Object.entries(note.reactions) as [name, num]}
-          <Reaction
-            {user}
-            {name}
-            {num}
-            on:destroy={() => {
-              destroyEmoji(name, note.reactions);
-            }}
-            noteId={note.id}
-            reactionEmojis={note.reactionEmojis}
-          />
-        {/each}
-      </div>
+      {/if}
     {/if}
     <a
       class="text-right text-xs link -mt-3"
