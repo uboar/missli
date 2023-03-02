@@ -233,7 +233,7 @@
       {/if}
     {:else}
       <div class="alert alert-error h-10">
-        {user.hostUrl}との通信にエラーが発生しました
+        ホストとの通信にエラーが発生しました
       </div>
     {/if}
   </div>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { userDataArray, selfUrl, setCookie } from "../lib/userdata";
+  import { users, selfUrl, setCookie } from "../lib/userdata";
   import type { userData } from "../lib/userdata";
   import { Stream, api } from "misskey-js";
 
@@ -44,7 +44,7 @@
 
         setCookie(userdata);
 
-        userDataArray.update((val) => [...val, userdata]);
+        users.update((val) => [...val, userdata]);
         location.href = window.location.origin + window.location.pathname;
       }
     } catch (err) {

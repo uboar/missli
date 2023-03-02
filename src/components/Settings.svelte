@@ -1,11 +1,11 @@
 <script lang="ts">
   import Auth from "./Auth.svelte";
-  import { settings } from "../lib/userdata";
+  import { settings, users, deleteUser } from "../lib/userdata";
 
   let selectedTab = 0;
 
   const tabs = [
-    { name: "アカウントの追加", value: 0 },
+    { name: "アカウントの設定", value: 0 },
     { name: "全般設定", value: 1 },
   ];
 
@@ -59,6 +59,22 @@
     {/each}
   </div>
   {#if selectedTab === 0}
+    <h1 class="text-2xl">連携しているアカウント</h1>
+    {#each $users as user, index (user.id)}
+      <div class="card bg-base-300 card-compact w-full my-2">
+        <div class="card-body">
+          <div class="card-actions flex">
+            <btn class="flex-1 text-xl font-bold">
+              @{user.userName}@{user.hostUrl}</btn
+            >
+            <btn class="btn btn-error -my-2" on:click={deleteUser(index)} on:keypress={deleteUser(index)}
+              >連携解除</btn
+            >
+          </div>
+        </div>
+      </div>
+    {/each}
+    <div class="divider-vertical" />
     <Auth />
   {:else if selectedTab === 1}
     <span class="label-text">カラーテーマ</span>

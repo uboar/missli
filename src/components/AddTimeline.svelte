@@ -1,12 +1,7 @@
 <script lang="ts">
-  import { userDataArray, timelines } from "../lib/userdata";
-  import type { userData } from "../lib/userdata";
-
+  import { users, timelines } from "../lib/userdata";
   let selectedChannel = null;
   let selectedUserNum = null;
-  let users: Array<userData> = [];
-
-  userDataArray.subscribe((val) => (users = val));
 
   const channelTypes = [
     { name: "ホーム", value: "homeTimeline" },
@@ -22,7 +17,7 @@
         id: new Date().valueOf(),
         channel: channelTypes[selectedChannel].value as any,
         userDataIndex: selectedUserNum,
-        channelName: `${channelTypes[selectedChannel].name} / ${users[selectedUserNum].hostUrl}`,
+        channelName: `${channelTypes[selectedChannel].name} / ${$users[selectedUserNum].hostUrl}`,
       },
     ]);
   };
@@ -39,7 +34,7 @@
             bind:value={selectedUserNum}
             class="select select-bordered w-full"
           >
-            {#each users as user, index (user.sessionId)}
+            {#each $users as user, index (user.id)}
               <option value={index}>{user.userName}@{user.hostUrl}</option>
             {/each}
           </select>

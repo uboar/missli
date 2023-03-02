@@ -2,7 +2,7 @@
   import Navbar from "./components/Navbar.svelte";
   import Auth from "./components/Auth.svelte";
   import {
-    userDataArray,
+    users,
     timelines,
     getCookie,
     settings,
@@ -16,28 +16,10 @@
   let loading = true;
 
   onMount(async () => {
-    $userDataArray = await getCookie();
+    $users = await getCookie();
     loading = false;
   });
 
-  const timelineLocal = JSON.parse(
-    localStorage.getItem("timelines")
-  ) as unknown as Array<timelineOptions>;
-
-  const settingsLocal = JSON.parse(
-    localStorage.getItem("settings")
-  ) as unknown as settingsType;
-
-  if (settingsLocal) $settings = { ...$settings, ...settingsLocal };
-  if (timelineLocal) $timelines = timelineLocal;
-
-  timelines.subscribe((val) => {
-    localStorage.setItem("timelines", JSON.stringify(val));
-  });
-
-  settings.subscribe((val) => {
-    localStorage.setItem("settings", JSON.stringify(val));
-  });
 </script>
 
 <main data-theme={$settings.theme} class="screen">
@@ -46,7 +28,7 @@
     <div class="pb-10" />
     {#if loading}
       <progress class="progress w-full my-8" />
-    {:else if $userDataArray.length === 0}
+    {:else if $users.length === 0}
       <div class="mt-4 text-2xl w-screen text-center">
         ↗にある⚙（設定）からユーザーを追加してください！
       </div>
@@ -54,7 +36,7 @@
       <div class="flex flex-row w-fit h-full">
         {#each $timelines as timeline}
           <Timeline
-            user={$userDataArray[timeline.userDataIndex]}
+            user={$users[timeline.userDataIndex]}
             bind:options={timeline}
           />
         {/each}
