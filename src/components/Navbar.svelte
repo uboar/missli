@@ -1,5 +1,6 @@
 <script lang="ts">
   import { version } from "../../package.json";
+  import { users } from "../lib/userdata";
   import AddTimeline from "./AddTimeline.svelte";
   import Post from "./Post.svelte";
   import Settings from "./Settings.svelte";
@@ -13,39 +14,43 @@
       target="_blank"
       rel="noreferrer"
     >
-      MissLI 
+      MissLI
       <span class="text-sm mx-4">{version}</span>
     </a>
   </div>
   <div class="navbar-end">
-    <label
-      class="btn group gap-2 btn-outline border-accent btn-sm p-1 px-16 mx-2 text-accent hover:text-primary-focus"
-      for="post-modal"
-    >
-      <!-- ノートアイコン -->
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6 fill-accent group-hover:fill-primary-focus"
-        viewBox="0 0 24 24"
-        ><title>send</title><path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg
+    {#if $users.length > 0}
+      <label
+        class="btn group gap-2 btn-outline border-accent btn-sm p-1 px-16 mx-2 text-accent hover:text-primary-focus"
+        for="post-modal"
       >
-      ノート
-    </label>
-    <label
-      class="btn group gap-2 btn-outline border-primary-content btn-sm p-1 mx-2 text-primary-content hover:text-primary-focus"
-      for="addtimeline-modal"
-    >
-      <!-- +アイコン -->
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6 fill-primary-content group-hover:fill-primary-focus"
-        viewBox="0 0 24 24"
-        ><title>plus</title><path
-          d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
-        /></svg
+        <!-- ノートアイコン -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 fill-accent group-hover:fill-primary-focus"
+          viewBox="0 0 24 24"
+          ><title>send</title><path
+            d="M2,21L23,12L2,3V10L17,12L2,14V21Z"
+          /></svg
+        >
+        ノート
+      </label>
+      <label
+        class="btn group gap-2 btn-outline border-primary-content btn-sm p-1 mx-2 text-primary-content hover:text-primary-focus"
+        for="addtimeline-modal"
       >
-      タイムラインを追加
-    </label>
+        <!-- +アイコン -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 fill-primary-content group-hover:fill-primary-focus"
+          viewBox="0 0 24 24"
+          ><title>plus</title><path
+            d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+          /></svg
+        >
+        タイムラインを追加
+      </label>
+    {/if}
     <label
       class="btn group gap-2 btn-outline border-primary-content btn-sm p-1 mx-2 text-primary-content hover:text-primary-focus"
       for="settings-modal"
