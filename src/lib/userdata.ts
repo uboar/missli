@@ -65,18 +65,22 @@ export const getCookie = async (): Promise<Array<userData>> => {
 
     for (let i = 0; i < users.length; i++) {
         try {
+            users[i].stream = new Stream(`https://${users[i].hostUrl}`, {
+                token: users[i].token,
+            })
             users[i].cli = new api.APIClient({
                 origin: `https://${users[i].hostUrl}`,
                 credential: users[i].token
             })
-            users[i].stream = new Stream(`https://${users[i].hostUrl}`, {
-                token: users[i].token,
-            })
 
             users[i].emojis = (await users[i].cli.request("emojis")).emojis;
         } catch (err) {
-            console.log(err);
+            console.error(err);
+            console.log(`${users[i].hostUrl}との認証に失敗しました。`);
             window.alert(`${users[i].hostUrl}との認証に失敗しました。`);
+            // Streamがerrorを返さない暫定対応
+            users[i].stream.close();
+            users[i].cli = null;
             users[i].ok = false;
         }
     }
