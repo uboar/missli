@@ -93,8 +93,6 @@ export const getCookie = async (): Promise<Array<userData>> => {
       users[i].ok = false;
     }
   }
-
-  console.log(users);
   return users;
 };
 

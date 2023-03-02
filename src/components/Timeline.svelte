@@ -56,7 +56,7 @@
 
       if(e.type === "reacted"){
         if(e.body.reaction.indexOf("@.") < 0){
-          if(notes[noteIndex].reactionEmojis === undefined) notes[noteIndex]["reactionEmojis"] = {};
+          if(notes[noteIndex]["reactionEmojis"] === undefined) notes[noteIndex]["reactionEmojis"] = {};
           notes[noteIndex].reactionEmojis[e.body.emoji.name] = e.body.emoji.url
         }
         if(notes[noteIndex].reactions[e.body.reaction] === undefined){
@@ -147,25 +147,31 @@
             <span class="label-text">タイムラインの大きさ</span>
             <div class="btn-group">
               <button
-                class="btn btn-outline btn-sm w-1/4"
+                class="btn btn-outline btn-sm w-1/5"
+                on:click={() => {
+                  options.width = "12rem";
+                }}>ちび</button
+              >
+              <button
+                class="btn btn-outline btn-sm w-1/5"
                 on:click={() => {
                   options.width = "24rem";
                 }}>小</button
               >
               <button
-                class="btn btn-outline btn-sm w-1/4"
+                class="btn btn-outline btn-sm w-1/5"
                 on:click={() => {
                   options.width = "36rem";
                 }}>中</button
               >
               <button
-                class="btn btn-outline btn-sm w-1/4"
+                class="btn btn-outline btn-sm w-1/5"
                 on:click={() => {
                   options.width = "48rem";
                 }}>大</button
               >
               <button
-                class="btn btn-outline btn-sm w-1/4"
+                class="btn btn-outline btn-sm w-1/5"
                 on:click={() => {
                   options.width = "100vw";
                 }}>画面幅</button

@@ -35,46 +35,52 @@
   onMount(() => {
     if (!stream) return;
     stream.send("subNote", {
-      id: note.id
-    })
+      id: note.id,
+    });
   });
   onDestroy(() => {
-    if(!stream) return;
+    if (!stream) return;
     stream.send("unsubNote", {
-      id: note.id
-    })
-  })
+      id: note.id,
+    });
+  });
 </script>
 
 <div
   class="card card-bordered bg-base-100 w-full my-2 shadow-sm hover:bg-base-200"
 >
   <div class="card-body -my-6 -mx-4">
-    <div class="card-title overflow-hidden">
+    <a
+      class="card-title link link-hover rounded hover:bg-base-100 -mb-1"
+      href={`https://${user.hostUrl}/${useridStr}`}
+      target="_blank"
+      rel="noreferrer"
+    >
       <!-- ユーザー名とアイコン -->
-      <div class="avatar">
-        <div class="w-8 rounded-full">
-          <img src={note.user.avatarUrl} alt={note.user.username} />
+      {#if (note.renote) && (!note.text)}
+        <div class="text-accent text-xs -mb-2">
+           🔁{note.user.name}がRenote
         </div>
-      </div>
-      <div class="flex flex-col">
-        <div class="text-sm text-base-content truncate">
-          {#if note.user.name === null}
-            {note.user.username}
-          {:else}
-            {note.user.name}
-          {/if}
+      {:else}
+        <div class="avatar">
+          <div class="w-8 rounded-full -m-1">
+            <img src={note.user.avatarUrl} alt={note.user.username} />
+          </div>
         </div>
-        <a
-          class="text-xs overflow-hidden text-ellipsis link link-hover"
-          href={`https://${user.hostUrl}/${useridStr}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {useridStr}
-        </a>
-      </div>
-    </div>
+        <div class="w-full overflow-clip">
+          <div class="text-sm truncate -mb-1">
+            {#if note.user.name === null}
+              {note.user.username}
+            {:else}
+              {note.user.name}
+            {/if}
+          </div>
+          <div class="text-xs truncate">
+            {useridStr}
+          </div>
+        </div>
+      {/if}
+    </a>
     {#if note.text}
       <p class="text-ellipsis overflow-hidden">
         <Mfm
@@ -110,29 +116,31 @@
     <!-- リノート内容 -->
     {#if note.renote}
       <div class="card card-bordered border-accent rounded p-1">
-        <div class="card-title overflow-hidden">
+        <a
+          class="card-title link link-hover rounded hover:bg-base-100 -mb-1 ml-1"
+          href={`https://${user.hostUrl}/${useridStr}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <!-- ユーザー名とアイコン -->
           <div class="avatar">
-            <div class="w-8 rounded-full">
-              <img
-                src={note.renote.user.avatarUrl}
-                alt={note.renote.user.username}
-              />
+            <div class="w-8 rounded-full -m-1">
+              <img src={note.renote.user.avatarUrl} alt={renoteUseridStr} />
             </div>
           </div>
-          <div class="flex flex-col">
-            <div class="text-sm text-accent truncate">
-              {note.renote.user.name}
+          <div class="w-full overflow-clip">
+            <div class="text-sm truncate -mb-1">
+              {#if note.renote.user.name === null}
+                {note.renote.user.username}
+              {:else}
+                {note.renote.user.name}
+              {/if}
             </div>
-            <a
-              class="text-xs overflow-hidden text-ellipsis link link-accent link-hover"
-              href={`https://${user.hostUrl}/${renoteUseridStr}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {renoteUseridStr}
-            </a>
+            <div class="text-xs truncate">
+              {useridStr}
+            </div>
           </div>
-        </div>
+        </a>
         {#if note.renote.text}
           <p class="text-ellipsis overflow-hidden">
             <Mfm
@@ -218,7 +226,7 @@
       </div>
     {/if}
     <a
-      class="text-right text-xs link"
+      class="text-right text-xs link -mt-3"
       href={`https://${user.hostUrl}/notes/${note.id}`}
       target="_blank"
       rel="noreferrer"
