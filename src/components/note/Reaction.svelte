@@ -8,7 +8,7 @@
   export let user: userData;
   export let color = "accent";
   export let noteId = "";
-  export let isReacted = true;
+  export let isReacted = false;
 
   const dispatch = createEventDispatcher();
 
