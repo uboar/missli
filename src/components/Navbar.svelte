@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { version } from "../../package.json";
   import AddTimeline from "./AddTimeline.svelte";
   import Post from "./Post.svelte";
   import Settings from "./Settings.svelte";
@@ -12,7 +13,8 @@
       target="_blank"
       rel="noreferrer"
     >
-      MissLI
+      MissLI 
+      <span class="text-sm mx-4">{version}</span>
     </a>
   </div>
   <div class="navbar-end">
