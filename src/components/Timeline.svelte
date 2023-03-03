@@ -47,10 +47,9 @@
       return;
     }
 
-    streamChannel = user.stream.useChannel(options.channel);
-    streamChannel.on("note", (payload: NoteType) => {
-      notes = uniqBy([payload, ...notes].slice(0, options.bufferNoteNum), "id");
-    });
+    /**
+     * ノート情報の更新
+     */
     user.stream.on("noteUpdated", (e) => {
       const noteIndex = notes.findIndex((v) => v.id === e.id);
 
@@ -71,6 +70,9 @@
       }
     });
 
+    /**
+     * 初期タイムラインの取得
+     */
     if (options.channel === "globalTimeline")
       notes = uniqBy(
         [...(await user.cli.request("notes/global-timeline")), ...notes],
@@ -91,6 +93,14 @@
         [...(await user.cli.request("notes/timeline")), ...notes],
         "id"
       );
+
+    /**
+     * チャンネルに接続
+     */
+    streamChannel = user.stream.useChannel(options.channel);
+    streamChannel.on("note", (payload: NoteType) => {
+      notes = uniqBy([payload, ...notes].slice(0, options.bufferNoteNum), "id");
+    });
   });
 
   const timelineDelete = () => {
@@ -131,6 +141,7 @@
     bind:this={scrollPos}
   >
     {#if !errFlg}
+      <!-- オプション -->
       {#if showOptions}
         <div class="relative w-full p-2">
           <h3 class="border-b">タイムライン設定</h3>

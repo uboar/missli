@@ -21,6 +21,13 @@
             class="rounded-lg {file.isSensitive ? 'blur' : ''}"
           />
         </a>
+      {:else if file.type.indexOf("video") >= 0}
+        <video controls>
+          <source src={file.url} />
+          <track kind="captions" />
+        </video>
+      {:else if file.type.indexOf("audio") >= 0}
+        <audio controls src={file.url} />
       {/if}
     {/each}
   {/if}
