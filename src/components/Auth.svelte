@@ -73,7 +73,8 @@
   <div class="card bg-base-300 w-full">
     <div class="card-body">
       <div class="card-title mb-2">認証情報を追加する</div>
-      <span>追加したいアカウントのインスタンスURL(例：misskey.io)を入力してください</span>
+      <p>追加したいアカウントのインスタンスURL(例：misskey.io)を入力してください。</p>
+      <p class="text-warning font-bold">現在、Misskey v12系のインスタンスではカスタム絵文字を正しく取得出来ません。</p>
       <input
         type="text"
         class="input"

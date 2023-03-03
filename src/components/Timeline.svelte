@@ -127,7 +127,7 @@
     </div>
   </div>
   <div
-    class="w-full timeline-body absolute pt-8 h-full overflow-y-scroll z-0 overflow-x-hidden inline-flex"
+    class="w-full timeline-body absolute pt-8 h-full overflow-y-scroll z-0 overflow-x-hidden inline-flex overscroll-none"
     bind:this={scrollPos}
   >
     {#if !errFlg}
