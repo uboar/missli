@@ -88,7 +88,12 @@ export const getCookie = async (): Promise<Array<userData>> => {
         credential: users[i].token,
       });
 
-      users[i].emojis = (await users[i].cli.request("emojis")).emojis;
+      try{
+        users[i].emojis = (await users[i].cli.request("emojis")).emojis;
+      }catch(err){
+        console.error(err);
+        window.alert("カスタム絵文字一覧の取得に失敗しました。")
+      }
     } catch (err) {
       console.error(err);
       console.log(`${users[i].hostUrl}との認証に失敗しました。`);

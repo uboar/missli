@@ -40,8 +40,6 @@
           }),
         };
 
-        userdata.emojis = (await userdata.cli.request("emojis")).emojis;
-
         setCookie(userdata);
 
         users.update((val) => [...val, userdata]);
