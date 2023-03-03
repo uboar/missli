@@ -94,7 +94,7 @@
       <Media files={note.files} />
       <!-- リノート内容 -->
       {#if note.renote}
-        <div class="card card-bordered border-accent rounded p-1">
+        <div class="card card-bordered border-accent rounded p-1 -mt-2">
           <User user={note.renote.user} hostUrl={user.hostUrl} />
           {#if note.renote.text}
             <p class="text-ellipsis overflow-hidden">
