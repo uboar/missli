@@ -79,6 +79,17 @@
         </p>
       {/if}
 
+      {#if note.poll}
+        <a
+          class="btn btn-xs btn-info"
+          href={`https://${user.hostUrl}/notes/${note.id}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          投票
+        </a>
+      {/if}
+
       <!-- メディア内容 -->
       <Media files={note.files} />
       <!-- リノート内容 -->
