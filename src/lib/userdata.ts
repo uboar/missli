@@ -92,6 +92,7 @@ export const getCookie = async (): Promise<Array<userData>> => {
         users[i].emojis = (await users[i].cli.request("emojis")).emojis;
       }catch(err){
         console.error(err);
+        users[i].emojis = [];
         // window.alert("カスタム絵文字一覧の取得に失敗しました。")
       }
     } catch (err) {
