@@ -3,6 +3,20 @@
 @tailwind utilities;
 
 .navbar {
-    @apply min-h-0;
-    @apply h-10
+  @apply min-h-0;
+  @apply h-10;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-base-300;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-base-content;
+  @apply rounded-full;
 }

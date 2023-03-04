@@ -46,6 +46,6 @@
 
 <style>
   .screen {
-    height: 98svh;
+    height: calc(100svh - 10px);
   }
 </style>

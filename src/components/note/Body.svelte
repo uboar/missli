@@ -47,15 +47,17 @@
     </div>
   </button>
 {/if}
-{#if (note.text && !note.cw) || showCw}
-  <p class="text-ellipsis overflow-hidden">
-    <Mfm
-      bind:text={note.text}
-      hostUrl={user.hostUrl}
-      localEmojis={user.emojis}
-      remoteEmojis={note.emojis}
-    />
-  </p>
+{#if !note.cw || showCw}
+  {#if note.text}
+    <p class="text-ellipsis overflow-hidden">
+      <Mfm
+        bind:text={note.text}
+        hostUrl={user.hostUrl}
+        localEmojis={user.emojis}
+        remoteEmojis={note.emojis}
+      />
+    </p>
+  {/if}
   {#if note.poll}
     <a
       class="btn btn-xs btn-info"
@@ -66,7 +68,7 @@
       投票
     </a>
   {/if}
-  
+
   <!-- メディア内容 -->
   {#if note.files.length > 0 && !compact}
     <Media files={note.files} />

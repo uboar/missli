@@ -87,7 +87,7 @@
       ...defaultOption,
       ...options,
     };
-
+    console.log(options.color)
     if (options.initialNotes.length > 0) notes = options.initialNotes;
     if (dummy) return;
 
@@ -173,7 +173,10 @@
   });
 </script>
 
-<div class="h-full bg-base-300 relative rounded" style="width:{options.width}">
+<div
+  class="h-full bg-base-300 relative rounded"
+  style="width:{options.width}"
+>
   <div class="absolute w-full flex justify-center z-10">
     <div class="flex flex-col w-full mx-8">
       <button
@@ -193,6 +196,7 @@
   <div
     class="w-full timeline-body absolute pt-8 h-full overflow-y-scroll z-0 overflow-x-hidden inline-flex overscroll-none"
     bind:this={scrollPos}
+    style:--color={options.color + "20"}
   >
     {#if !errFlg}
       <!-- オプション -->
@@ -331,3 +335,9 @@
     </div>
   </div>
 </div>
+
+<style>
+  div::-webkit-scrollbar-track {
+    background-color: var(--color);
+  }
+</style>
