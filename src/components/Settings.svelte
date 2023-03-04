@@ -41,6 +41,7 @@
     "night",
     "coffee",
     "winter",
+    "med1gp",
   ];
 </script>
 

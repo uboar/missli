@@ -141,7 +141,7 @@
   <div class="absolute w-full flex justify-center z-10">
     <div class="flex flex-col w-full mx-8">
       <button
-        class="btn btn-xs bg-base-300 btn-outline btn-block my-1"
+        class="btn btn-xs bg-base-100 btn-outline btn-block my-1"
         style="color: {options.color}"
         on:click={() => {
           scrollPos.scrollTop = 0;
@@ -244,6 +244,7 @@
           </div>
         </div>
       {:else}
+      <!-- ノート表示 -->
         <div class="relative w-full z-10">
           {#each showNotes as note (note.id)}
             <Note {note} {user} stream={user.stream} />
@@ -283,6 +284,7 @@
     class="absolute bottom-0 w-full z-50 bg-base-200 bg-opacity-70 border-b-4"
     style="border-color:{options.color}"
   >
+  <!-- タイムラインのフッター -->
     {#if showNote}
       <div class="card card-compact">
         <div class="card-body">
@@ -308,7 +310,7 @@
         </div>
       </div>
     {/if}
-    <div class="flex my-2 justify-around">
+    <div class="flex my-1 justify-around">
       <div class="tooltip" data-tip="ノート">
         <button
           class="btn btn-circle btn-primary fill-base-100"
@@ -318,10 +320,7 @@
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
-            class="h-8 w-8"
-            ><path
-              d="M4 6.03L11.5 9.25L4 8.25L4 6.03M11.5 14.75L4 17.97V15.75L11.5 14.75M2 3L2 10L17 12L2 14L2 21L23 12L2 3Z"
-            /></svg
+            class="h-8 w-8"><path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg
           >
         </button>
       </div>

@@ -52,6 +52,14 @@
       hostUrl={user.hostUrl}
       isRenote={note.renote && !note.text}
     />
+    {#if note.replyId}
+      <a
+        class="badge badge-sm -mb-1"
+        href={`https://${user.hostUrl}/notes/${note.replyId}`}
+        target="_blank"
+        rel="noreferrer"
+      >↩️リプライ</a>
+    {/if}
 
     {#if note.cw}
       <a
