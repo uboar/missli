@@ -1,7 +1,11 @@
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte";
+  import { onMount, onDestroy, tick } from "svelte";
   import Note from "./Note.svelte";
-  import type { userData, timelineOptions, postNote as postNoteType } from "../lib/userdata";
+  import type {
+    userData,
+    timelineOptions,
+    postNote as postNoteType,
+  } from "../lib/userdata";
   import type { Note as NoteType } from "misskey-js/built/entities";
   import type { Connection } from "misskey-js/built/streaming";
   import { timelines } from "../lib/userdata";
@@ -38,6 +42,40 @@
     visibility: "public",
     localOnly: false,
     cw: null,
+  };
+
+  let renoteNote: NoteType | null = null;
+  const renoteRequest = async (note: NoteType) => {
+    renoteNote = null;
+    replyNote = null;
+    await tick();
+    if (note.renote && !note.text) {
+      renoteNote = note.renote;
+      postNote.localOnly = note.renote.localOnly;
+      postNote.visibility = note.renote.visibility;
+    } else {
+      renoteNote = note;
+      postNote.localOnly = note.localOnly;
+      postNote.visibility = note.visibility;
+    }
+    showNote = true;
+  };
+
+  let replyNote: NoteType | null = null;
+  const replyRequest = async (note: NoteType) => {
+    renoteNote = null;
+    replyNote = null;
+    await tick();
+    if (note.renote && !note.text) {
+      replyNote = note.renote;
+      postNote.localOnly = note.renote.localOnly;
+      postNote.visibility = note.renote.visibility;
+    } else {
+      replyNote = note;
+      postNote.localOnly = note.localOnly;
+      postNote.visibility = note.visibility;
+    }
+    showNote = true;
   };
 
   $: showNotes = notes.slice(beginNotes, options.showNoteNum + beginNotes);
@@ -161,7 +199,13 @@
         <!-- ノート表示 -->
         <div class="relative w-full z-10">
           {#each showNotes as note (note.id)}
-            <Note {note} {user} stream={user.stream} />
+            <Note
+              {note}
+              {user}
+              stream={user.stream}
+              on:renoteRequest={() => renoteRequest(note)}
+              on:replyRequest={() => replyRequest(note)}
+            />
           {/each}
           <button
             class="btn btn-block btn-secondary my-2"
@@ -200,7 +244,12 @@
   >
     <!-- タイムラインのフッター -->
     {#if showNote}
-      <TimelinePostNote cli={user.cli} bind:postNote />
+      <TimelinePostNote
+        bind:user
+        bind:postNote
+        bind:replyNote
+        bind:renoteNote
+      />
     {/if}
     <div class="flex my-1 justify-around">
       <!-- ノートボタン -->

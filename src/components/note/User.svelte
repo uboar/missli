@@ -16,7 +16,7 @@
 >
   {#if isRenote}
     <div class="text-accent text-xs">
-      🔁{user.name === null ? user.username : user.name}がRenote
+      🔁{user.name === null ? user.username : user.name}がリノート
     </div>
   {:else}
     <div class="avatar">

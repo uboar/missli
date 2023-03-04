@@ -1,16 +1,16 @@
 <script lang="ts">
-  import type { api } from "misskey-js";
   import type { Note as NoteType } from "misskey-js/built/entities";
   import { onMount } from "svelte";
-  import type { postNote as postNoteType } from "../../lib/userdata";
+  import type { postNote as postNoteType, userData } from "../../lib/userdata";
+  import Note from "../Note.svelte";
 
   export let postNote: postNoteType;
-  export let cli: api.APIClient | null = null;
+  export let user: userData | null = null;
   export let replyNote: NoteType | null = null;
   export let renoteNote: NoteType | null = null;
 
   onMount(() => {
-    if (!cli) return;
+    if (!user) return;
   });
 
   let noteBusy = false;
@@ -31,25 +31,81 @@
     },
   ];
 
+  const deleteAttachNote = () => {
+    replyNote = null;
+    renoteNote = null;
+  };
+
   const sendNote = async () => {
     noteBusy = true;
     try {
       let postNoteBuff = { ...postNote };
 
       if (!showCw) delete postNoteBuff.cw;
-      await cli.request("notes/create", postNoteBuff);
+
+      if (renoteNote) {
+        if (postNoteBuff.text === "") delete postNoteBuff.text;
+        postNoteBuff.renoteId = renoteNote.id;
+      } else if (replyNote) {
+        postNoteBuff.replyId = replyNote.id;
+      }
+
+      await user.cli.request("notes/create", postNoteBuff);
       noteBusy = false;
       postNote.text = "";
       postNote.cw = "";
+      renoteNote = null;
+      replyNote = null;
     } catch (err) {
       console.error(err);
       noteBusy = false;
     }
   };
+
+  $: renoteText = () => {
+    if (renoteNote && postNote.text === "") return "リノートする";
+    else if (renoteNote) return "引用リノートする";
+    else if (replyNote) return "返信する";
+    else return "ノートする";
+  };
+
+  $: disablePost = () => {
+    if (postNote.text === "" && !renoteNote) return true;
+    return false;
+  };
 </script>
 
 <div class="card card-compact">
   <div class="card-body">
+    {#if replyNote || renoteNote}
+      <div class="flex justify-between -my-3">
+        {#if replyNote}
+          <span class="badge mt-1">↩️返信</span>
+        {/if}
+        {#if renoteNote}
+          <span class="badge badge-outline badge-accent mt-1">🔁リノート</span>
+        {/if}
+        <button
+          class="btn btn-xs btn-warning fill-warning-content"
+          on:click={deleteAttachNote}
+          on:keypress={deleteAttachNote}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            class="h-4 w-4"
+            ><path
+              d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+            /></svg
+          >
+        </button>
+      </div>
+      {#if replyNote}
+        <Note compact bind:note={replyNote} {user} />
+      {:else if renoteNote}
+        <Note compact bind:note={renoteNote} {user} />
+      {/if}
+    {/if}
     <div class="flex gap-4">
       <div class="form-control flex-1">
         <span class="label-text">公開範囲</span>
@@ -103,13 +159,13 @@
     />
     <div class="card-actions">
       <button
-        class="btn btn-block btn-sm btn-primary {noteBusy
+        class="btn btn-block btn-sm btn-primary {noteBusy || disablePost()
           ? 'btn-disabled'
           : ''}"
         on:click={sendNote}
         on:keypress={sendNote}
       >
-        ノートする
+        {renoteText()}
       </button>
     </div>
   </div>
