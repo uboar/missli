@@ -35,7 +35,7 @@
       <div class="flex flex-row w-fit h-full">
         {#each $timelines as timeline}
           <Timeline
-            user={$users[timeline.userDataIndex]}
+            bind:user={$users[timeline.userDataIndex]}
             bind:options={timeline}
           />
         {/each}

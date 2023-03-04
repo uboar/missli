@@ -1,9 +1,11 @@
 import { writable, get } from "svelte/store";
 import { Stream, api } from "misskey-js";
 import type { Channels } from "misskey-js/built/streaming.types";
-import type { Note } from "misskey-js/built/entities";
+import type { Note, Notification } from "misskey-js/built/entities";
 import m from "moment/min/moment-with-locales.min.js";
+import uniqBy from "lodash/uniqBy";
 import "moment/locale/ja";
+import type { Connection } from "misskey-js/built/streaming";
 
 m.locale("ja");
 
@@ -11,13 +13,13 @@ export const moment = m;
 
 export type postNote = {
   text: string;
-  visibility?: "public" | "home" | "followers" | "specified"
-  cw?: string
+  visibility?: "public" | "home" | "followers" | "specified";
+  cw?: string;
   localOnly?: boolean;
   replyId?: string;
   renoteId?: string;
   channelId?: string;
-}
+};
 
 export type userData = {
   ok: boolean;
@@ -28,6 +30,9 @@ export type userData = {
   hostUrl: string;
   stream?: Stream;
   cli?: api.APIClient;
+  mainConnection?: Connection;
+  notifyBuffer?: Array<Notification>;
+  notifyUnOpen?: boolean;
   emojis?: any;
 };
 
@@ -45,10 +50,12 @@ export type timelineOptions = {
 
 export type settingsType = {
   theme?: string;
+  notifyBufferNum: number;
 };
 
 export const settings = writable<settingsType>({
   theme: "light",
+  notifyBufferNum: 100,
 });
 export const users = writable<Array<userData>>([]);
 export const timelines = writable<Array<timelineOptions>>([]);
@@ -98,9 +105,32 @@ export const getCookie = async (): Promise<Array<userData>> => {
         credential: users[i].token,
       });
 
-      try{
+      // 通知の取得
+      try {
+        users[i].notifyBuffer = await users[i].cli.request("i/notifications");
+        users[i].notifyUnOpen = true;
+        console.log(users[i].notifyBuffer);
+
+        users[i].mainConnection = users[i].stream.useChannel("main");
+        users[i].mainConnection.on("notification", (notify) => {
+          users[i].notifyBuffer = uniqBy(
+            [notify, ...users[i].notifyBuffer].slice(
+              0,
+              get(settings).notifyBufferNum
+            ),
+            "id"
+          );
+          users[i].notifyUnOpen = true;
+        });
+      } catch (err) {
+        console.log(err);
+        users[i].notifyBuffer = [];
+      }
+
+      // カスタム絵文字の取得
+      try {
         users[i].emojis = (await users[i].cli.request("emojis")).emojis;
-      }catch(err){
+      } catch (err) {
         console.error(err);
         users[i].emojis = [];
         // window.alert("カスタム絵文字一覧の取得に失敗しました。")
@@ -125,7 +155,7 @@ export const getCookie = async (): Promise<Array<userData>> => {
 export const deleteUser = (userDataIndex: number) => {
   document.cookie = `${get(users)[userDataIndex].id}=; Max-Age=0`;
   timelines.update((val) => {
-    let updateVal = val.filter((v) => v.userDataIndex !== userDataIndex)
+    let updateVal = val.filter((v) => v.userDataIndex !== userDataIndex);
 
     updateVal.forEach((v) => {
       if (v.userDataIndex > userDataIndex) v.userDataIndex -= 1;

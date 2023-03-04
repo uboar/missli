@@ -12,6 +12,7 @@
   import uniqBy from "lodash/uniqBy";
   import TimelineOptions from "./timeline/TimelineOptions.svelte";
   import TimelinePostNote from "./timeline/TimelinePostNote.svelte";
+  import TimelineNotify from "./timeline/TimelineNotify.svelte";
 
   export let dummy: boolean = false;
   export let user: userData = null;
@@ -37,6 +38,7 @@
   let scrollPos: HTMLElement = document.createElement("div");
   let errFlg = false;
   let showNote = false;
+  let showNotify = false;
   let postNote: postNoteType = {
     text: "",
     visibility: "public",
@@ -256,7 +258,34 @@
         bind:renoteNote
       />
     {/if}
+    {#if showNotify}
+      <TimelineNotify bind:user />
+    {/if}
     <div class="flex my-1 justify-around">
+      <!-- 通知ボタン -->
+      <div class="tooltip" data-tip={showNotify ? "閉じる" : "通知"}>
+        <div class="indicator">
+          {#if user.notifyUnOpen}
+            <span class="indicator-item badge badge-secondary" />
+          {/if}
+          <button
+            class="btn btn-circle btn-outline fill-base-content hover:fill-base-100"
+            on:click={() => (showNotify = !showNotify)}
+            on:keypress={() => (showNotify = !showNotify)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              class="h-8 w-8"
+              ><path
+                d={showNotify
+                  ? "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                  : "M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4A2,2 0 0,1 12,2A2,2 0 0,1 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21"}
+              /></svg
+            >
+          </button>
+        </div>
+      </div>
       <!-- ノートボタン -->
       <div class="tooltip" data-tip={showNote ? "閉じる" : "ノート"}>
         <button
@@ -283,7 +312,7 @@
         data-tip={showOptions ? "閉じる" : "タイムラインの設定"}
       >
         <button
-          class="btn btn-circle fill-base-100"
+          class="btn btn-circle btn-outline fill-base-content hover:fill-base-100"
           on:click={() => (showOptions = !showOptions)}
           on:keypress={() => (showOptions = !showOptions)}
         >
