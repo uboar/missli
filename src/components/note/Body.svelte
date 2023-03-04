@@ -36,8 +36,8 @@
 {#if note.cw}
   <button
     class="alert shadow-md mb-2"
-    on:click={() => showCw = !showCw}
-    on:keypress={() => showCw = !showCw}
+    on:click={() => (showCw = !showCw)}
+    on:keypress={() => (showCw = !showCw)}
   >
     <div class="-m-2">
       <div class="badge badge-warning">CW</div>
@@ -56,24 +56,24 @@
       remoteEmojis={note.emojis}
     />
   </p>
-{/if}
-
-{#if note.poll}
-  <a
-    class="btn btn-xs btn-info"
-    href={`https://${user.hostUrl}/notes/${note.id}`}
-    target="_blank"
-    rel="noreferrer"
-  >
-    投票
-  </a>
+  {#if note.poll}
+    <a
+      class="btn btn-xs btn-info"
+      href={`https://${user.hostUrl}/notes/${note.id}`}
+      target="_blank"
+      rel="noreferrer"
+    >
+      投票
+    </a>
+  {/if}
+  
+  <!-- メディア内容 -->
+  {#if note.files.length > 0 && !compact}
+    <Media files={note.files} />
+  {/if}
 {/if}
 
 {#if !compact}
-  <!-- メディア内容 -->
-  {#if note.files.length > 0}
-    <Media files={note.files} />
-  {/if}
   <!-- リノート内容 -->
   {#if note.renote}
     <div class="card card-bordered border-accent rounded p-1">
