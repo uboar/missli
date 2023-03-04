@@ -10,6 +10,8 @@
   export let note: NoteType;
   export let compact = false;
 
+  let showCw = false;
+
   const destroyEmoji = (emojiName: string, reactions: [key: number]) => {
     // console.log("break")
     // delete reactions[emojiName]
@@ -32,11 +34,10 @@
 {/if}
 
 {#if note.cw}
-  <a
+  <button
     class="alert shadow-md mb-2"
-    href={`https://${user.hostUrl}/notes/${note.id}`}
-    target="_blank"
-    rel="noreferrer"
+    on:click={() => showCw = !showCw}
+    on:keypress={() => showCw = !showCw}
   >
     <div class="-m-2">
       <div class="badge badge-warning">CW</div>
@@ -44,9 +45,9 @@
         {note.cw}
       </div>
     </div>
-  </a>
+  </button>
 {/if}
-{#if note.text}
+{#if (note.text && !note.cw) || showCw}
   <p class="text-ellipsis overflow-hidden">
     <Mfm
       bind:text={note.text}
