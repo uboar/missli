@@ -9,7 +9,7 @@
 </script>
 
 <a
-  class="card-title link link-hover rounded-full hover:bg-base-300 -mb-1"
+  class="card-title link link-hover rounded-full hover:bg-base-300 -mb-1 w-fit max-w-full pr-3"
   href={`https://${hostUrl}/${useridStr}`}
   target="_blank"
   rel="noreferrer"
