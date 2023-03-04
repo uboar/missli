@@ -1,11 +1,13 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
   import Note from "./Note.svelte";
-  import type { userData, timelineOptions } from "../lib/userdata";
+  import type { userData, timelineOptions, postNote as postNoteType } from "../lib/userdata";
   import type { Note as NoteType } from "misskey-js/built/entities";
   import type { Connection } from "misskey-js/built/streaming";
   import { timelines } from "../lib/userdata";
   import uniqBy from "lodash/uniqBy";
+  import TimelineOptions from "./timeline/TimelineOptions.svelte";
+  import TimelinePostNote from "./timeline/TimelinePostNote.svelte";
 
   export let dummy: boolean = false;
   export let user: userData = null;
@@ -31,25 +33,14 @@
   let scrollPos: HTMLElement = document.createElement("div");
   let errFlg = false;
   let showNote = false;
-  let noteBusy = false;
-  let postNote = {
+  let postNote: postNoteType = {
     text: "",
+    visibility: "public",
+    localOnly: false,
+    cw: null,
   };
 
   $: showNotes = notes.slice(beginNotes, options.showNoteNum + beginNotes);
-
-  const sendNote = async () => {
-    noteBusy = true;
-
-    try {
-      await user.cli.request("notes/create", postNote);
-      noteBusy = false;
-      postNote.text = "";
-    } catch (err) {
-      console.error(err);
-      noteBusy = false;
-    }
-  };
 
   onMount(async () => {
     options = {
@@ -161,90 +152,13 @@
     {#if !errFlg}
       <!-- オプション -->
       {#if showOptions}
-        <div class="relative w-full p-2 mb-16">
-          <h3 class="border-b">タイムライン設定</h3>
-          <div class="form-control mt-4">
-            <span class="label-text">タイムラインの名前</span>
-            <input
-              type="text"
-              class="input input-sm"
-              bind:value={options.channelName}
-            />
-            <div class="flex flex-row my-8">
-              <span class="label-text mr-8">タイムラインの色</span>
-              <input type="color" bind:value={options.color} />
-            </div>
-            <span class="label-text">タイムラインの大きさ</span>
-            <div class="btn-group">
-              <button
-                class="btn btn-outline btn-sm w-1/5"
-                on:click={() => {
-                  options.width = "12rem";
-                }}>ちび</button
-              >
-              <button
-                class="btn btn-outline btn-sm w-1/5"
-                on:click={() => {
-                  options.width = "24rem";
-                }}>小</button
-              >
-              <button
-                class="btn btn-outline btn-sm w-1/5"
-                on:click={() => {
-                  options.width = "36rem";
-                }}>中</button
-              >
-              <button
-                class="btn btn-outline btn-sm w-1/5"
-                on:click={() => {
-                  options.width = "48rem";
-                }}>大</button
-              >
-              <button
-                class="btn btn-outline btn-sm w-1/5"
-                on:click={() => {
-                  options.width = "100vw";
-                }}>画面幅</button
-              >
-            </div>
-            <span class="label-text">ノートの表示件数</span>
-            <input
-              type="number"
-              class="input input-sm"
-              bind:value={options.showNoteNum}
-            />
-            <span class="label-text">ノートのバッファ件数</span>
-            <input
-              type="number"
-              class="input input-sm"
-              bind:value={options.bufferNoteNum}
-            />
-
-            <button
-              class="btn btn-outline btn-secondary mt-4 btn-sm"
-              on:click={() => console.log(notes)}
-              >ノートのバッファをコンソールに出力</button
-            >
-
-            <button
-              class="btn btn-error btn-block mt-4"
-              on:click={timelineDelete}>タイムラインを削除</button
-            >
-            <div class="w-full flex justify-center absolute bottom-0">
-              <button
-                class="btn btn-primary btn-outline w-10/12 my-4"
-                on:click={() => {
-                  showOptions = !showOptions;
-                }}
-                on:keypress={() => {
-                  showOptions = !showOptions;
-                }}>閉じる</button
-              >
-            </div>
-          </div>
-        </div>
+        <TimelineOptions
+          bind:options
+          on:deleteRequest={() => timelineDelete()}
+          on:getNoteRequest={() => console.log(notes)}
+        />
       {:else}
-      <!-- ノート表示 -->
+        <!-- ノート表示 -->
         <div class="relative w-full z-10">
           {#each showNotes as note (note.id)}
             <Note {note} {user} stream={user.stream} />
@@ -281,37 +195,16 @@
     {/if}
   </div>
   <div
-    class="absolute bottom-0 w-full z-50 bg-base-200 bg-opacity-70 border-b-4"
+    class="absolute bottom-0 w-full z-50 bg-base-200 bg-opacity-90 border-b-4"
     style="border-color:{options.color}"
   >
-  <!-- タイムラインのフッター -->
+    <!-- タイムラインのフッター -->
     {#if showNote}
-      <div class="card card-compact">
-        <div class="card-body">
-          <textarea
-            class="textarea textarea-bordered"
-            bind:value={postNote.text}
-            placeholder="ノートする内容を入力して下さい！"
-            on:keydown={(e) => {
-              if (e.ctrlKey && e.code === "Enter") sendNote();
-            }}
-          />
-          <div class="card-actions">
-            <button
-              class="btn btn-block btn-sm btn-primary {noteBusy
-                ? 'btn-disabled'
-                : ''}"
-              on:click={sendNote}
-              on:keypress={sendNote}
-            >
-              ノートする
-            </button>
-          </div>
-        </div>
-      </div>
+      <TimelinePostNote cli={user.cli} bind:postNote />
     {/if}
     <div class="flex my-1 justify-around">
-      <div class="tooltip" data-tip="ノート">
+      <!-- ノートボタン -->
+      <div class="tooltip" data-tip={showNote ? "閉じる" : "ノート"}>
         <button
           class="btn btn-circle btn-primary fill-base-100"
           on:click={() => (showNote = !showNote)}
@@ -320,22 +213,34 @@
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
-            class="h-8 w-8"><path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg
+            class="h-8 w-8"
+            ><path
+              d={showNote
+                ? "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                : "M2,21L23,12L2,3V10L17,12L2,14V21Z"}
+            /></svg
           >
         </button>
       </div>
 
-      <div class="tooltip" data-tip="タイムラインの設定">
+      <!-- 設定ボタン -->
+      <div
+        class="tooltip"
+        data-tip={showOptions ? "閉じる" : "タイムラインの設定"}
+      >
         <button
           class="btn btn-circle fill-base-100"
           on:click={() => (showOptions = !showOptions)}
           on:keypress={() => (showOptions = !showOptions)}
-          ><svg
+        >
+          <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             class="h-8 w-8"
             ><path
-              d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"
+              d={showOptions
+                ? "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                : "M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"}
             /></svg
           >
         </button>

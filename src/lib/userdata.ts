@@ -9,6 +9,16 @@ m.locale("ja");
 
 export const moment = m;
 
+export type postNote = {
+  text: string;
+  visibility?: "public" | "home" | "followers" | "specified"
+  cw?: string
+  localOnly?: boolean;
+  replyId?: string;
+  renoteId?: string;
+  channelId?: string;
+}
+
 export type userData = {
   ok: boolean;
   id: number;
@@ -17,7 +27,7 @@ export type userData = {
   userName: string;
   hostUrl: string;
   stream?: Stream;
-  cli?: any;
+  cli?: api.APIClient;
   emojis?: any;
 };
 
