@@ -9,13 +9,13 @@
 </script>
 
 <a
-  class="card-title link link-hover rounded-full hover:bg-base-300 -mb-1 w-fit max-w-full pr-3"
+  class="card-title link link-hover rounded-full {(isRenote) ? "link-accent" : "hover:bg-base-300"} w-fit max-w-full pr-3"
   href={`https://${hostUrl}/${useridStr}`}
   target="_blank"
   rel="noreferrer"
 >
   {#if isRenote}
-    <div class="text-accent text-xs">
+    <div class="text-xs -mb-2 pr-3">
       🔁{user.name === null ? user.username : user.name}がリノート
     </div>
   {:else}
