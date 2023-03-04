@@ -111,6 +111,11 @@
         } else {
           notes[noteIndex].reactions[e.body.reaction]++;
         }
+      } else if (e.type === "unreacted") {
+        if (notes[noteIndex]["reactionEmojis"] === undefined)
+          notes[noteIndex]["reactionEmojis"] = {};
+        notes[noteIndex].reactionEmojis[e.body.emoji.name] = e.body.emoji.url;
+        notes[noteIndex].reactions[e.body.reaction]--;
       } else if (e.type === "deleted") {
         notes.splice(noteIndex, 1);
         notes = [...notes];

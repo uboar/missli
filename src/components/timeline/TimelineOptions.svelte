@@ -54,7 +54,7 @@ const timelineSizeEnum = [
     <div class="btn-group">
       {#each timelineSizeEnum as timelineSize (timelineSize.name)}
         <button
-          class="btn btn-outline btn-sm w-1/{timelineSizeEnum.length}"
+          class="btn btn-outline btn-sm w-1/5"
           on:click={() => {
             options.width = timelineSize.value;
           }}>{timelineSize.name}</button
