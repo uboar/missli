@@ -87,7 +87,7 @@
       ...defaultOption,
       ...options,
     };
-    console.log(options.color)
+    console.log(options.color);
     if (options.initialNotes.length > 0) notes = options.initialNotes;
     if (dummy) return;
 
@@ -95,34 +95,6 @@
       errFlg = true;
       return;
     }
-
-    /**
-     * ノート情報の更新
-     */
-    user.stream.on("noteUpdated", (e) => {
-      const noteIndex = notes.findIndex((v) => v.id === e.id);
-
-      if (e.type === "reacted") {
-        if (e.body.reaction.indexOf("@.") < 0) {
-          if (notes[noteIndex]["reactionEmojis"] === undefined)
-            notes[noteIndex]["reactionEmojis"] = {};
-          notes[noteIndex].reactionEmojis[e.body.emoji.name] = e.body.emoji.url;
-        }
-        if (notes[noteIndex].reactions[e.body.reaction] === undefined) {
-          notes[noteIndex].reactions[e.body.reaction] = 1;
-        } else {
-          notes[noteIndex].reactions[e.body.reaction]++;
-        }
-      } else if (e.type === "unreacted") {
-        if (notes[noteIndex]["reactionEmojis"] === undefined)
-          notes[noteIndex]["reactionEmojis"] = {};
-        notes[noteIndex].reactionEmojis[e.body.emoji.name] = e.body.emoji.url;
-        notes[noteIndex].reactions[e.body.reaction]--;
-      } else if (e.type === "deleted") {
-        notes.splice(noteIndex, 1);
-        notes = [...notes];
-      }
-    });
 
     /**
      * 初期タイムラインの取得
@@ -155,6 +127,49 @@
     streamChannel.on("note", (payload: NoteType) => {
       notes = uniqBy([payload, ...notes].slice(0, options.bufferNoteNum), "id");
     });
+
+    /**
+     * ノート情報の更新
+     */
+    user.stream.on("noteUpdated", async (e) => {
+      await tick();
+      const noteIndex = notes.findIndex((v) => v.id === e.id);
+      if (noteIndex < 0) {
+        console.error("can't find note data");
+        return;
+      }
+      if (notes[noteIndex]["reactionEmojis"] == null)
+        notes[noteIndex]["reactionEmojis"] = {};
+      if (notes[noteIndex]["reactions"] == null)
+        notes[noteIndex]["reactions"] = {};
+
+      try {
+        if (e.type === "reacted") {
+          if (e.body.reaction.indexOf("@.") < 0) {
+            notes[noteIndex].reactionEmojis[e.body.emoji.name] =
+              e.body.emoji.url;
+          } else {
+            if (notes[noteIndex].reactions[e.body.reaction] == null) {
+              notes[noteIndex].reactions[e.body.reaction] = 1;
+            } else {
+              notes[noteIndex].reactions[e.body.reaction]++;
+            }
+          }
+        } else if (e.type === "unreacted") {
+          if (e.body.reaction.indexOf("@.") < 0) {
+            notes[noteIndex].reactionEmojis[e.body.emoji.name] =
+              e.body.emoji.url;
+          }
+          notes[noteIndex].reactions[e.body.reaction]--;
+        } else if (e.type === "deleted") {
+          notes.splice(noteIndex, 1);
+          notes = [...notes];
+        }
+      } catch (e) {
+        console.log(notes[noteIndex]);
+        console.error(e);
+      }
+    });
   });
 
   const timelineDelete = () => {
@@ -173,10 +188,7 @@
   });
 </script>
 
-<div
-  class="h-full bg-base-300 relative rounded"
-  style="width:{options.width}"
->
+<div class="h-full bg-base-300 relative rounded" style="width:{options.width}">
   <div class="absolute w-full flex justify-center z-10">
     <div class="flex flex-col w-full mx-8">
       <button

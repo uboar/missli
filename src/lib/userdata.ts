@@ -33,7 +33,12 @@ export type userData = {
   mainConnection?: Connection;
   notifyBuffer?: Array<Notification>;
   notifyUnOpen?: boolean;
-  emojis?: any;
+  emojis?: Array<{
+    aliases: Array<string>;
+    name: string;
+    category: string;
+    url: string;
+  }>;
 };
 
 export type timelineOptions = {

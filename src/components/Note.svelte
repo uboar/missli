@@ -4,11 +4,14 @@
   import { createEventDispatcher, onDestroy, onMount } from "svelte";
   import { type userData, moment } from "../lib/userdata";
   import Body from "./note/Body.svelte";
+  import ReactionDeck from "./note/ReactionDeck.svelte";
 
   export let user: userData;
   export let note: Note;
   export let stream: Stream = null;
   export let compact = false;
+
+  let showReactionDeck = false;
 
   const dispatch = createEventDispatcher();
 
@@ -32,13 +35,17 @@
       id: note.id,
     });
   });
+
+  const reactionDeckBreakRequest = (e: CustomEvent<string>) => {
+    showReactionDeck = false;
+  };
 </script>
 
 <div
   class="card card-bordered bg-base-100 w-full my-2 shadow-sm hover:border-neutral-focus"
 >
   <div class="card-body {!compact ? '-my-6 -mx-4' : ' -my-2'}">
-    <Body {note} {user} {compact} />
+    <Body {note} {user} {compact}/>
     {#if !compact}
       <div class="divider -my-3" />
       <div class="flex -mb-1 z-10">
@@ -73,7 +80,19 @@
             >
           </button>
         </div>
-        <div class="basis-1/5" />
+        <div class="basis-1/5 tooltip" data-tip="リアクション">
+          <button
+            class="btn btn-ghost btn-block btn-xs fill-base-content"
+            on:click={() => (showReactionDeck = !showReactionDeck)}
+            on:keypress={() => (showReactionDeck = !showReactionDeck)}
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              class="h-4 w-4"
+              ><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg
+            >
+          </button>
+        </div>
         <div class="basis-1/5" />
         <a
           class="basis-1/5 text-xs link pt-1"
@@ -84,6 +103,13 @@
           {moment(note.createdAt).fromNow()}
         </a>
       </div>
+    {/if}
+    {#if showReactionDeck}
+      <ReactionDeck
+        {user}
+        noteId={note.id}
+        on:breakRequest={reactionDeckBreakRequest}
+      />
     {/if}
   </div>
 </div>

@@ -71,7 +71,9 @@
   </span>
 {:else}
   <button
-    class="badge {!isReacted ? 'badge-outline' : ''} badge-{color} h-5"
+    class="badge {!isReacted
+      ? 'badge-outline'
+      : ''} badge-{color} h-5 unicode-emoji"
     on:click={clickReaction}
   >
     <span class="h-4">{name}</span>
