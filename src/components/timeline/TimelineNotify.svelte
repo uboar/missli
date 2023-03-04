@@ -97,11 +97,7 @@
       {#each user.notifyBuffer as notify (notify.id)}
         <li>
           <a
-            on:click={() => console.log(notify)}
             href={getNotifyLink(notify)}
-            on:click={() => {
-              console.log(notify);
-            }}
             target="_blank"
             rel="noreferrer"
           >

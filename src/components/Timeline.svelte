@@ -87,7 +87,6 @@
       ...defaultOption,
       ...options,
     };
-    console.log(options.color);
     if (options.initialNotes.length > 0) notes = options.initialNotes;
     if (dummy) return;
 
@@ -166,7 +165,6 @@
           notes = [...notes];
         }
       } catch (e) {
-        console.log(notes[noteIndex]);
         console.error(e);
       }
     });
