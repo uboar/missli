@@ -46,7 +46,13 @@
           notify.user.name ? notify.user.name : notify.user.username
         }さんにリノートされました`;
       case "reaction":
-        return "リアクションされました";
+        return `${
+          notify.user.name ? notify.user.name : notify.user.username
+        }さんにリアクションされました`;
+      case "reply":
+        return `${
+          notify.user.name ? notify.user.name : notify.user.username
+        }さんから返信されました`;
       default:
         return notify.type;
     }
@@ -80,6 +86,8 @@
       case "messagingMessage":
         return `${origin}/my/notifications`;
       case "mention":
+        return `${origin}/notes/${notify.note.id}`;
+      case "reply":
         return `${origin}/notes/${notify.note.id}`;
       case "renote":
         return `${origin}/notes/${notify.note.id}`;
