@@ -9,6 +9,7 @@
   export let user: userData;
   export let note: NoteType;
   export let compact = false;
+  export let renoteCount = 0;
 
   let showCw = false;
 
@@ -77,9 +78,18 @@
 
 {#if !compact}
   <!-- リノート内容 -->
-  {#if note.renote}
+  {#if note.renote && renoteCount > 0}
+    <a
+      class="btn btn-outline btn-accent btn-sm btn-block"
+      href={`https://${user.hostUrl}/notes/${note.renote.id}`}
+      target="_blank"
+      rel="noreferrer"
+    >
+      もっとリノートを見る
+    </a>
+  {:else if note.renote}
     <div class="card card-bordered border-accent rounded p-1">
-      <svelte:self {user} note={note.renote} />
+      <svelte:self {user} note={note.renote} renoteCount={renoteCount + 1} />
     </div>
   {/if}
 
