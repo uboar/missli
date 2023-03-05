@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Note as NoteType } from "misskey-js/built/entities";
-  import { onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import type { postNote as postNoteType, userData } from "../../lib/userdata";
   import Note from "../Note.svelte";
 
@@ -9,12 +9,15 @@
   export let replyNote: NoteType | null = null;
   export let renoteNote: NoteType | null = null;
 
+  const dispatch = createEventDispatcher();
+
   onMount(() => {
     if (!user) return;
   });
 
   let noteBusy = false;
   let showCw = false;
+  let keepOpen = false;
 
   const noteVisibilityEnum = [
     {
@@ -56,6 +59,7 @@
       postNote.cw = "";
       renoteNote = null;
       replyNote = null;
+      if(!keepOpen) dispatch("breakRequest");
     } catch (err) {
       console.error(err);
       noteBusy = false;
@@ -106,6 +110,18 @@
         <Note compact bind:note={renoteNote} {user} />
       {/if}
     {/if}
+    <div class="flex justify-end w-full">
+      <div class="form-control -my-3 w-fit">
+        <label class="label cursor-pointer">
+          <span class="label-text mx-2">投稿してもウィンドウを閉じない</span>
+          <input
+            type="checkbox"
+            class="checkbox bg-base-100"
+            bind:checked={keepOpen}
+          />
+        </label>
+      </div>
+    </div>
     <div class="flex gap-4">
       <div class="form-control flex-1">
         <span class="label-text">公開範囲</span>

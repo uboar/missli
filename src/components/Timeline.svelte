@@ -270,6 +270,7 @@
         bind:postNote
         bind:replyNote
         bind:renoteNote
+        on:breakRequest={() => showNote = false}
       />
     {/if}
     {#if showNotify}
