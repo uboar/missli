@@ -114,7 +114,7 @@ export const getCookie = async (): Promise<Array<userData>> => {
       // 通知の取得
       try {
         users[i].notifyBuffer = await users[i].cli.request("i/notifications");
-        users[i].notifyUnOpen = true;
+        users[i].notifyUnOpen = false;
 
         users[i].mainConnection = users[i].stream.useChannel("main");
         users[i].mainConnection.on("notification", (notify) => {
