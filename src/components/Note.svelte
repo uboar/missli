@@ -36,6 +36,11 @@
     });
   });
 
+  $: reactionId = () => {
+    if (note.renote && !note.text) return note.renote.id;
+    else return note.id;
+  };
+
   const reactionDeckBreakRequest = (e: CustomEvent<string>) => {
     showReactionDeck = false;
   };
@@ -45,7 +50,7 @@
   class="card card-bordered bg-base-100 w-full my-2 shadow-sm hover:border-neutral-focus"
 >
   <div class="card-body {!compact ? '-my-6 -mx-4' : ' -my-2'}">
-    <Body {note} {user} {compact}/>
+    <Body {note} {user} {compact} />
     {#if !compact}
       <div class="divider -my-3" />
       <div class="flex -mb-1 z-10">
@@ -107,7 +112,7 @@
     {#if showReactionDeck}
       <ReactionDeck
         {user}
-        noteId={note.id}
+        noteId={reactionId()}
         on:breakRequest={reactionDeckBreakRequest}
       />
     {/if}
