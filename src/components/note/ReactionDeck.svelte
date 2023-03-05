@@ -1,11 +1,17 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
   import type { userData } from "../../lib/userdata";
+  import unicodeEmojis from "../../assets/unicodeEmojis.json";
 
   const suggestEmojiNum = 20;
   let inputElem: HTMLInputElement;
 
-  $: suggestedText = [] as Array<{ name: string; url: string }>;
+  $: suggestedText = [] as Array<{
+    name: string;
+    url?: string;
+    value?: string;
+    isUnicodeEmoji?: boolean;
+  }>;
 
   export let user: userData;
   export let noteId: string;
@@ -15,37 +21,67 @@
 
   const emojiSuggest = () => {
     let filteredEmoji: userData["emojis"];
+    let filteredUnicodeEmoji: Array<{ name: string; value: string }> = [];
+
     if (text === "") {
       filteredEmoji = user.emojis.slice(0, suggestEmojiNum);
     } else {
-      filteredEmoji = user.emojis
+      filteredUnicodeEmoji = unicodeEmojis
         .filter((emoji) => {
           if (emoji.name.indexOf(text) >= 0) return true;
-          if (emoji.aliases.indexOf(text) >= 0) return true;
-          return false;
+        })
+        .slice(0, suggestEmojiNum);
+      filteredEmoji = user.emojis
+        .filter((emoji) => {
+          let flg = false;
+          if (emoji.name.indexOf(text) >= 0) return true;
+          for (let i = 0; i < emoji.aliases.length; i++) {
+            if (emoji.aliases[i].indexOf(text) >= 0) {
+              flg = true;
+              break;
+            }
+          }
+          return flg;
         })
         .slice(0, suggestEmojiNum);
     }
     suggestedText = [];
-    filteredEmoji.forEach((emoji) => {
-      suggestedText.push({ name: emoji.name, url: emoji.url });
+
+    filteredUnicodeEmoji.forEach((emoji) => {
+      suggestedText.push({
+        ...emoji,
+        isUnicodeEmoji: true,
+      });
     });
+
+    filteredEmoji.forEach((emoji) => {
+      suggestedText.push({
+        name: emoji.name,
+        url: emoji.url,
+        isUnicodeEmoji: false,
+      });
+    });
+
     suggestedText = suggestedText;
   };
 
-  const sendEmoji = async () => {
+  const sendEmoji = async (isUnicodeEmoji?: string) => {
+    let reactionText = `:${text}@.`;
+
+    if (isUnicodeEmoji) reactionText = isUnicodeEmoji;
+
     try {
       await user.cli.request("notes/reactions/create", {
         noteId: noteId,
-        reaction: `:${text}@.:`,
+        reaction: reactionText,
       });
-      dispatch("breakRequest", `:${text}@.:` );
+      dispatch("breakRequest", `:${text}@.:`);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const pushBtn = (index: number) => {
+  const pushBtn = (index: number, isUnicodeEmoji: boolean) => {
     text = suggestedText[index].name;
     sendEmoji();
   };
@@ -70,13 +106,24 @@
   />
   <div class="flex flex-nowrap gap-1">
     {#each suggestedText as emoji, index (emoji.name)}
-      <button
-        class="btn btn-xs btn-outline"
-        on:click={() => pushBtn(index)}
-        on:keypress={() => pushBtn(index)}
-      >
-        <img class="h-4" src={emoji.url} alt={emoji.name} />
-      </button>
+      {#if !emoji.isUnicodeEmoji}
+        <button
+          class="btn btn-xs btn-outline"
+          on:click={() => pushBtn(index, emoji.isUnicodeEmoji)}
+          on:keypress={() => pushBtn(index, emoji.isUnicodeEmoji)}
+          title={emoji.name}
+        >
+          <img class="h-4" src={emoji.url} alt={emoji.name} />
+        </button>
+      {:else}
+        <button
+          class="btn btn-xs btn-outline"
+          on:click={() => sendEmoji(emoji.value)}
+          on:keypress={() => sendEmoji(emoji.value)}
+        >
+          {emoji.value}
+        </button>
+      {/if}
     {/each}
   </div>
 </div>

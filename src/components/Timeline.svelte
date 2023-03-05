@@ -144,7 +144,7 @@
 
       try {
         if (e.type === "reacted") {
-          if (e.body.reaction.indexOf("@.") < 0) {
+          if ((e.body.reaction.indexOf("@.") < 0) && (e.body.reaction.indexOf("@") >= 0)) {
             notes[noteIndex].reactionEmojis[e.body.emoji.name] =
               e.body.emoji.url;
           } else {
@@ -155,7 +155,7 @@
             }
           }
         } else if (e.type === "unreacted") {
-          if (e.body.reaction.indexOf("@.") < 0) {
+          if ((e.body.reaction.indexOf("@.") < 0) && (e.body.reaction.indexOf("@") >= 0)) {
             notes[noteIndex].reactionEmojis[e.body.emoji.name] =
               e.body.emoji.url;
           }
