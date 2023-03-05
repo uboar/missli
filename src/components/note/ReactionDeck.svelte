@@ -47,13 +47,6 @@
     }
     suggestedText = [];
 
-    filteredUnicodeEmoji.forEach((emoji) => {
-      suggestedText.push({
-        ...emoji,
-        isUnicodeEmoji: true,
-      });
-    });
-
     filteredEmoji.forEach((emoji) => {
       suggestedText.push({
         name: emoji.name,
@@ -62,26 +55,35 @@
       });
     });
 
+    filteredUnicodeEmoji.forEach((emoji) => {
+      suggestedText.push({
+        ...emoji,
+        isUnicodeEmoji: true,
+      });
+    });
+
+
     suggestedText = suggestedText;
   };
 
   const sendEmoji = async (isUnicodeEmoji?: string) => {
-    let reactionText = `:${text}@.`;
+    let reactionText = "";
 
-    if (isUnicodeEmoji) reactionText = isUnicodeEmoji;
+    if (isUnicodeEmoji == null) reactionText = `:${text}@.:`;
+    else reactionText = isUnicodeEmoji;
 
     try {
       await user.cli.request("notes/reactions/create", {
         noteId: noteId,
         reaction: reactionText,
       });
-      dispatch("breakRequest", `:${text}@.:`);
+      dispatch("breakRequest", reactionText);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const pushBtn = (index: number, isUnicodeEmoji: boolean) => {
+  const pushBtn = (index: number) => {
     text = suggestedText[index].name;
     sendEmoji();
   };
@@ -109,8 +111,8 @@
       {#if !emoji.isUnicodeEmoji}
         <button
           class="btn btn-xs btn-outline"
-          on:click={() => pushBtn(index, emoji.isUnicodeEmoji)}
-          on:keypress={() => pushBtn(index, emoji.isUnicodeEmoji)}
+          on:click={() => pushBtn(index)}
+          on:keypress={() => pushBtn(index)}
           title={emoji.name}
         >
           <img class="h-4" src={emoji.url} alt={emoji.name} />
