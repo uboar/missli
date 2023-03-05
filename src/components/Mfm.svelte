@@ -57,6 +57,7 @@
       }
       elem.className = "h-6 inline-flex";
       elem.alt = node.props.name;
+      elem.title = node.props.name;
       parentElemnt.appendChild(elem);
     }
     // インラインコード
