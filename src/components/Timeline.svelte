@@ -17,9 +17,7 @@
   export let dummy: boolean = false;
   export let user: userData = null;
   export let options: timelineOptions;
-  
 
-  
   let streamChannel: Connection;
 
   const defaultOption: timelineOptions = {
@@ -32,14 +30,15 @@
     showNoteNum: 100,
     bufferNoteNum: 250,
     initialNotes: [],
+    favReactions: [],
   };
 
   const NAV = {
     none: 0,
     note: 1,
     notify: 2,
-    settings: 3
-  }
+    settings: 3,
+  };
 
   let notes: Array<NoteType> = [];
   let beginNotes = 0;
@@ -151,7 +150,10 @@
 
       try {
         if (e.type === "reacted") {
-          if ((e.body.reaction.indexOf("@.") < 0) && (e.body.reaction.indexOf("@") >= 0)) {
+          if (
+            e.body.reaction.indexOf("@.") < 0 &&
+            e.body.reaction.indexOf("@") >= 0
+          ) {
             notes[noteIndex].reactionEmojis[e.body.emoji.name] =
               e.body.emoji.url;
           } else {
@@ -162,7 +164,10 @@
             }
           }
         } else if (e.type === "unreacted") {
-          if ((e.body.reaction.indexOf("@.") < 0) && (e.body.reaction.indexOf("@") >= 0)) {
+          if (
+            e.body.reaction.indexOf("@.") < 0 &&
+            e.body.reaction.indexOf("@") >= 0
+          ) {
             notes[noteIndex].reactionEmojis[e.body.emoji.name] =
               e.body.emoji.url;
           }
@@ -277,7 +282,7 @@
         bind:postNote
         bind:replyNote
         bind:renoteNote
-        on:breakRequest={() => showNav = NAV.none}
+        on:breakRequest={() => (showNav = NAV.none)}
       />
     {/if}
     {#if showNav === NAV.notify}
@@ -285,15 +290,20 @@
     {/if}
     <div class="flex my-1 justify-around">
       <!-- 通知ボタン -->
-      <div class="tooltip" data-tip={showNav === NAV.notify ? "閉じる" : "通知"}>
+      <div
+        class="tooltip"
+        data-tip={showNav === NAV.notify ? "閉じる" : "通知"}
+      >
         <div class="indicator">
           {#if user.notifyUnOpen}
             <span class="indicator-item badge badge-secondary" />
           {/if}
           <button
             class="btn btn-circle btn-outline fill-base-content hover:fill-base-100"
-            on:click={() => showNav = (showNav === NAV.notify) ? NAV.none : NAV.notify}
-            on:keypress={() => showNav = (showNav === NAV.notify) ? NAV.none : NAV.notify}
+            on:click={() =>
+              (showNav = showNav === NAV.notify ? NAV.none : NAV.notify)}
+            on:keypress={() =>
+              (showNav = showNav === NAV.notify ? NAV.none : NAV.notify)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -309,11 +319,16 @@
         </div>
       </div>
       <!-- ノートボタン -->
-      <div class="tooltip" data-tip={showNav === NAV.note ? "閉じる" : "ノート"}>
+      <div
+        class="tooltip"
+        data-tip={showNav === NAV.note ? "閉じる" : "ノート"}
+      >
         <button
           class="btn btn-circle btn-primary fill-base-100"
-          on:click={() => showNav = (showNav === NAV.note) ? NAV.none : NAV.note}
-          on:keypress={() => showNav = (showNav === NAV.note) ? NAV.none : NAV.note}
+          on:click={() =>
+            (showNav = showNav === NAV.note ? NAV.none : NAV.note)}
+          on:keypress={() =>
+            (showNav = showNav === NAV.note ? NAV.none : NAV.note)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -335,8 +350,10 @@
       >
         <button
           class="btn btn-circle btn-outline fill-base-content hover:fill-base-100"
-          on:click={() => showNav = (showNav === NAV.settings) ? NAV.none : NAV.settings}
-          on:keypress={() => showNav = (showNav === NAV.settings) ? NAV.none : NAV.settings}
+          on:click={() =>
+            (showNav = showNav === NAV.settings ? NAV.none : NAV.settings)}
+          on:keypress={() =>
+            (showNav = showNav === NAV.settings ? NAV.none : NAV.settings)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

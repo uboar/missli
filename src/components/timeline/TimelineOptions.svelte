@@ -13,28 +13,28 @@
     dispatch("getNoteRequest");
   };
 
-const timelineSizeEnum = [
-  {
-    name: "ちび",
-    value: "12rem",
-  },
-  {
-    name: "小",
-    value: "24rem",
-  },
-  {
-    name: "中",
-    value: "36rem",
-  },
-  {
-    name: "大",
-    value: "48rem",
-  },
-  {
-    name: "画面幅",
-    value: "100vw",
-  },
-];
+  const timelineSizeEnum = [
+    {
+      name: "ちび",
+      value: "12rem",
+    },
+    {
+      name: "小",
+      value: "24rem",
+    },
+    {
+      name: "中",
+      value: "36rem",
+    },
+    {
+      name: "大",
+      value: "48rem",
+    },
+    {
+      name: "画面幅",
+      value: "100vw",
+    },
+  ];
 </script>
 
 <div class="relative w-full p-2 mb-16">
@@ -74,11 +74,15 @@ const timelineSizeEnum = [
       bind:value={options.bufferNoteNum}
     />
 
-    <button
-      class="btn btn-outline btn-secondary mt-4 btn-sm"
-      on:click={getNotesRequest}
-      on:keypress={deleteRequest}>ノートのバッファをコンソールに出力</button
-    >
+    <button />
+
+    {#if import.meta.env.MODE === "development"}
+      <button
+        class="btn btn-outline btn-secondary mt-4 btn-sm"
+        on:click={getNotesRequest}
+        on:keypress={deleteRequest}>ノートのバッファをコンソールに出力</button
+      >
+    {/if}
 
     <button
       class="btn btn-error btn-block mt-4"
