@@ -51,7 +51,7 @@ export type timelineOptions = {
   showNoteNum?: number;
   bufferNoteNum?: number;
   initialNotes?: Array<Note>;
-  favReactions?: Array<string>
+  reactionDeck?: Array<string>
 };
 
 export type settingsType = {

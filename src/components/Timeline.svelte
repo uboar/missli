@@ -30,7 +30,7 @@
     showNoteNum: 100,
     bufferNoteNum: 250,
     initialNotes: [],
-    favReactions: [],
+    reactionDeck: [],
   };
 
   const NAV = {
@@ -235,6 +235,7 @@
             <Note
               {note}
               {user}
+              timelineOptions={options}
               stream={user.stream}
               on:renoteRequest={() => renoteRequest(note)}
               on:replyRequest={() => replyRequest(note)}

@@ -13,8 +13,20 @@
     isUnicodeEmoji?: boolean;
   }>;
 
+  $: localEmojiSearch = (emojiName: string): string => {
+    try {
+      const emojiReplaced = emojiName.replace(/\:|@./gm, "");
+
+      return user.emojis.find((v) => v.name === emojiReplaced).url;
+    } catch (err) {
+      console.error(err);
+      return "エラー";
+    }
+  };
+
   export let user: userData;
-  export let noteId: string;
+  export let noteId: string = "";
+  export let customReactionDeck: Array<string> = [];
 
   let text = "";
   const dispatch = createEventDispatcher();
@@ -62,7 +74,6 @@
       });
     });
 
-
     suggestedText = suggestedText;
   };
 
@@ -72,12 +83,19 @@
     if (isUnicodeEmoji == null) reactionText = `:${text}@.:`;
     else reactionText = isUnicodeEmoji;
 
+    await directSendEmoji(reactionText);
+  };
+
+  const directSendEmoji = async (reaction: string) => {
     try {
-      await user.cli.request("notes/reactions/create", {
-        noteId: noteId,
-        reaction: reactionText,
-      });
-      dispatch("breakRequest", reactionText);
+      if (noteId !== "") {
+        await user.cli.request("notes/reactions/create", {
+          noteId: noteId,
+          reaction: reaction,
+        });
+      }
+      text = "";
+      dispatch("breakRequest", reaction);
     } catch (err) {
       console.error(err);
     }
@@ -106,13 +124,12 @@
     }}
     on:input={emojiSuggest}
   />
-  <div class="flex flex-nowrap gap-1">
-    {#each suggestedText as emoji, index (emoji.name)}
+  <div class="flex flex-nowrap gap-1 w-full">
+    {#each suggestedText as emoji, index}
       {#if !emoji.isUnicodeEmoji}
         <button
           class="btn btn-xs btn-outline"
           on:click={() => pushBtn(index)}
-          on:keypress={() => pushBtn(index)}
           title={emoji.name}
         >
           <img class="h-4" src={emoji.url} alt={emoji.name} />
@@ -121,9 +138,32 @@
         <button
           class="btn btn-xs btn-outline"
           on:click={() => sendEmoji(emoji.value)}
-          on:keypress={() => sendEmoji(emoji.value)}
         >
           {emoji.value}
+        </button>
+      {/if}
+    {/each}
+  </div>
+  <div class="flex flex-wrap gap-1">
+    {#each customReactionDeck as reaction}
+      {#if reaction.indexOf("@.") >= 0}
+        <button
+          class="btn btn-xs btn-outline btn-success"
+          on:click={() => directSendEmoji(reaction)}
+          title={reaction.replace(/\:|@./gm, "")}
+        >
+          <img
+            class="h-4"
+            src={localEmojiSearch(reaction)}
+            alt={reaction.replace(/\:|@./gm, "")}
+          />
+        </button>
+      {:else}
+        <button
+          class="btn btn-xs btn-outline btn-success"
+          on:click={() => sendEmoji(reaction)}
+        >
+          {reaction}
         </button>
       {/if}
     {/each}
