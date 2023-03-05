@@ -60,14 +60,14 @@
   <button
     class="badge {!isReacted ? 'badge-outline' : ''} badge-{color} h-5"
     on:click={clickReaction}
-    title="name"
+    title={name}
   >
     <img src={localEmojiSearch(name)} class="h-4" alt={name} />
     {num}
   </button>
 {:else if name.indexOf("@") >= 0}
   <span class="badge badge-outline h-5" 
-  title="name">
+  title={name}>
     <img src={remoteEmojiSearch(name)} class="h-4" alt={name} />
     {num}
   </span>
