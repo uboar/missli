@@ -51,7 +51,7 @@ export type timelineOptions = {
   showNoteNum?: number;
   bufferNoteNum?: number;
   initialNotes?: Array<Note>;
-  reactionDeck?: Array<string>
+  reactionDeck?: Array<string>;
 };
 
 export type settingsType = {
@@ -157,19 +157,52 @@ export const getCookie = async (): Promise<Array<userData>> => {
  *
  * @param userDataIndex
  */
-export const deleteUser = (userDataIndex: number) => {
-  document.cookie = `${get(users)[userDataIndex].id}=; Max-Age=0`;
-  timelines.update((val) => {
-    let updateVal = val.filter((v) => v.userDataIndex !== userDataIndex);
+export const deleteUser = (
+  userDataIndex: number,
+  firstAuth: boolean = true
+) => {
+  if (firstAuth) {
+    document.cookie = `${get(users)[userDataIndex].id}=; Max-Age=0`;
+    timelines.update((val) => {
+      let updateVal = val.filter((v) => v.userDataIndex !== userDataIndex);
 
-    updateVal.forEach((v) => {
-      if (v.userDataIndex > userDataIndex) v.userDataIndex -= 1;
+      updateVal.forEach((v) => {
+        if (v.userDataIndex > userDataIndex) v.userDataIndex -= 1;
+      });
+
+      return updateVal;
+    });
+  } else {
+    const cookies = document.cookie;
+
+    if (cookies === "") return [];
+
+    const strArr = cookies.split("; ");
+    const users: Array<userData> = [];
+    strArr.forEach((elem) => {
+      users.push(JSON.parse(decodeURIComponent(elem.replace(/\d+=/, ""))));
     });
 
-    return updateVal;
-  });
+    document.cookie = `${users[userDataIndex].id}=; Max-Age=0`;
+    
+    timelines.update((val) => {
+      let updateVal = val.map((v) => {
+        if (v.userDataIndex !== userDataIndex) {
+          if (v.userDataIndex > userDataIndex) v.userDataIndex -= 1;
+        } else {
+          v.userDataIndex = val.length - 1;
+        }
+
+        return v;
+      });
+
+      return updateVal;
+    });
+  }
   users.update((val) => val.splice(userDataIndex, 1));
-  location.href = window.location.origin + window.location.pathname;
+  if (firstAuth) {
+    location.href = window.location.origin + window.location.pathname;
+  }
 };
 
 /**

@@ -1,7 +1,7 @@
 <script lang="ts">
   import Auth from "./Auth.svelte";
   import { version } from "../../package.json";
-  import { settings, users, deleteUser } from "../lib/userdata";
+  import { settings } from "../lib/userdata";
 
   let selectedTab = 0;
 
@@ -57,26 +57,6 @@
     {/each}
   </div>
   {#if selectedTab === 0}
-    <h1 class="text-2xl">連携しているアカウント</h1>
-    2023/03/02以前に本アプリを使用した事がある方は、権限設定が変更されているので、お手数ですが再認証して下さい。
-    {#if $users.length === 0}
-      ユーザーデータがありません
-    {/if}
-    {#each $users as user, index (user.id)}
-      <div class="card bg-base-300 card-compact w-full my-2">
-        <div class="card-body">
-          <div class="card-actions flex">
-            <div class="flex-1 text-xl font-bold">
-              @{user.userName}@{user.hostUrl}
-            </div>
-            <button class="btn btn-error -my-2" on:click={() => deleteUser(index)}
-              >連携解除</button
-            >
-          </div>
-        </div>
-      </div>
-    {/each}
-    <div class="divider-vertical" />
     <Auth />
   {:else if selectedTab === 1}
     <span class="label-text">カラーテーマ</span>

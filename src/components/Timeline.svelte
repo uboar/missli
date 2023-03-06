@@ -96,17 +96,17 @@
     homeTimeline: "notes/timeline",
   };
 
-  const moreNote = async() => {
+  const moreNote = async () => {
     notes = uniqBy(
       [
         ...notes,
         ...(await user.cli.request(timelineTypeEnum[options.channel], {
-          untilId: (notes[notes.length - 1].id)
+          untilId: notes[notes.length - 1].id,
         })),
       ],
       "id"
     ).slice(0, options.bufferNoteNum);
-  }
+  };
 
   onMount(async () => {
     options = {
@@ -124,18 +124,35 @@
     /**
      * 初期タイムラインの取得
      */
-    notes = uniqBy(
-      [
-        ...(await user.cli.request(timelineTypeEnum[options.channel])),
-        ...notes,
-      ],
-      "id"
-    );
-
-    /**
-     * チャンネルに接続
-     */
-    streamChannel = user.stream.useChannel(options.channel);
+    if (timelineTypeEnum[options.channel] == null) {
+      console.log(options.channel);
+      notes = uniqBy(
+        [
+          ...(await user.cli.request("channels/timeline", {
+            channelId: options.channel,
+          })),
+          ...notes,
+        ],
+        "id"
+      );
+      /**
+       * チャンネルに接続
+       */
+      streamChannel = user.stream.useChannel("channel", {channelId: options.channel});
+      postNote.channelId = options.channel;
+    } else {
+      notes = uniqBy(
+        [
+          ...(await user.cli.request(timelineTypeEnum[options.channel])),
+          ...notes,
+        ],
+        "id"
+      );
+      /**
+       * チャンネルに接続
+       */
+      streamChannel = user.stream.useChannel(options.channel);
+    }
     streamChannel.on("note", (payload: NoteType) => {
       notes = uniqBy([payload, ...notes].slice(0, options.bufferNoteNum), "id");
     });
