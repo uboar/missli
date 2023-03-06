@@ -14,11 +14,12 @@
     }
   };
 
-  export let text = "";
   let parseedHTML: HTMLElement;
+  export let text = "";
   export let hostUrl: string;
   export let remoteEmojis: Array<{ name: string; url: string }> = [];
   export let localEmojis: userData["emojis"] = [];
+  export let emojiHeight = "";
 
   onMount(() => {
     const mfmTree = mfm.parse(text);
@@ -55,7 +56,8 @@
       } else {
         elem.src = remoteEmojis[node.props.name];
       }
-      elem.className = "h-6 inline-flex";
+      if(emojiHeight === "") elem.className = "h-6 inline-flex";
+      else elem.className = emojiHeight + " inline-flex";
       elem.alt = node.props.name;
       elem.title = node.props.name;
       parentElemnt.appendChild(elem);

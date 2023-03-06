@@ -24,6 +24,7 @@
   user={note.user}
   hostUrl={user.hostUrl}
   isRenote={note.renote && !note.text}
+  localEmojis={user.emojis}
 />
 {#if note.replyId}
   <a
@@ -43,7 +44,11 @@
     <div class="-m-2">
       <div class="badge badge-warning">CW</div>
       <div class=" link link-hover">
-        {note.cw}
+        <Mfm
+          bind:text={note.cw}
+          hostUrl={user.hostUrl}
+          localEmojis={user.emojis}
+        />
       </div>
     </div>
   </button>

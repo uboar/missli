@@ -22,7 +22,7 @@
   {#if files.length > 0}
     <div class="relative w-full flex justify-center max-h-64 min-h-16">
       {#if file.type.indexOf("image") >= 0}
-        <a href={file.url} target="_blank" rel="noreferrer" class="relative">
+        <a href={file.url} target="_blank" rel="noreferrer" class="relative grid content-center">
           <img
             src={file.thumbnailUrl}
             alt={file.name}

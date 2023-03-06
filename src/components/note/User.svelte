@@ -1,15 +1,20 @@
 <script lang="ts">
   import type { User } from "misskey-js/built/entities";
+  import type { userData } from "../../lib/userdata";
+  import Mfm from "../Mfm.svelte";
 
   export let user: User;
   export let hostUrl: string;
   export let isRenote: boolean = false;
+  export let localEmojis: userData["emojis"] = [];
 
   const useridStr = `@${user.username}${user.host ? `@${user.host}` : ""}`;
 </script>
 
 <a
-  class="card-title link link-hover rounded-full {(isRenote) ? "link-accent" : "hover:bg-base-300"} w-fit max-w-full pr-3"
+  class="card-title link link-hover rounded-full {isRenote
+    ? 'link-accent'
+    : 'hover:bg-base-300'} w-fit max-w-full pr-3"
   href={`https://${hostUrl}/${useridStr}`}
   target="_blank"
   rel="noreferrer"
@@ -29,7 +34,13 @@
         {#if user.name === null}
           {user.username}
         {:else}
-          {user.name}
+          <Mfm
+            text={user.name}
+            {localEmojis}
+            remoteEmojis={user.emojis}
+            emojiHeight="h-4"
+            {hostUrl}
+          />
         {/if}
       </div>
       <div class="text-xs truncate">
