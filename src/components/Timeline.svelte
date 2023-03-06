@@ -97,15 +97,28 @@
   };
 
   const moreNote = async () => {
-    notes = uniqBy(
-      [
-        ...notes,
-        ...(await user.cli.request(timelineTypeEnum[options.channel], {
-          untilId: notes[notes.length - 1].id,
-        })),
-      ],
-      "id"
-    ).slice(0, options.bufferNoteNum);
+    if (timelineTypeEnum[options.channel] == null) {
+      notes = uniqBy(
+        [
+          ...notes,
+          ...(await user.cli.request("channels/timeline", {
+            untilId: notes[notes.length - 1].id,
+            channelId: options.channel,
+          })),
+        ],
+        "id"
+      ).slice(0, options.bufferNoteNum);
+    } else {
+      notes = uniqBy(
+        [
+          ...notes,
+          ...(await user.cli.request(timelineTypeEnum[options.channel], {
+            untilId: notes[notes.length - 1].id,
+          })),
+        ],
+        "id"
+      ).slice(0, options.bufferNoteNum);
+    }
   };
 
   onMount(async () => {
@@ -125,7 +138,6 @@
      * 初期タイムラインの取得
      */
     if (timelineTypeEnum[options.channel] == null) {
-      console.log(options.channel);
       notes = uniqBy(
         [
           ...(await user.cli.request("channels/timeline", {
@@ -138,7 +150,9 @@
       /**
        * チャンネルに接続
        */
-      streamChannel = user.stream.useChannel("channel", {channelId: options.channel});
+      streamChannel = user.stream.useChannel("channel", {
+        channelId: options.channel,
+      });
       postNote.channelId = options.channel;
     } else {
       notes = uniqBy(
