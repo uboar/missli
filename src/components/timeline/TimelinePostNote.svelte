@@ -92,7 +92,6 @@
         <button
           class="btn btn-xs btn-warning fill-warning-content"
           on:click={deleteAttachNote}
-          on:keypress={deleteAttachNote}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -179,7 +178,6 @@
           ? 'btn-disabled'
           : ''}"
         on:click={sendNote}
-        on:keypress={sendNote}
       >
         {renoteText()}
       </button>

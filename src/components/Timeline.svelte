@@ -13,6 +13,7 @@
   import TimelineOptions from "./timeline/TimelineOptions.svelte";
   import TimelinePostNote from "./timeline/TimelinePostNote.svelte";
   import TimelineNotify from "./timeline/TimelineNotify.svelte";
+  import type { Endpoints } from "misskey-js";
 
   export let dummy: boolean = false;
   export let user: userData = null;
@@ -88,6 +89,25 @@
 
   $: showNotes = notes.slice(beginNotes, options.showNoteNum + beginNotes);
 
+  const timelineTypeEnum: Record<string, keyof Endpoints> = {
+    globalTimeline: "notes/global-timeline",
+    hybridTimeline: "notes/hybrid-timeline",
+    localTimeline: "notes/local-timeline",
+    homeTimeline: "notes/timeline",
+  };
+
+  const moreNote = async() => {
+    notes = uniqBy(
+      [
+        ...notes,
+        ...(await user.cli.request(timelineTypeEnum[options.channel], {
+          untilId: (notes[notes.length - 1].id)
+        })),
+      ],
+      "id"
+    ).slice(0, options.bufferNoteNum);
+  }
+
   onMount(async () => {
     options = {
       ...defaultOption,
@@ -104,26 +124,13 @@
     /**
      * 初期タイムラインの取得
      */
-    if (options.channel === "globalTimeline")
-      notes = uniqBy(
-        [...(await user.cli.request("notes/global-timeline")), ...notes],
-        "id"
-      );
-    else if (options.channel === "hybridTimeline")
-      notes = uniqBy(
-        [...(await user.cli.request("notes/hybrid-timeline")), ...notes],
-        "id"
-      );
-    else if (options.channel === "localTimeline")
-      notes = uniqBy(
-        [...(await user.cli.request("notes/local-timeline")), ...notes],
-        "id"
-      );
-    else if (options.channel === "homeTimeline")
-      notes = uniqBy(
-        [...(await user.cli.request("notes/timeline")), ...notes],
-        "id"
-      );
+    notes = uniqBy(
+      [
+        ...(await user.cli.request(timelineTypeEnum[options.channel])),
+        ...notes,
+      ],
+      "id"
+    );
 
     /**
      * チャンネルに接続
@@ -252,7 +259,10 @@
                 beginNotes += options.showNoteNum / 2;
               }}>もっと表示</button
             >
-          {/if}
+          {:else}
+            <button class="btn btn-block btn-primary my-2" on:click={moreNote}
+              >もっと表示(追加読み込み)</button
+            >{/if}
           <div class="pt-16" />
         </div>
       {/if}
