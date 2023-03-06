@@ -223,6 +223,22 @@
 
   const dispatch = createEventDispatcher();
 
+  const swapLeft = () => {
+    const self = $timelines.findIndex((v) => v.id === options.id);
+    if ($timelines.length === 1) return;
+    if (self === 0) return;
+    $timelines.splice(self - 1, 2, $timelines[self], $timelines[self - 1]);
+    dispatch("breakRequest");
+  };  
+  const swapRight = () => {
+    const self = $timelines.findIndex((v) => v.id === options.id);
+    if ($timelines.length === 1) return;
+    if (self === $timelines.length - 1) return;
+    $timelines.splice(self, 2, $timelines[self + 1], $timelines[self]);
+    dispatch("breakRequest");
+  };
+
+
   const timelineDelete = () => {
     if (streamChannel) streamChannel.dispose();
     showNav = NAV.none;
@@ -273,6 +289,8 @@
           <TimelineOptions
             bind:options
             on:deleteRequest={() => timelineDelete()}
+            on:swapLeft={swapLeft}
+            on:swapRight={swapRight}
             on:getNoteRequest={() => console.log(notes)}
           />
         {:else}

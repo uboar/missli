@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
-  import { users, type timelineOptions } from "../../lib/userdata";
+  import { timelines, users, type timelineOptions } from "../../lib/userdata";
   import ReactionDeck from "../note/ReactionDeck.svelte";
 
   export let options: timelineOptions;
@@ -57,6 +57,14 @@
       console.error(err);
     }
   };
+
+  const swapTimelineLeft = () => {
+    dispatch("swapLeft");
+  }
+
+  const swapTimelineRight = () => {
+    dispatch("swapRight");
+  }
 </script>
 
 <div class="relative w-full p-2 mb-16">
@@ -96,6 +104,14 @@
         class="input input-sm"
         bind:value={options.bufferNoteNum}
       />
+      <div class="btn-group mt-4">
+        <button class="btn btn-outline w-1/2 btn-secondary" on:click={swapTimelineLeft}>
+          左と入れ替え
+        </button>
+        <button class="btn btn-outline w-1/2 btn-secondary" on:click={swapTimelineRight}>
+          右と入れ替え
+        </button>
+      </div>
 
       <button
         class="btn btn-primary btn-block mt-4"
@@ -120,7 +136,7 @@
           >削除する</button
         >{:else}
         <button
-          class="btn btn-error btn-outline btn-block mt-16"
+          class="btn btn-error btn-outline btn-block mt-16 mb-16"
           on:click={() => {
             showDelete = true;
           }}>タイムラインを削除する</button

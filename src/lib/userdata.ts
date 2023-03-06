@@ -52,6 +52,7 @@ export type timelineOptions = {
   bufferNoteNum?: number;
   initialNotes?: Array<Note>;
   reactionDeck?: Array<string>;
+  isCollapsed?: boolean;
 };
 
 export type settingsType = {

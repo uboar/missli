@@ -13,11 +13,14 @@
 
   onMount(() => {
     if (!user) return;
+    focusNoteText.focus();
   });
 
   let noteBusy = false;
   let showCw = false;
   let keepOpen = false;
+
+  let focusNoteText: HTMLTextAreaElement;
 
   const noteVisibilityEnum = [
     {
@@ -166,6 +169,7 @@
     {/if}
     <textarea
       class="textarea textarea-bordered"
+      bind:this={focusNoteText}
       bind:value={postNote.text}
       placeholder="ノートする内容を入力して下さい！"
       on:keydown={(e) => {
