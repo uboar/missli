@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { User } from "misskey-js/built/entities";
   import type { userData } from "../../lib/userdata";
-  import Mfm from "../Mfm.svelte";
+  import MfmLite from "../MfmLite.svelte";
 
   export let user: User;
   export let hostUrl: string;
@@ -34,7 +34,7 @@
         {#if user.name === null}
           {user.username}
         {:else}
-          <Mfm
+          <MfmLite
             text={user.name}
             {localEmojis}
             remoteEmojis={user.emojis}
