@@ -132,7 +132,7 @@
             showDelete = false;
           }}>やめる</button
         >
-        <button class="btn btn-error btn-block mt-2" on:click={deleteRequest}
+        <button class="btn btn-error btn-block mt-2 mb-16" on:click={deleteRequest}
           >削除する</button
         >{:else}
         <button
