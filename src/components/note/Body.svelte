@@ -20,12 +20,74 @@
   };
 </script>
 
-<User
-  user={note.user}
-  hostUrl={user.hostUrl}
-  isRenote={note.renote && !note.text}
-  localEmojis={user.emojis}
-/>
+<div class="flex w-full justify-between">
+  <User
+    user={note.user}
+    hostUrl={user.hostUrl}
+    isRenote={note.renote && !note.text}
+    localEmojis={user.emojis}
+  />
+  <div class="flex gap-2">
+    {#if note.localOnly}
+      <div
+        class="fill-base-content tooltip tooltip-left grid items-center"
+        data-tip="連合なし"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          class="h-4 w-4"
+          ><path
+            d="M14.46 15.88L15.88 14.46L18 16.59L20.12 14.47L21.54 15.88L19.41 18L21.54 20.12L20.12 21.54L18 19.41L15.88 21.54L14.46 20.12L16.59 18L14.47 15.88M20 12C20 8.64 17.93 5.77 15 4.59V5C15 6.1 14.1 7 13 7H11V9C11 9.55 10.55 10 10 10H8V12H14C14.5 12 14.9 12.35 15 12.81C13.2 13.85 12 15.79 12 18C12 19.5 12.54 20.85 13.44 21.9L12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2C17.5 2 22 6.5 22 12L21.9 13.44C21.34 12.96 20.7 12.59 20 12.34L20 12M11 19.93V18C9.9 18 9 17.1 9 16V15L4.21 10.21C4.08 10.78 4 11.38 4 12C4 16.08 7.06 19.44 11 19.93Z"
+          /></svg
+        >
+      </div>
+    {/if}
+    {#if note.visibility === "home"}
+      <div
+        class="fill-base-content tooltip tooltip-left grid items-center"
+        data-tip="ホーム"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          ><path
+            d="M12 5.69L17 10.19V18H15V12H9V18H7V10.19L12 5.69M12 3L2 12H5V20H11V14H13V20H19V12H22"
+          /></svg
+        >
+      </div>
+    {:else if note.visibility === "followers"}
+      <div
+        class="fill-base-content tooltip tooltip-left grid items-center"
+        data-tip="フォロワーのみ"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          class="h-4 w-4"
+          ><path
+            d="M12,17C10.89,17 10,16.1 10,15C10,13.89 10.89,13 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
+          /></svg
+        >
+      </div>
+    {:else if note.visibility === "specified"}
+      <div
+        class="fill-base-content tooltip tooltip-left grid items-center"
+        data-tip="ダイレクト"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          class="h-4 w-4"
+          >\<path
+            d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6M20 6L12 11L4 6H20M20 18H4V8L12 13L20 8V18Z"
+          /></svg
+        >
+      </div>
+    {/if}
+  </div>
+</div>
 {#if note.replyId}
   <a
     class="badge badge-sm -mb-1"
@@ -36,10 +98,7 @@
 {/if}
 
 {#if note.cw}
-  <button
-    class="alert shadow-md mb-2"
-    on:click={() => (showCw = !showCw)}
-  >
+  <button class="alert shadow-md mb-2" on:click={() => (showCw = !showCw)}>
     <div class="-m-2">
       <div class="badge badge-warning">CW</div>
       <div class=" link link-hover">
