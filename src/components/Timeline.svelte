@@ -53,6 +53,7 @@
     localOnly: false,
     cw: null,
   };
+  let unRead = false;
 
   let renoteNote: NoteType | null = null;
   const renoteRequest = async (note: NoteType) => {
@@ -170,6 +171,7 @@
     }
     streamChannel.on("note", (payload: NoteType) => {
       notes = uniqBy([payload, ...notes].slice(0, options.bufferNoteNum), "id");
+      if (options.isCollapsed) unRead = true;
     });
 
     /**
@@ -229,7 +231,7 @@
     if (self === 0) return;
     $timelines.splice(self - 1, 2, $timelines[self], $timelines[self - 1]);
     dispatch("breakRequest");
-  };  
+  };
   const swapRight = () => {
     const self = $timelines.findIndex((v) => v.id === options.id);
     if ($timelines.length === 1) return;
@@ -237,7 +239,6 @@
     $timelines.splice(self, 2, $timelines[self + 1], $timelines[self]);
     dispatch("breakRequest");
   };
-
 
   const timelineDelete = () => {
     if (streamChannel) streamChannel.dispose();
@@ -358,7 +359,14 @@
         >
           <div class="indicator">
             {#if user.notifyUnOpen}
-              <span class="indicator-item badge badge-secondary" />
+              <span class="indicator-item flex">
+                <span
+                  class="animate-ping absolute top-0 right-0 inline-flex h-4 w-4 rounded-full bg-secondary opacity-75"
+                />
+                <span
+                  class="absolute inline-flex top-0 right-0 rounded-full h-4 w-4 bg-secondary"
+                />
+              </span>
             {/if}
             <button
               class="btn btn-circle btn-outline fill-base-content hover:fill-base-100"
@@ -430,12 +438,26 @@
   <div
     class="h-full bg-base-300 relative rounded w-8 grid place-content-center"
   >
-    <button
-      class="badge badge-outline link -rotate-90 link-hover animate-none"
-      style="color: {options.color}; width: 70vh"
-      on:click={() => (options.isCollapsed = false)}
-      >{options.channelName}</button
-    >
+    <div class="indicator -rotate-90">
+      {#if unRead}
+        <span class="indicator-item flex">
+          <span
+            class="animate-ping absolute top-0.5 right-0.5 inline-flex h-4 w-4 rounded-full bg-secondary opacity-75"
+          />
+          <span
+            class="absolute inline-flex top-0.5 right-0.5 rounded-full h-4 w-4 bg-secondary"
+          />
+        </span>
+      {/if}
+      <button
+        class="badge badge-outline link link-hover animate-none"
+        style="color: {options.color}; width: 70vh"
+        on:click={() => {
+          options.isCollapsed = false;
+          unRead = false;
+        }}>{options.channelName}</button
+      >
+    </div>
   </div>
 {/if}
 
