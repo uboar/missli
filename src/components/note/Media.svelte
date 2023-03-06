@@ -20,7 +20,7 @@
 <!-- メディア内容 -->
 <div class="w-full">
   {#if files.length > 0}
-    <div class="relative w-full flex justify-center max-h-64">
+    <div class="relative w-full flex justify-center max-h-64 min-h-16">
       {#if file.type.indexOf("image") >= 0}
         <a href={file.url} target="_blank" rel="noreferrer" class="relative">
           <img
@@ -29,15 +29,8 @@
             class="object-contain rounded-lg max-h-64 {file.isSensitive ? 'blur-lg' : ''}"
           />
         </a>
-        {#if file.isSensitive}
-          <div
-            class="absolute w-full h-full top-0 grid content-center justify-center z-20"
-          >
-            <button class="btn w-32 btn-warning shadow-md" on:click={() => file.isSensitive = false}>画像を見る</button>
-          </div>
-        {/if}
       {:else if file.type.indexOf("video") >= 0}
-        <video controls>
+        <video controls class={(file.isSensitive) ? "hidden" : ""}>
           <source src={file.url} />
           <track kind="captions" />
         </video>
@@ -62,6 +55,13 @@
             <span>{file.name}</span>
           </div>
         </a>
+      {/if}
+      {#if file.isSensitive}
+        <div
+          class="absolute w-full h-full top-0 grid content-center justify-center z-20"
+        >
+          <button class="btn w-32 btn-warning shadow-md" on:click={() => file.isSensitive = false}>メディアを見る</button>
+        </div>
       {/if}
       {#if files.length > 1}
         <div
