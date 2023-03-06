@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy, tick } from "svelte";
+  import { onMount, onDestroy, tick, createEventDispatcher } from "svelte";
   import Note from "./Note.svelte";
   import type {
     userData,
@@ -182,6 +182,8 @@
     });
   });
 
+  const dispatch = createEventDispatcher();
+
   const timelineDelete = () => {
     if (streamChannel) streamChannel.dispose();
     showNav = NAV.none;
@@ -189,7 +191,7 @@
       const ret = val.filter((v) => v.id !== options.id);
       return ret;
     });
-    location.href = window.location.origin + window.location.pathname;
+    dispatch("breakRequest");
   };
 
   onDestroy(() => {

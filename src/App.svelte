@@ -11,7 +11,7 @@
   } from "./lib/userdata";
   import Timeline from "./components/Timeline.svelte";
   import AddTimeline from "./components/AddTimeline.svelte";
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
 
   let loading = true;
 
@@ -19,6 +19,12 @@
     $users = await getCookie();
     loading = false;
   });
+
+  const deleteTimeline = async() => {
+    loading = true;
+    await tick();
+    loading = false;
+  }
 </script>
 
 <main data-theme={$settings.theme} class="screen">
@@ -37,6 +43,7 @@
           <Timeline
             bind:user={$users[timeline.userDataIndex]}
             bind:options={timeline}
+            on:breakRequest={deleteTimeline}
           />
         {/each}
       </div>
