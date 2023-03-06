@@ -39,7 +39,6 @@
   <button
     class="alert shadow-md mb-2"
     on:click={() => (showCw = !showCw)}
-    on:keypress={() => (showCw = !showCw)}
   >
     <div class="-m-2">
       <div class="badge badge-warning">CW</div>

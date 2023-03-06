@@ -206,12 +206,7 @@
       <button
         class="btn btn-xs bg-base-100 btn-outline btn-block my-1"
         style="color: {options.color}"
-        on:click={() => {
-          scrollPos.scrollTop = 0;
-        }}
-        on:keypress={() => {
-          scrollPos.scrollTop = 0;
-        }}
+        on:click={() => (scrollPos.scrollTop = 0)}
       >
         {options.channelName}
       </button>
@@ -248,19 +243,12 @@
             on:click={() => {
               scrollPos.scrollTop = 0;
               beginNotes = 0;
-            }}
-            on:keypress={() => {
-              scrollPos.scrollTop = 0;
-              beginNotes = 0;
             }}>最初に戻る</button
           >
           {#if notes.length > options.showNoteNum && notes.length - options.showNoteNum > beginNotes}
             <button
               class="btn btn-block btn-primary my-2"
               on:click={() => {
-                beginNotes += options.showNoteNum / 2;
-              }}
-              on:keypress={() => {
                 beginNotes += options.showNoteNum / 2;
               }}>もっと表示</button
             >
@@ -305,8 +293,6 @@
             class="btn btn-circle btn-outline fill-base-content hover:fill-base-100"
             on:click={() =>
               (showNav = showNav === NAV.notify ? NAV.none : NAV.notify)}
-            on:keypress={() =>
-              (showNav = showNav === NAV.notify ? NAV.none : NAV.notify)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -330,8 +316,6 @@
           class="btn btn-circle btn-primary fill-base-100"
           on:click={() =>
             (showNav = showNav === NAV.note ? NAV.none : NAV.note)}
-          on:keypress={() =>
-            (showNav = showNav === NAV.note ? NAV.none : NAV.note)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -354,8 +338,6 @@
         <button
           class="btn btn-circle btn-outline fill-base-content hover:fill-base-100"
           on:click={() =>
-            (showNav = showNav === NAV.settings ? NAV.none : NAV.settings)}
-          on:keypress={() =>
             (showNav = showNav === NAV.settings ? NAV.none : NAV.settings)}
         >
           <svg

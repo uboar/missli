@@ -59,7 +59,6 @@
           <button
             class="btn btn-ghost btn-block btn-xs fill-base-content"
             on:click={replyRequest}
-            on:keypress={replyRequest}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +74,6 @@
           <button
             class="btn btn-ghost btn-block btn-xs fill-base-content"
             on:click={renoteRequest}
-            on:keypress={renoteRequest}
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -90,7 +88,6 @@
           <button
             class="btn btn-ghost btn-block btn-xs fill-base-content"
             on:click={() => (showReactionDeck = !showReactionDeck)}
-            on:keypress={() => (showReactionDeck = !showReactionDeck)}
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

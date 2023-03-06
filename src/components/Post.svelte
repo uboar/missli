@@ -113,7 +113,7 @@
       for="post-modal"
       class="btn btn-primary flex-1 {postNote.text === '' ? 'btn-disabled' : ''}"
       on:click={sendNote}
-      on:keypress={sendNote}>ノートする</label
+      on:keydown={sendNote}>ノートする</label
     >
     <label for="post-modal" class="btn btn-secondary btn-outline">閉じる</label>
   </div>

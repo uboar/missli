@@ -73,13 +73,21 @@
   <div class="card bg-base-300 w-full">
     <div class="card-body">
       <div class="card-title mb-2">認証情報を追加する</div>
-      <p>追加したいアカウントのインスタンスURL(例：misskey.io)を入力してください。</p>
-      <p class="text-warning font-bold">現在、Misskey v12系のインスタンスではカスタム絵文字を正しく取得出来ません。</p>
+      <p>
+        追加したいアカウントのインスタンスURL(例：misskey.io)を入力してください。
+      </p>
+      <p class="text-warning font-bold">
+        現在、Misskey
+        v12系のインスタンスではカスタム絵文字を正しく取得出来ません。
+      </p>
       <input
         type="text"
         class="input"
         disabled={busy}
         bind:value={hostUrl}
+        on:keydown={(e) => {
+          if (e.code === "Enter") openMiAuth();
+        }}
         placeholder="インスタンスURL"
         tabindex="0"
       />
@@ -89,7 +97,6 @@
           hostUrl === "" || busy ? "btn-disabled" : ""
         } btn btn-primary btn-lg`}
         on:click={openMiAuth}
-        on:keypress={openMiAuth}
         value={busy ? "セッションID取得中..." : "認証する"}
       />
     </div>

@@ -50,12 +50,7 @@
     {#each tabs as tab, index (tab.value)}
       <button
         class="tab tab-bordered {selectedTab === tab.value ? 'tab-active' : ''}"
-        on:click={() => {
-          selectedTab = tab.value;
-        }}
-        on:keypress={() => {
-          selectedTab = tab.value;
-        }}
+        on:click={() => (selectedTab = tab.value)}
       >
         {tab.name}
       </button>
@@ -74,10 +69,8 @@
             <div class="flex-1 text-xl font-bold">
               @{user.userName}@{user.hostUrl}
             </div>
-            <btn
-              class="btn btn-error -my-2"
-              on:click={deleteUser(index)}
-              on:keypress={deleteUser(index)}>連携解除</btn
+            <button class="btn btn-error -my-2" on:click={() => deleteUser(index)}
+              >連携解除</button
             >
           </div>
         </div>
