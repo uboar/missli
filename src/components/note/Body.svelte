@@ -133,6 +133,16 @@
     </a>
   {/if}
 
+  {#if note.channelId}
+    <a
+      class="text-xs link fill-base-content text-base-content opacity-40"
+      href={`https://${user.hostUrl}/channels/${note.channelId}`}
+      target="_blank"
+      rel="noreferrer"
+      >{note.channel.name}
+    </a>
+  {/if}
+
   <!-- メディア内容 -->
   {#if note.files.length > 0 && !compact}
     <Media files={note.files} />
