@@ -1,9 +1,22 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { version } from "../../package.json";
   import { users } from "../lib/userdata";
   import AddTimeline from "./AddTimeline.svelte";
   import Post from "./Post.svelte";
   import Settings from "./Settings.svelte";
+  import VersionNotify from "./VersionNotify.svelte";
+
+  let notifyModal: HTMLInputElement = document.createElement("input");
+
+  onMount(() => {
+    const userVersion = localStorage.getItem("version");
+
+    if (version !== userVersion) {
+      notifyModal.checked = true;
+      localStorage.setItem("version", version);
+    }
+  });
 </script>
 
 <div class="navbar bg-primary fixed z-50 shadow-lg w-screen">
@@ -29,9 +42,7 @@
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-6 fill-accent group-hover:fill-primary-focus"
           viewBox="0 0 24 24"
-          ><path
-            d="M2,21L23,12L2,3V10L17,12L2,14V21Z"
-          /></svg
+          ><path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg
         >
         <span class="hidden md:inline">ノート</span>
       </label>
@@ -44,9 +55,7 @@
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-6 fill-primary-content group-hover:fill-primary-focus"
           viewBox="0 0 24 24"
-          ><path
-            d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
-          /></svg
+          ><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg
         >
         <span class="hidden md:inline">タイムラインを追加</span>
       </label>
@@ -90,6 +99,21 @@
     <Settings />
     <div class="modal-action">
       <label for="settings-modal" class="btn btn-primary w-40">閉じる</label>
+    </div>
+  </div>
+</div>
+
+<input
+  type="checkbox"
+  id="update-modal"
+  class="modal-toggle"
+  bind:this={notifyModal}
+/>
+<div class="modal">
+  <div class="modal-box">
+    <VersionNotify />
+    <div class="modal-action">
+      <label for="update-modal" class="btn btn-primary w-40">閉じる</label>
     </div>
   </div>
 </div>
