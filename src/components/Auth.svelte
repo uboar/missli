@@ -139,7 +139,9 @@ v1.2.1以前に本アプリを使用した事がある方は、権限設定が�
           @{user.userName}@{user.hostUrl}
         </div>
         <button
-          class="btn btn-info btn-sm -my-2"
+          class="btn btn-info btn-sm -my-2 {user.isOldVersion
+            ? 'btn-disabled'
+            : ''}"
           on:click={() => reAuthUser(index)}>再認証</button
         >
         <button
