@@ -181,7 +181,10 @@
       await tick();
       const noteIndex = notes.findIndex((v) => v.id === e.id);
       if (noteIndex < 0) {
-        console.error("can't find note data");
+        console.error("Note data not found. Cancel subscription.");
+        user.stream.send("unsubNote", {
+          id: e.id,
+        });
         return;
       }
       if (notes[noteIndex]["reactionEmojis"] == null)
