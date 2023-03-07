@@ -23,8 +23,9 @@ export type postNote = {
 
 export type userData = {
   ok: boolean;
+  isOldVersion?: boolean;
   id: number;
-  sessionId: string;
+  sessionId?: string;
   token: string;
   userName: string;
   hostUrl: string;
@@ -78,6 +79,7 @@ export const setCookie = (userData: userData) => {
     token: userData.token,
     hostUrl: userData.hostUrl,
     userName: userData.userName,
+    isOldVersion: userData.isOldVersion,
     ok: userData.ok,
   };
 
@@ -134,12 +136,17 @@ export const getCookie = async (): Promise<Array<userData>> => {
       }
 
       // カスタム絵文字の取得
-      try {
-        users[i].emojis = (await users[i].cli.request("emojis")).emojis;
-      } catch (err) {
-        console.error(err);
+      // TODO : Misskey v12以前でちゃんと絵文字を取得出来るようにする。
+      if (!users[i].isOldVersion) {
+        try {
+          users[i].emojis = (await users[i].cli.request("emojis")).emojis;
+        } catch (err) {
+          console.error(err);
+          users[i].emojis = [];
+          // window.alert("カスタム絵文字一覧の取得に失敗しました。")
+        }
+      }else{
         users[i].emojis = [];
-        // window.alert("カスタム絵文字一覧の取得に失敗しました。")
       }
     } catch (err) {
       console.error(err);
@@ -185,7 +192,7 @@ export const deleteUser = (
     });
 
     document.cookie = `${users[userDataIndex].id}=; Max-Age=0`;
-    
+
     timelines.update((val) => {
       let updateVal = val.map((v) => {
         if (v.userDataIndex !== userDataIndex) {

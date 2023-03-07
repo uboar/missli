@@ -54,6 +54,7 @@
   });
 
   const openMiAuth = async () => {
+    hostUrl = hostUrl.replace("https://", "");
     busy = true;
     try {
       const sessionId = await (
@@ -90,6 +91,37 @@
       window.alert("認証時にエラーが発生しました");
     }
   };
+
+  const directAuth = async () => {
+    try {
+      hostUrl = hostUrl.replace("https://", "");
+      let userdata: userData = {
+        ok: true,
+        isOldVersion: true,
+        id: new Date().valueOf(),
+        userName: directUserId,
+        token: directToken,
+        hostUrl: hostUrl,
+        stream: new Stream(`https://${hostUrl}`, {
+          token: directToken,
+        }),
+        cli: new api.APIClient({
+          origin: `https://${hostUrl}`,
+          credential: directToken,
+        }),
+      };
+      setCookie(userdata);
+      users.update((val) => [...val, userdata]);
+      location.href = window.location.origin + window.location.pathname;
+    } catch (err) {
+      console.error(err);
+      window.alert("認証時にエラーが発生しました");
+    }
+  };
+
+  let selectedTab = 0;
+  let directToken = "";
+  let directUserId = "";
 </script>
 
 <h1 class="text-2xl">連携しているアカウント</h1>
@@ -122,33 +154,89 @@ v1.2.1以前に本アプリを使用した事がある方は、権限設定が�
 <div class="flex justify-center m-4">
   <div class="card bg-base-300 w-full">
     <div class="card-body">
-      <div class="card-title mb-2">認証情報を追加する</div>
-      <p>
-        追加したいアカウントのインスタンスURL(例：misskey.io)を入力してください。
-      </p>
-      <p class="text-warning font-bold">
-        現在、Misskey
-        v12系のインスタンスではカスタム絵文字を正しく取得出来ません。
-      </p>
-      <input
-        type="text"
-        class="input"
-        disabled={busy}
-        bind:value={hostUrl}
-        on:keydown={(e) => {
-          if (e.code === "Enter") openMiAuth();
-        }}
-        placeholder="インスタンスURL"
-        tabindex="0"
-      />
-      <input
-        type="submit"
-        class={`${
-          hostUrl === "" || busy ? "btn-disabled" : ""
-        } btn btn-primary btn-lg`}
-        on:click={openMiAuth}
-        value={busy ? "セッションID取得中..." : "認証する"}
-      />
+      <div class="card-title -mt-4">
+        <div class="flex flex-col">
+          <h2 class="text-xl font-bold">ユーザーの追加</h2>
+          <div class="tabs">
+            <button
+              class="tab tab-bordered {selectedTab === 0 ? 'tab-active' : ''}"
+              on:click={() => (selectedTab = 0)}>MiAuth</button
+            >
+            <button
+              class="tab tab-bordered {selectedTab === 1 ? 'tab-active' : ''}"
+              on:click={() => (selectedTab = 1)}
+              >アクセストークンの直接入力</button
+            >
+          </div>
+        </div>
+      </div>
+      {#if selectedTab === 0}
+        <h2 class="text-xl font-bold">MiAuth認証</h2>
+        <p>
+          追加したいアカウントのサーバーURL(例：misskey.io)を入力してください。
+        </p>
+        <p class="text-warning font-bold">
+          現在、Misskey
+          v12系のサーバーではカスタム絵文字を正しく取得出来ません。
+        </p>
+        <input
+          type="text"
+          class="input"
+          disabled={busy}
+          bind:value={hostUrl}
+          on:keydown={(e) => {
+            if (e.code === "Enter") openMiAuth();
+          }}
+          placeholder="ホストURL"
+          tabindex="0"
+        />
+        <input
+          type="submit"
+          class={`${
+            hostUrl === "" || busy ? "btn-disabled" : ""
+          } btn btn-primary btn-lg`}
+          on:click={openMiAuth}
+          value={busy ? "セッションID取得中..." : "認証する"}
+        />
+      {:else if selectedTab === 1}
+        <h2 class="text-xl font-bold">アクセストークンの直接入力</h2>
+        <p>
+          取得したアクセストークンを直接入力します。MiAuth認証していない古いバージョンのMisskeyを使用する際に使用して下さい。
+        </p>
+        <div class="form-control">
+          <span class="label-text">ホストURL</span>
+          <input
+            type="text"
+            bind:value={hostUrl}
+            class="input"
+            placeholder="ホストURL"
+          />
+          <span class="label-text">ユーザーID</span>
+          <input
+            type="text"
+            bind:value={directUserId}
+            class="input"
+            placeholder="ユーザーID"
+          />
+          <span class="label-text">アクセストークン</span>
+          <input
+            type="password"
+            bind:value={directToken}
+            class="input"
+            placeholder="アクセストークン"
+          />
+          <button
+            class="btn btn-primary btn-lg btn-block {hostUrl === '' ||
+            directToken === '' ||
+            directUserId === ''
+              ? 'btn-disabled'
+              : ''}"
+            on:click={directAuth}
+          >
+            認証する
+          </button>
+        </div>
+      {/if}
     </div>
   </div>
 </div>
