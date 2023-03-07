@@ -1,14 +1,26 @@
 <script lang="ts">
   import type { Notification } from "misskey-js/built/entities";
   import { onMount } from "svelte";
-  import type { userData } from "../../lib/userdata";
+  import type { userData, users } from "../../lib/userdata";
   import EmojiParser from "../EmojiParser.svelte";
+  import MfmLite from "../MfmLite.svelte";
 
   export let user: userData | null = null;
+
+  $: noteText = (notify: Notification) => {
+    if (notify.note.text === null && notify.type === "renote") {
+      return notify.note.renote.text;
+    } else if (notify.note.text === null) {
+      return "テキスト無し";
+    } else {
+      return notify.note.text;
+    }
+  };
 
   onMount(() => {
     if (!user) return;
     user.notifyUnOpen = false;
+    console.log(user.notifyBuffer);
   });
 
   $: getNotifyTypeName = (notify: Notification) => {
@@ -49,10 +61,16 @@
         return `${
           notify.user.name ? notify.user.name : notify.user.username
         }さんにリアクションされました`;
+      case "quote":
+        return `${
+          notify.user.name ? notify.user.name : notify.user.username
+        }さんに引用されました`;
       case "reply":
         return `${
           notify.user.name ? notify.user.name : notify.user.username
         }さんから返信されました`;
+      case "pollEnded":
+        return `投票が終了しました`;
       default:
         return notify.type;
     }
@@ -86,12 +104,26 @@
       case "messagingMessage":
         return `${origin}/my/notifications`;
       case "mention":
-        return `${origin}/notes/${notify.note.id}`;
+        return `${origin}/@${notify.user.username}${
+          notify.user.host ? "@" + notify.user.host : ""
+        }`;
       case "reply":
-        return `${origin}/notes/${notify.note.id}`;
+        return `${origin}/@${notify.user.username}${
+          notify.user.host ? "@" + notify.user.host : ""
+        }`;
       case "renote":
-        return `${origin}/notes/${notify.note.id}`;
+        return `${origin}/@${notify.user.username}${
+          notify.user.host ? "@" + notify.user.host : ""
+        }`;
       case "reaction":
+        return `${origin}/@${notify.user.username}${
+          notify.user.host ? "@" + notify.user.host : ""
+        }`;
+      case "quote":
+        return `${origin}/@${notify.user.username}${
+          notify.user.host ? "@" + notify.user.host : ""
+        }`;
+      case "pollEnded":
         return `${origin}/notes/${notify.note.id}`;
       default:
         return `${origin}/my/notifications`;
@@ -104,19 +136,44 @@
     <ul class="menu bg-base-100">
       {#each user.notifyBuffer as notify (notify.id)}
         <li>
-          <a
-            href={getNotifyLink(notify)}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {#if notify.type === "reaction"}
-              <EmojiParser
-                localEmojis={user.emojis}
-                text={notify.reaction}
-                remoteEmojis={notify.note.reactionEmojis}
-              />
-            {/if}
-            {getNotifyTypeName(notify)}
+          <a href={getNotifyLink(notify)} target="_blank" rel="noreferrer">
+            <div class="flex flex-col">
+              <div class="flex link link-hover gap-2">
+                {#if notify.type === "reaction"}
+                  <EmojiParser
+                    localEmojis={user.emojis}
+                    text={notify.reaction}
+                    remoteEmojis={notify.note.reactionEmojis}
+                  />
+                {/if}
+                {#if new RegExp("reaction|renote|reply|quote|mention").test(notify.type)}
+                  <MfmLite
+                    text={getNotifyTypeName(notify)}
+                    localEmojis={user.emojis}
+                    remoteEmojis={notify.user.emojis}
+                    emojiHeight="h-4"
+                    hostUrl={user.hostUrl}
+                  />
+                {:else}
+                  {getNotifyTypeName(notify)}
+                {/if}
+              </div>
+              {#if new RegExp("reaction|renote|reply|mention|quote|pollEnded").test(notify.type)}
+                <a
+                  href={`https://${user.hostUrl}/notes/${notify.note.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div
+                    class="card card-compact bg-base-100 card-bordered link link-hover border-base-content"
+                  >
+                    <div class="card-body max-w-full -my-2">
+                      {noteText(notify)}
+                    </div>
+                  </div>
+                </a>
+              {/if}
+            </div>
           </a>
         </li>
       {/each}

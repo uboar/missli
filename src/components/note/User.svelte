@@ -21,7 +21,17 @@
 >
   {#if isRenote}
     <div class="text-xs -mb-2 pr-3">
-      🔁{user.name === null ? user.username : user.name}がリノート
+      {#if user.name === null}
+        🔁user.usernameがリノート
+      {:else}
+        <MfmLite
+          text={"🔁" + user.name + "がリノート"}
+          {localEmojis}
+          remoteEmojis={user.emojis}
+          emojiHeight="h-4"
+          {hostUrl}
+        />
+      {/if}
     </div>
   {:else}
     <div class="avatar">
