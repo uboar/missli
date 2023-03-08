@@ -6,7 +6,7 @@
     timelines,
     getCookie,
     settings,
-    type timelineOptions,
+    type TimelineOptions,
     type settingsType,
   } from "./lib/userdata";
   import Timeline from "./components/Timeline.svelte";

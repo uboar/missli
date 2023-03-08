@@ -3,7 +3,7 @@
   import Note from "./Note.svelte";
   import type {
     userData,
-    timelineOptions,
+    TimelineOptions as Option,
     postNote as postNoteType,
   } from "../lib/userdata";
   import type { Note as NoteType } from "misskey-js/built/entities";
@@ -13,15 +13,17 @@
   import TimelineOptions from "./timeline/TimelineOptions.svelte";
   import TimelinePostNote from "./timeline/TimelinePostNote.svelte";
   import TimelineNotify from "./timeline/TimelineNotify.svelte";
-  import type { Endpoints } from "misskey-js";
+  import { fixChannelData, getOldNotes, initializeTimeline } from "../lib/channel";
+
+  const dispatch = createEventDispatcher();
 
   export let dummy: boolean = false;
   export let user: userData = null;
-  export let options: timelineOptions;
+  export let options: Option;
 
   let streamChannel: Connection;
 
-  const defaultOption: timelineOptions = {
+  const defaultOption: Option = {
     id: new Date().valueOf(),
     userDataIndex: 0,
     channel: "globalTimeline",
@@ -55,79 +57,14 @@
   };
   let unRead = false;
 
-  let renoteNote: NoteType | null = null;
-  const renoteRequest = async (note: NoteType) => {
-    renoteNote = null;
-    replyNote = null;
-    await tick();
-    if (note.renote && !note.text) {
-      renoteNote = note.renote;
-      postNote.localOnly = note.renote.localOnly;
-      postNote.visibility = note.renote.visibility;
-    } else {
-      renoteNote = note;
-      postNote.localOnly = note.localOnly;
-      postNote.visibility = note.visibility;
-    }
-    showNav = NAV.note;
-  };
-
-  let replyNote: NoteType | null = null;
-  const replyRequest = async (note: NoteType) => {
-    renoteNote = null;
-    replyNote = null;
-    await tick();
-    if (note.renote && !note.text) {
-      replyNote = note.renote;
-      postNote.localOnly = note.renote.localOnly;
-      postNote.visibility = note.renote.visibility;
-    } else {
-      replyNote = note;
-      postNote.localOnly = note.localOnly;
-      postNote.visibility = note.visibility;
-    }
-    showNav = NAV.note;
-  };
-
   $: showNotes = notes.slice(beginNotes, options.showNoteNum + beginNotes);
-
-  const timelineTypeEnum: Record<string, keyof Endpoints> = {
-    globalTimeline: "notes/global-timeline",
-    hybridTimeline: "notes/hybrid-timeline",
-    localTimeline: "notes/local-timeline",
-    homeTimeline: "notes/timeline",
-  };
-
-  const moreNote = async () => {
-    if (timelineTypeEnum[options.channel] == null) {
-      notes = uniqBy(
-        [
-          ...notes,
-          ...(await user.cli.request("channels/timeline", {
-            untilId: notes[notes.length - 1].id,
-            channelId: options.channel,
-          })),
-        ],
-        "id"
-      ).slice(0, options.bufferNoteNum);
-    } else {
-      notes = uniqBy(
-        [
-          ...notes,
-          ...(await user.cli.request(timelineTypeEnum[options.channel], {
-            untilId: notes[notes.length - 1].id,
-          })),
-        ],
-        "id"
-      ).slice(0, options.bufferNoteNum);
-    }
-  };
 
   onMount(async () => {
     options = {
       ...defaultOption,
       ...options,
     };
+
     if (options.initialNotes.length > 0) notes = options.initialNotes;
     if (dummy) return;
 
@@ -136,39 +73,17 @@
       return;
     }
 
+    options = fixChannelData(options);
+    if (options.channel === "channel") postNote.channelId = options.channelId;
+
+    const initializeData = await initializeTimeline(user, options);
+
+    streamChannel = initializeData.streamChannel;
+    notes = uniqBy([...initializeData.notes, ...notes], "id");
+
     /**
-     * 初期タイムラインの取得
+     * ノートの受信
      */
-    if (timelineTypeEnum[options.channel] == null) {
-      notes = uniqBy(
-        [
-          ...(await user.cli.request("channels/timeline", {
-            channelId: options.channel,
-          })),
-          ...notes,
-        ],
-        "id"
-      );
-      /**
-       * チャンネルに接続
-       */
-      streamChannel = user.stream.useChannel("channel", {
-        channelId: options.channel,
-      });
-      postNote.channelId = options.channel;
-    } else {
-      notes = uniqBy(
-        [
-          ...(await user.cli.request(timelineTypeEnum[options.channel])),
-          ...notes,
-        ],
-        "id"
-      );
-      /**
-       * チャンネルに接続
-       */
-      streamChannel = user.stream.useChannel(options.channel);
-    }
     streamChannel.on("note", (payload: NoteType) => {
       notes = uniqBy([payload, ...notes].slice(0, options.bufferNoteNum), "id");
       if (options.isCollapsed) unRead = true;
@@ -225,8 +140,20 @@
       }
     });
   });
+  onDestroy(() => {
+    showNav = NAV.none;
+    if (streamChannel) streamChannel.dispose();
+  });
 
-  const dispatch = createEventDispatcher();
+  const moreNote = async () => {
+    notes = uniqBy(
+      [
+        ...notes,
+        ...(await getOldNotes(user, options, notes[notes.length - 1].id)),
+      ],
+      "id"
+    ).slice(0, options.bufferNoteNum);
+  };
 
   const swapLeft = () => {
     const self = $timelines.findIndex((v) => v.id === options.id);
@@ -242,7 +169,6 @@
     $timelines.splice(self, 2, $timelines[self + 1], $timelines[self]);
     dispatch("breakRequest");
   };
-
   const timelineDelete = () => {
     if (streamChannel) streamChannel.dispose();
     showNav = NAV.none;
@@ -253,10 +179,47 @@
     dispatch("breakRequest");
   };
 
-  onDestroy(() => {
-    showNav = NAV.none;
-    if (streamChannel) streamChannel.dispose();
-  });
+  /**
+   * @description リノートボタンが押された時
+   * @param note
+   */
+  const renoteRequest = async (note: NoteType) => {
+    renoteNote = null;
+    replyNote = null;
+    await tick();
+    if (note.renote && !note.text) {
+      renoteNote = note.renote;
+      postNote.localOnly = note.renote.localOnly;
+      postNote.visibility = note.renote.visibility;
+    } else {
+      renoteNote = note;
+      postNote.localOnly = note.localOnly;
+      postNote.visibility = note.visibility;
+    }
+    showNav = NAV.note;
+  };
+  let renoteNote: NoteType | null = null;
+
+  /**
+   * @description 返信ボタンが押された時
+   * @param note
+   */
+  const replyRequest = async (note: NoteType) => {
+    renoteNote = null;
+    replyNote = null;
+    await tick();
+    if (note.renote && !note.text) {
+      replyNote = note.renote;
+      postNote.localOnly = note.renote.localOnly;
+      postNote.visibility = note.renote.visibility;
+    } else {
+      replyNote = note;
+      postNote.localOnly = note.localOnly;
+      postNote.visibility = note.visibility;
+    }
+    showNav = NAV.note;
+  };
+  let replyNote: NoteType | null = null;
 </script>
 
 {#if !options.isCollapsed}
@@ -304,7 +267,7 @@
               <Note
                 {note}
                 {user}
-                timelineOptions={options}
+                TimelineOptions={options}
                 stream={user.stream}
                 on:renoteRequest={() => renoteRequest(note)}
                 on:replyRequest={() => replyRequest(note)}

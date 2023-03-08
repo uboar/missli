@@ -1,9 +1,9 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
-  import { timelines, users, type timelineOptions } from "../../lib/userdata";
+  import { timelines, users, type TimelineOptions } from "../../lib/userdata";
   import ReactionDeck from "../note/ReactionDeck.svelte";
 
-  export let options: timelineOptions;
+  export let options: TimelineOptions;
   const dispatch = createEventDispatcher();
 
   let showReactionDeck = false;

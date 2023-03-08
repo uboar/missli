@@ -42,10 +42,11 @@ export type userData = {
   }>;
 };
 
-export type timelineOptions = {
+export type TimelineOptions = {
   id: number;
   userDataIndex?: number;
   channel?: keyof Channels;
+  channelId?: string;
   channelName?: string;
   color?: string;
   width?: string;
@@ -66,10 +67,10 @@ export const settings = writable<settingsType>({
   notifyBufferNum: 100,
 });
 export const users = writable<Array<userData>>([]);
-export const timelines = writable<Array<timelineOptions>>([]);
+export const timelines = writable<Array<TimelineOptions>>([]);
 
 /**
- *
+ * @description クッキーに認証情報を追加する
  * @param userData
  */
 export const setCookie = (userData: userData) => {
@@ -89,7 +90,7 @@ export const setCookie = (userData: userData) => {
 };
 
 /**
- *
+ * @description クッキーから認証情報を取得する
  * @returns
  */
 export const getCookie = async (): Promise<Array<userData>> => {
@@ -145,7 +146,7 @@ export const getCookie = async (): Promise<Array<userData>> => {
           users[i].emojis = [];
           // window.alert("カスタム絵文字一覧の取得に失敗しました。")
         }
-      }else{
+      } else {
         users[i].emojis = [];
       }
     } catch (err) {
@@ -162,7 +163,7 @@ export const getCookie = async (): Promise<Array<userData>> => {
 };
 
 /**
- *
+ * @description クッキーから認証情報を削除する
  * @param userDataIndex
  */
 export const deleteUser = (
@@ -213,18 +214,9 @@ export const deleteUser = (
   }
 };
 
-/**
- *
- * @returns
- */
-export const selfUrl = () => {
-  if (import.meta.env.MODE === "development") return "https://localhost:5173";
-  else return "https://uboar.github.io/missli";
-};
-
 const timelineLocal = JSON.parse(
   localStorage.getItem("timelines")
-) as unknown as Array<timelineOptions>;
+) as unknown as Array<TimelineOptions>;
 
 const settingsLocal = JSON.parse(
   localStorage.getItem("settings")

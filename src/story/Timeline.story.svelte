@@ -5,11 +5,11 @@
   import notes from "./assets/timeline.json";
   // import notes from "../../.idea/timeline.json";
   import Timeline from "../components/Timeline.svelte";
-  import type { timelineOptions, userData } from "../lib/userdata";
+  import type { TimelineOptions, userData } from "../lib/userdata";
 
   export let Hst: Hst;
 
-  let options: timelineOptions = {
+  let options: TimelineOptions = {
     id: new Date().valueOf(),
     initialNotes: notes as any,
     channelName: "タイムライン",

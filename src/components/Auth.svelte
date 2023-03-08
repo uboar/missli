@@ -1,7 +1,7 @@
 <script lang="ts">
   import { version } from "../../package.json";
   import { onMount } from "svelte";
-  import { users, selfUrl, setCookie, deleteUser } from "../lib/userdata";
+  import { users, setCookie, deleteUser } from "../lib/userdata";
   import type { userData } from "../lib/userdata";
   import { Stream, api } from "misskey-js";
 
@@ -63,7 +63,9 @@
 
       const url = `https://${hostUrl}/miauth/${sessionId}?name=MissLI${
         import.meta.env.MODE === "development" ? "_Dev" : ""
-      }_${version}&permission=write:notes,read:channels,write:channels,read:account,write:account,read:drive,write:drive,read:notifications,write:notifications,write:reactions,write:favorites,read:gallery-likes,write:gallery-likes&callback=${selfUrl()}?authed=${hostUrl}`;
+      }_${version}&permission=write:notes,read:channels,write:channels,read:account,write:account,read:drive,write:drive,read:notifications,write:notifications,write:reactions,write:favorites,read:gallery-likes,write:gallery-likes&callback=${
+        window.location.origin + window.location.pathname
+      }?authed=${hostUrl}`;
 
       location.href = url;
     } catch (err) {
@@ -83,7 +85,9 @@
 
       const url = `https://${hostUrl}/miauth/${sessionId}?name=MissLI${
         import.meta.env.MODE === "development" ? "_Dev" : ""
-      }_${version}&permission=write:notes,read:channels,write:channels,read:account,write:account,read:drive,write:drive,read:notifications,write:notifications,write:reactions,write:favorites,read:gallery-likes,write:gallery-likes&callback=${selfUrl()}?userdatanum=${index}%26authed=${hostUrl}`;
+      }_${version}&permission=write:notes,read:channels,write:channels,read:account,write:account,read:drive,write:drive,read:notifications,write:notifications,write:reactions,write:favorites,read:gallery-likes,write:gallery-likes&callback=${
+        window.location.origin + window.location.pathname
+      }?userdatanum=${index}%26authed=${hostUrl}`;
 
       location.href = url;
     } catch (err) {

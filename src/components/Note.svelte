@@ -2,14 +2,14 @@
   import type { Stream } from "misskey-js";
   import type { Note } from "misskey-js/built/entities";
   import { createEventDispatcher, onDestroy, onMount } from "svelte";
-  import { type userData, moment, type timelineOptions } from "../lib/userdata";
+  import { type userData, moment, type TimelineOptions } from "../lib/userdata";
   import Body from "./note/Body.svelte";
   import ReactionDeck from "./note/ReactionDeck.svelte";
 
   export let user: userData;
   export let note: Note;
   export let stream: Stream = null;
-  export let timelineOptions: timelineOptions = null;
+  export let TimelineOptions: TimelineOptions = null;
   export let compact = false;
 
   let showReactionDeck = false;
@@ -109,7 +109,7 @@
     {/if}
     {#if showReactionDeck}
       <ReactionDeck
-        customReactionDeck={timelineOptions.reactionDeck}
+        customReactionDeck={TimelineOptions.reactionDeck}
         {user}
         noteId={reactionId()}
         on:breakRequest={reactionDeckBreakRequest}
