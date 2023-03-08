@@ -13,7 +13,11 @@
   import TimelineOptions from "./timeline/TimelineOptions.svelte";
   import TimelinePostNote from "./timeline/TimelinePostNote.svelte";
   import TimelineNotify from "./timeline/TimelineNotify.svelte";
-  import { fixChannelData, getOldNotes, initializeTimeline } from "../lib/channel";
+  import {
+    fixChannelData,
+    getOldNotes,
+    initializeTimeline,
+  } from "../lib/channel";
 
   const dispatch = createEventDispatcher();
 
@@ -58,6 +62,45 @@
   let unRead = false;
 
   $: showNotes = notes.slice(beginNotes, options.showNoteNum + beginNotes);
+
+  $: getTimelineTip = () => {
+    if (options.channel === "homeTimeline") {
+      return `${user.hostUrl}のホームタイムライン`;
+    } else if (options.channel === "localTimeline") {
+      return `${user.hostUrl}のローカルタイムライン`;
+    } else if (options.channel === "hybridTimeline") {
+      return `${user.hostUrl}のソーシャルタイムライン`;
+    } else if (options.channel === "globalTimeline") {
+      return `${user.hostUrl}のグローバルタイムライン`;
+    } else if (options.channel === "channel") {
+      return `${user.hostUrl}のチャンネル`;
+    } else if (options.channel === "antenna") {
+      return `${user.hostUrl}のアンテナ`;
+    } else if (options.channel === "userList") {
+      return `${user.hostUrl}のリスト`;
+    } else {
+      return "不明";
+    }
+  };
+  $: getTimelineSvgPath = () => {
+    if (options.channel === "homeTimeline") {
+      return "M12 5.69L17 10.19V18H15V12H9V18H7V10.19L12 5.69M12 3L2 12H5V20H11V14H13V20H19V12H22";
+    } else if (options.channel === "localTimeline") {
+      return "M10,2C8.89,2 8,2.89 8,4V7C8,8.11 8.89,9 10,9H11V11H2V13H6V15H5C3.89,15 3,15.89 3,17V20C3,21.11 3.89,22 5,22H9C10.11,22 11,21.11 11,20V17C11,15.89 10.11,15 9,15H8V13H16V15H15C13.89,15 13,15.89 13,17V20C13,21.11 13.89,22 15,22H19C20.11,22 21,21.11 21,20V17C21,15.89 20.11,15 19,15H18V13H22V11H13V9H14C15.11,9 16,8.11 16,7V4C16,2.89 15.11,2 14,2H10M10,4H14V7H10V4M5,17H9V20H5V17M15,17H19V20H15V17Z";
+    } else if (options.channel === "hybridTimeline") {
+      return "M13.13 22.19L11.5 18.36C13.07 17.78 14.54 17 15.9 16.09L13.13 22.19M5.64 12.5L1.81 10.87L7.91 8.1C7 9.46 6.22 10.93 5.64 12.5M19.22 4C19.5 4 19.75 4 19.96 4.05C20.13 5.44 19.94 8.3 16.66 11.58C14.96 13.29 12.93 14.6 10.65 15.47L8.5 13.37C9.42 11.06 10.73 9.03 12.42 7.34C15.18 4.58 17.64 4 19.22 4M19.22 2C17.24 2 14.24 2.69 11 5.93C8.81 8.12 7.5 10.53 6.65 12.64C6.37 13.39 6.56 14.21 7.11 14.77L9.24 16.89C9.62 17.27 10.13 17.5 10.66 17.5C10.89 17.5 11.13 17.44 11.36 17.35C13.5 16.53 15.88 15.19 18.07 13C23.73 7.34 21.61 2.39 21.61 2.39S20.7 2 19.22 2M14.54 9.46C13.76 8.68 13.76 7.41 14.54 6.63S16.59 5.85 17.37 6.63C18.14 7.41 18.15 8.68 17.37 9.46C16.59 10.24 15.32 10.24 14.54 9.46M8.88 16.53L7.47 15.12L8.88 16.53M6.24 22L9.88 18.36C9.54 18.27 9.21 18.12 8.91 17.91L4.83 22H6.24M2 22H3.41L8.18 17.24L6.76 15.83L2 20.59V22M2 19.17L6.09 15.09C5.88 14.79 5.73 14.47 5.64 14.12L2 17.76V19.17Z";
+    } else if (options.channel === "globalTimeline") {
+      return "M17.9,17.39C17.64,16.59 16.89,16 16,16H15V13A1,1 0 0,0 14,12H8V10H10A1,1 0 0,0 11,9V7H13A2,2 0 0,0 15,5V4.59C17.93,5.77 20,8.64 20,12C20,14.08 19.2,15.97 17.9,17.39M11,19.93C7.05,19.44 4,16.08 4,12C4,11.38 4.08,10.78 4.21,10.21L9,15V16A2,2 0 0,0 11,18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z";
+    } else if (options.channel === "channel") {
+      return "M8.16,3L6.75,4.41L9.34,7H4C2.89,7 2,7.89 2,9V19C2,20.11 2.89,21 4,21H20C21.11,21 22,20.11 22,19V9C22,7.89 21.11,7 20,7H14.66L17.25,4.41L15.84,3L12,6.84L8.16,3M4,9H17V19H4V9M19.5,9A1,1 0 0,1 20.5,10A1,1 0 0,1 19.5,11A1,1 0 0,1 18.5,10A1,1 0 0,1 19.5,9M19.5,12A1,1 0 0,1 20.5,13A1,1 0 0,1 19.5,14A1,1 0 0,1 18.5,13A1,1 0 0,1 19.5,12Z";
+    } else if (options.channel === "antenna") {
+      return "M12 7.5C12.69 7.5 13.27 7.73 13.76 8.2S14.5 9.27 14.5 10C14.5 11.05 14 11.81 13 12.28V21H11V12.28C10 11.81 9.5 11.05 9.5 10C9.5 9.27 9.76 8.67 10.24 8.2S11.31 7.5 12 7.5M16.69 5.3C17.94 6.55 18.61 8.11 18.7 10C18.7 11.8 18.03 13.38 16.69 14.72L15.5 13.5C16.5 12.59 17 11.42 17 10C17 8.67 16.5 7.5 15.5 6.5L16.69 5.3M6.09 4.08C4.5 5.67 3.7 7.64 3.7 10S4.5 14.3 6.09 15.89L4.92 17.11C3 15.08 2 12.7 2 10C2 7.3 3 4.94 4.92 2.91L6.09 4.08M19.08 2.91C21 4.94 22 7.3 22 10C22 12.8 21 15.17 19.08 17.11L17.91 15.89C19.5 14.3 20.3 12.33 20.3 10S19.5 5.67 17.91 4.08L19.08 2.91M7.31 5.3L8.5 6.5C7.5 7.42 7 8.58 7 10C7 11.33 7.5 12.5 8.5 13.5L7.31 14.72C5.97 13.38 5.3 11.8 5.3 10C5.3 8.2 5.97 6.64 7.31 5.3Z";
+    } else if (options.channel === "userList") {
+      return "M7,5H21V7H7V5M7,13V11H21V13H7M4,4.5A1.5,1.5 0 0,1 5.5,6A1.5,1.5 0 0,1 4,7.5A1.5,1.5 0 0,1 2.5,6A1.5,1.5 0 0,1 4,4.5M4,10.5A1.5,1.5 0 0,1 5.5,12A1.5,1.5 0 0,1 4,13.5A1.5,1.5 0 0,1 2.5,12A1.5,1.5 0 0,1 4,10.5M7,19V17H21V19H7M4,16.5A1.5,1.5 0 0,1 5.5,18A1.5,1.5 0 0,1 4,19.5A1.5,1.5 0 0,1 2.5,18A1.5,1.5 0 0,1 4,16.5Z";
+    } else {
+      return "M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z";
+    }
+  };
 
   onMount(async () => {
     options = {
@@ -140,6 +183,7 @@
       }
     });
   });
+
   onDestroy(() => {
     showNav = NAV.none;
     if (streamChannel) streamChannel.dispose();
@@ -228,7 +272,19 @@
     style="width:{options.width}"
   >
     <div class="absolute w-full flex justify-center z-10">
-      <div class="flex flex-col w-full ml-8">
+      <div class="tooltip tooltip-bottom" data-tip={getTimelineTip()}>
+        <button
+          class="btn btn-xs bg-base-100 my-1 mx-3 btn-outline btn-square"
+          style="color: {options.color}; fill:{options.color}"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            class="h-3 w-3"><path d={getTimelineSvgPath()} /></svg
+          >
+        </button>
+      </div>
+      <div class="flex flex-col w-full">
         <button
           class="btn btn-xs bg-base-100 btn-outline btn-block my-1 normal-case"
           style="color: {options.color}"
@@ -237,13 +293,15 @@
           {options.channelName}
         </button>
       </div>
-      <button
-        class="btn btn-xs bg-base-100 my-1 mr-8 ml-2 btn-outline btn-square"
-        style="color: {options.color}"
-        on:click={() => (options.isCollapsed = true)}
-      >
-        ❮
-      </button>
+      <div class="tooltip tooltip-bottom" data-tip="タイムラインを畳む">
+        <button
+          class="btn btn-xs bg-base-100 my-1 mx-3 btn-outline btn-square"
+          style="color: {options.color}"
+          on:click={() => (options.isCollapsed = true)}
+        >
+          ❮
+        </button>
+      </div>
     </div>
     <div
       class="w-full timeline-body absolute pt-8 h-full overflow-y-scroll z-0 overflow-x-hidden inline-flex overscroll-none"
@@ -301,7 +359,7 @@
       {/if}
     </div>
     <div
-      class="absolute bottom-0 w-full z-50 bg-base-200 bg-opacity-90 border-b-4"
+      class="absolute bottom-0 w-full z-50 bg-base-200 bg-opacity-95 border-b-4"
       style="border-color:{options.color}"
     >
       <!-- タイムラインのフッター -->
