@@ -70,8 +70,11 @@ export const initializeTimeline = async (
           limit: getNotesNum,
         }
       );
+      streamChannel = user.stream.useChannel(timeline.channel, {
+        antennaId: timeline.channelId,
+      });
     }else if(UserListApiEndPoint[timeline.channel] != null) {
-      // アンテナ
+      // リスト
       notesBuffer = await user.cli.request(
         UserListApiEndPoint[timeline.channel],
         {
@@ -79,6 +82,9 @@ export const initializeTimeline = async (
           limit: getNotesNum,
         }
       );
+      streamChannel = user.stream.useChannel(timeline.channel, {
+        listId: timeline.channelId,
+      });
     }
   } catch (err) {
     console.error(err);
