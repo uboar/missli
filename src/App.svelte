@@ -1,6 +1,5 @@
 <script lang="ts">
   import Navbar from "./components/Navbar.svelte";
-  import Auth from "./components/Auth.svelte";
   import {
     users,
     timelines,
@@ -10,7 +9,6 @@
     type settingsType,
   } from "./lib/userdata";
   import Timeline from "./components/Timeline.svelte";
-  import AddTimeline from "./components/AddTimeline.svelte";
   import { onMount, tick } from "svelte";
 
   let loading = true;

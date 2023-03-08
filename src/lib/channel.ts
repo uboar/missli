@@ -14,6 +14,14 @@ export const ChannelApiEndPoint: Record<string, keyof Endpoints> = {
   channel: "channels/timeline",
 };
 
+export const AntennaApiEndPoint: Record<string, keyof Endpoints> = {
+  antenna: "antennas/notes",
+}
+
+export const UserListApiEndPoint: Record<string, keyof Endpoints> = {
+  userList: "notes/user-list-timeline",
+}
+
 /**
  * @description タイムラインを初期化する
  * @param user 
@@ -53,6 +61,24 @@ export const initializeTimeline = async (
       streamChannel = user.stream.useChannel(timeline.channel, {
         channelId: timeline.channelId,
       });
+    }else if(AntennaApiEndPoint[timeline.channel] != null) {
+      // アンテナ
+      notesBuffer = await user.cli.request(
+        AntennaApiEndPoint[timeline.channel],
+        {
+          antennaId: timeline.channelId,
+          limit: getNotesNum,
+        }
+      );
+    }else if(UserListApiEndPoint[timeline.channel] != null) {
+      // アンテナ
+      notesBuffer = await user.cli.request(
+        UserListApiEndPoint[timeline.channel],
+        {
+          listId: timeline.channelId,
+          limit: getNotesNum,
+        }
+      );
     }
   } catch (err) {
     console.error(err);
@@ -96,6 +122,26 @@ export const getOldNotes = async (
           limit: getNotesNum,
           untilId: untilId,
           channelId: timeline.channelId,
+        }
+      );
+    } else if (AntennaApiEndPoint[timeline.channel] != null) {
+      // アンテナ
+      notesBuffer = await user.cli.request(
+        AntennaApiEndPoint[timeline.channel],
+        {
+          limit: getNotesNum,
+          untilId: untilId,
+          antennaId: timeline.channelId,
+        }
+      );
+    } else if (UserListApiEndPoint[timeline.channel] != null) {
+      // チャンネル
+      notesBuffer = await user.cli.request(
+        UserListApiEndPoint[timeline.channel],
+        {
+          limit: getNotesNum,
+          untilId: untilId,
+          listId: timeline.channelId,
         }
       );
     }

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Channels } from "misskey-js";
-  import { users, timelines } from "../lib/userdata";
+  import { TimelineApiEndpoint } from "../lib/channel";
+  import { users, timelines, type TimelineOptions } from "../lib/userdata";
   let selectedChannel = 0;
   let selectedUserNum = 0;
   let selectedChannelNum = -1;
@@ -11,18 +11,42 @@
     { name: "ソーシャル", value: "hybridTimeline" },
     { name: "グローバル", value: "globalTimeline" },
     { name: "チャンネル", value: "channel" },
+    { name: "アンテナ", value: "antenna" },
+    { name: "リスト", value: "userList" },
   ];
 
-  let userChannels: Record<string, any> = [];
+  let userChannels: Array<{ name: string; id: string }> = [];
 
   const getChannels = async () => {
     try {
-      userChannels = await $users[selectedUserNum].cli.request(
-        "channels/followed",
-        {
-          limit: 100,
-        }
-      );
+      if (channelTypes[selectedChannel].value === "channel") {
+        // チャンネル
+        const buffer = await $users[selectedUserNum].cli.request(
+          "channels/followed",
+          {
+            limit: 100,
+          }
+        );
+        userChannels = buffer.map((v) => {
+          return { name: v.name, id: v.id };
+        });
+      } else if (channelTypes[selectedChannel].value === "antenna") {
+        // アンテナ
+        const buffer = await $users[selectedUserNum].cli.request(
+          "antennas/list"
+        );
+        userChannels = buffer.map((v) => {
+          return { name: v.name, id: v.id };
+        });
+      } else if (channelTypes[selectedChannel].value === "userList") {
+        // リスト
+        const buffer = await $users[selectedUserNum].cli.request(
+          "users/lists/list"
+        );
+        userChannels = buffer.map((v) => {
+          return { name: v.name, id: v.id };
+        });
+      }
 
       if (userChannels.length > 0) {
         selectedChannelNum = 0;
@@ -38,26 +62,24 @@
   };
 
   const addTimeline = () => {
-    let channelName = "";
-    let channel = "";
+    let timeline: TimelineOptions = {
+      id: new Date().valueOf(),
+      userDataIndex: selectedUserNum,
+      channelName: "",
+    };
 
-    if (channelTypes[selectedChannel].name === "チャンネル") {
-      channelName = `${userChannels[selectedChannelNum].name} / ${$users[selectedUserNum].hostUrl}`;
-      channel = userChannels[selectedChannelNum].id;
+    if (TimelineApiEndpoint[channelTypes[selectedChannel].value] == null) {
+      // タイムライン以外
+      timeline.channelName = `${userChannels[selectedChannelNum].name} / ${$users[selectedUserNum].hostUrl}`;
+      timeline.channel = channelTypes[selectedChannel].value;
+      timeline.channelId = userChannels[selectedChannelNum].id;
     } else {
-      channelName = `${channelTypes[selectedChannel].name} / ${$users[selectedUserNum].hostUrl}`;
-      channel = channelTypes[selectedChannel].value;
+      // タイムライン
+      timeline.channelName = `${channelTypes[selectedChannel].name} / ${$users[selectedUserNum].hostUrl}`;
+      timeline.channel = channelTypes[selectedChannel].value;
     }
 
-    timelines.update((val) => [
-      ...val,
-      {
-        id: new Date().valueOf(),
-        channel: channel as keyof Channels,
-        userDataIndex: selectedUserNum,
-        channelName: channelName,
-      },
-    ]);
+    timelines.update((val) => [...val, timeline]);
   };
 </script>
 
@@ -70,7 +92,7 @@
         bind:value={selectedUserNum}
         class="select select-bordered w-full"
         on:change={() => {
-          if (channelTypes[selectedChannel].name === "チャンネル")
+          if (TimelineApiEndpoint[channelTypes[selectedChannel].value] == null)
             getChannels();
         }}
       >
@@ -82,7 +104,7 @@
       <select
         bind:value={selectedChannel}
         on:change={() => {
-          if (channelTypes[selectedChannel].name === "チャンネル")
+          if (TimelineApiEndpoint[channelTypes[selectedChannel].value] == null)
             getChannels();
         }}
         class="select select-bordered w-full"
@@ -92,8 +114,7 @@
         {/each}
       </select>
 
-      {#if channelTypes[selectedChannel].name === "チャンネル"}
-        <span class="label-text">チャンネル</span>
+      {#if TimelineApiEndpoint[channelTypes[selectedChannel].value] == null}
         <select
           bind:value={selectedChannelNum}
           class="select select-bordered w-full"
@@ -109,9 +130,9 @@
         class={`${
           (selectedChannel !== null &&
             selectedUserNum !== null &&
-            channelTypes[selectedChannel].name !== "チャンネル") ||
+            TimelineApiEndpoint[channelTypes[selectedChannel].value] == null) ||
           (selectedChannel !== null &&
-            channelTypes[selectedChannel].name === "チャンネル" &&
+            TimelineApiEndpoint[channelTypes[selectedChannel].value] != null &&
             selectedChannelNum !== null)
             ? ""
             : "btn-disabled"
