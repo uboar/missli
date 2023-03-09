@@ -5,8 +5,6 @@
     timelines,
     getCookie,
     settings,
-    type TimelineOptions,
-    type settingsType,
   } from "./lib/userdata";
   import Timeline from "./components/Timeline.svelte";
   import { onMount, tick } from "svelte";

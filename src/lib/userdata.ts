@@ -21,7 +21,7 @@ export type postNote = {
   channelId?: string;
 };
 
-export type userData = {
+export type UserData = {
   ok: boolean;
   isOldVersion?: boolean;
   id: number;
@@ -57,23 +57,23 @@ export type TimelineOptions = {
   isCollapsed?: boolean;
 };
 
-export type settingsType = {
+export type SettingsType = {
   theme?: string;
   notifyBufferNum: number;
 };
 
-export const settings = writable<settingsType>({
+export const settings = writable<SettingsType>({
   theme: "light",
   notifyBufferNum: 100,
 });
-export const users = writable<Array<userData>>([]);
+export const users = writable<Array<UserData>>([]);
 export const timelines = writable<Array<TimelineOptions>>([]);
 
 /**
  * @description クッキーに認証情報を追加する
  * @param userData
  */
-export const setCookie = (userData: userData) => {
+export const setCookie = (userData: UserData) => {
   const cookieBuff: userData = {
     id: userData.id,
     sessionId: userData.sessionId,
@@ -93,7 +93,7 @@ export const setCookie = (userData: userData) => {
  * @description クッキーから認証情報を取得する
  * @returns
  */
-export const getCookie = async (): Promise<Array<userData>> => {
+export const getCookie = async (): Promise<Array<UserData>> => {
   const cookies = document.cookie;
 
   if (cookies === "") return [];
@@ -220,7 +220,7 @@ const timelineLocal = JSON.parse(
 
 const settingsLocal = JSON.parse(
   localStorage.getItem("settings")
-) as unknown as settingsType;
+) as unknown as SettingsType;
 
 if (settingsLocal) settings.set({ ...get(settings), ...settingsLocal });
 if (timelineLocal) timelines.set(timelineLocal);

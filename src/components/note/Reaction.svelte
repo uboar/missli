@@ -1,11 +1,11 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { userData } from "../../lib/userdata";
+  import type { UserData } from "../../lib/userdata";
 
   export let name: string;
   export let num: number;
   export let reactionEmojis: [key: string];
-  export let user: userData;
+  export let user: UserData;
   export let color = "accent";
   export let noteId = "";
   export let isReacted = false;

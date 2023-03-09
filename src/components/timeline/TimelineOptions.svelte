@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
-  import { timelines, users, type TimelineOptions } from "../../lib/userdata";
+  import { createEventDispatcher } from "svelte";
+  import { users, type TimelineOptions } from "../../lib/userdata";
   import ReactionDeck from "../note/ReactionDeck.svelte";
 
   export let options: TimelineOptions;
@@ -60,11 +60,11 @@
 
   const swapTimelineLeft = () => {
     dispatch("swapLeft");
-  }
+  };
 
   const swapTimelineRight = () => {
     dispatch("swapRight");
-  }
+  };
 </script>
 
 <div class="relative w-full p-2 mb-16">
@@ -104,11 +104,29 @@
         class="input input-sm"
         bind:value={options.bufferNoteNum}
       />
+      <label class="label cursor-pointer">
+        <span class="label-text">CWを自動展開する</span>
+        <input type="checkbox" class="checkbox" />
+      </label>
+      <label class="label cursor-pointer">
+        <span class="label-text">NSFWメディアを無視する</span>
+        <input type="checkbox" class="checkbox" />
+      </label>
+      <label class="label cursor-pointer">
+        <span class="label-text">高さの大きいノートを自動で畳む</span>
+        <input type="checkbox" class="checkbox" />
+      </label>
       <div class="btn-group mt-4">
-        <button class="btn btn-outline w-1/2 btn-secondary" on:click={swapTimelineLeft}>
+        <button
+          class="btn btn-outline w-1/2 btn-secondary"
+          on:click={swapTimelineLeft}
+        >
           左と入れ替え
         </button>
-        <button class="btn btn-outline w-1/2 btn-secondary" on:click={swapTimelineRight}>
+        <button
+          class="btn btn-outline w-1/2 btn-secondary"
+          on:click={swapTimelineRight}
+        >
           右と入れ替え
         </button>
       </div>
@@ -132,8 +150,9 @@
             showDelete = false;
           }}>やめる</button
         >
-        <button class="btn btn-error btn-block mt-2 mb-16" on:click={deleteRequest}
-          >削除する</button
+        <button
+          class="btn btn-error btn-block mt-2 mb-16"
+          on:click={deleteRequest}>削除する</button
         >{:else}
         <button
           class="btn btn-error btn-outline btn-block mt-16 mb-16"

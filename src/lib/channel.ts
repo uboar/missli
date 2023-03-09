@@ -1,7 +1,7 @@
 import type { Endpoints } from "misskey-js";
 import type { Note } from "misskey-js/built/entities";
 import type { Connection } from "misskey-js/built/streaming";
-import type { TimelineOptions, userData } from "./userdata";
+import type { TimelineOptions, UserData } from "./userdata";
 
 export const TimelineApiEndpoint: Record<string, keyof Endpoints> = {
   globalTimeline: "notes/global-timeline",
@@ -30,7 +30,7 @@ export const UserListApiEndPoint: Record<string, keyof Endpoints> = {
  * @returns 
  */
 export const initializeTimeline = async (
-  user: userData,
+  user: UserData,
   timeline: TimelineOptions,
   getNotesNum: number = 10
 ): Promise<{ streamChannel: Connection; notes: Array<Note> }> => {
@@ -103,7 +103,7 @@ export const initializeTimeline = async (
  * @returns 
  */
 export const getOldNotes = async (
-  user: userData,
+  user: UserData,
   timeline: TimelineOptions,
   untilId: string,
   getNotesNum: number = 10

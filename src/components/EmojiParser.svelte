@@ -1,12 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { userData } from "../lib/userdata";
+  import type { UserData } from "../lib/userdata";
 
   let src = "";
 
   export let text = "";
   export let remoteEmojis: Array<{ name: string; url: string }> = [];
-  export let localEmojis: userData["emojis"] = [];
+  export let localEmojis: UserData["emojis"] = [];
 
   onMount(() => {
     try {

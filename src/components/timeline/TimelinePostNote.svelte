@@ -1,11 +1,11 @@
 <script lang="ts">
   import type { Note as NoteType } from "misskey-js/built/entities";
   import { createEventDispatcher, onMount } from "svelte";
-  import type { postNote as postNoteType, userData } from "../../lib/userdata";
+  import type { postNote as postNoteType, UserData } from "../../lib/userdata";
   import Note from "../Note.svelte";
 
   export let postNote: postNoteType;
-  export let user: userData | null = null;
+  export let user: UserData | null = null;
   export let replyNote: NoteType | null = null;
   export let renoteNote: NoteType | null = null;
 

@@ -2,7 +2,7 @@
   import { onMount, onDestroy, tick, createEventDispatcher } from "svelte";
   import Note from "./Note.svelte";
   import type {
-    userData,
+    UserData,
     TimelineOptions as Option,
     postNote as postNoteType,
   } from "../lib/userdata";
@@ -22,7 +22,7 @@
   const dispatch = createEventDispatcher();
 
   export let dummy: boolean = false;
-  export let user: userData = null;
+  export let user: UserData = null;
   export let options: Option;
 
   let streamChannel: Connection;

@@ -1,11 +1,11 @@
 <script lang="ts">
   import type { Notification } from "misskey-js/built/entities";
   import { onMount } from "svelte";
-  import type { userData, users } from "../../lib/userdata";
+  import type { UserData, users } from "../../lib/userdata";
   import EmojiParser from "../EmojiParser.svelte";
   import MfmLite from "../MfmLite.svelte";
 
-  export let user: userData | null = null;
+  export let user: UserData | null = null;
 
   $: noteText = (notify: Notification) => {
     if (notify.note.text === null && notify.type === "renote") {

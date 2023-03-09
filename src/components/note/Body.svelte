@@ -1,12 +1,12 @@
 <script lang="ts">
   import type { Note as NoteType } from "misskey-js/built/entities";
-  import type { userData } from "../../lib/userdata";
+  import type { UserData } from "../../lib/userdata";
   import User from "./User.svelte";
   import Mfm from "../Mfm.svelte";
   import Media from "./Media.svelte";
   import Reaction from "./Reaction.svelte";
 
-  export let user: userData;
+  export let user: UserData;
   export let note: NoteType;
   export let compact = false;
   export let renoteCount = 0;

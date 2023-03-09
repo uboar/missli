@@ -5,7 +5,7 @@
   import notes from "./assets/timeline.json";
   // import notes from "../../.idea/timeline.json";
   import Timeline from "../components/Timeline.svelte";
-  import type { TimelineOptions, userData } from "../lib/userdata";
+  import type { TimelineOptions, UserData } from "../lib/userdata";
 
   export let Hst: Hst;
 
@@ -21,7 +21,7 @@
     channel: "globalTimeline",
   };
 
-  let user: userData = {
+  let user: UserData = {
     ok: true,
     id: new Date().valueOf(),
     sessionId: "xxxxxxxx",

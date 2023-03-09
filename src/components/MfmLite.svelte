@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as mfm from "mfm-js";
   import { onMount } from "svelte";
-  import type { userData } from "../lib/userdata";
+  import type { UserData } from "../lib/userdata";
 
   $: localEmojiSearch;
 
@@ -18,7 +18,7 @@
   export let text = "";
   export let hostUrl: string;
   export let remoteEmojis: Array<{ name: string; url: string }> = [];
-  export let localEmojis: userData["emojis"] = [];
+  export let localEmojis: UserData["emojis"] = [];
   export let emojiHeight = "";
 
   onMount(() => {

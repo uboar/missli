@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
-  import type { userData } from "../../lib/userdata";
+  import type { UserData } from "../../lib/userdata";
   import unicodeEmojis from "../../assets/unicodeEmojis.json";
 
   const suggestEmojiNum = 20;
@@ -24,7 +24,7 @@
     }
   };
 
-  export let user: userData;
+  export let user: UserData;
   export let noteId: string = "";
   export let customReactionDeck: Array<string> = [];
 
@@ -32,7 +32,7 @@
   const dispatch = createEventDispatcher();
 
   const emojiSuggest = () => {
-    let filteredEmoji: userData["emojis"];
+    let filteredEmoji: UserData["emojis"];
     let filteredUnicodeEmoji: Array<{ name: string; value: string }> = [];
 
     if (text === "") {

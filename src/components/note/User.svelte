@@ -1,12 +1,12 @@
 <script lang="ts">
   import type { User } from "misskey-js/built/entities";
-  import type { userData } from "../../lib/userdata";
+  import type { UserData } from "../../lib/userdata";
   import MfmLite from "../MfmLite.svelte";
 
   export let user: User;
   export let hostUrl: string;
   export let isRenote: boolean = false;
-  export let localEmojis: userData["emojis"] = [];
+  export let localEmojis: UserData["emojis"] = [];
 
   const useridStr = `@${user.username}${user.host ? `@${user.host}` : ""}`;
 </script>

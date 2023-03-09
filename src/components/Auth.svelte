@@ -2,7 +2,7 @@
   import { version } from "../../package.json";
   import { onMount } from "svelte";
   import { users, setCookie, deleteUser } from "../lib/userdata";
-  import type { userData } from "../lib/userdata";
+  import type { UserData } from "../lib/userdata";
   import { Stream, api } from "misskey-js";
 
   let hostUrl = "";
@@ -25,7 +25,7 @@
 
         if (!sessionRes.ok) throw "認証に失敗しました";
 
-        let userdata: userData = {
+        let userdata: UserData = {
           ok: sessionRes.ok,
           id: new Date().valueOf(),
           userName: sessionRes.user.username,
@@ -99,7 +99,7 @@
   const directAuth = async () => {
     try {
       hostUrl = hostUrl.replace("https://", "");
-      let userdata: userData = {
+      let userdata: UserData = {
         ok: true,
         isOldVersion: true,
         id: new Date().valueOf(),
