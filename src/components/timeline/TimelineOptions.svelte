@@ -106,16 +106,22 @@
       />
       <label class="label cursor-pointer">
         <span class="label-text">CWを自動展開する</span>
-        <input type="checkbox" class="checkbox" />
+        <input type="checkbox" bind:checked={options.noteOption.cwShow} class="checkbox" />
       </label>
       <label class="label cursor-pointer">
         <span class="label-text">NSFWメディアを無視する</span>
-        <input type="checkbox" class="checkbox" />
+        <input type="checkbox" bind:checked={options.noteOption.nsfwShow} class="checkbox" />
       </label>
       <label class="label cursor-pointer">
         <span class="label-text">高さの大きいノートを自動で畳む</span>
-        <input type="checkbox" class="checkbox" />
+        <input type="checkbox" bind:checked={options.noteOption.noteCollapse} class="checkbox" />
       </label>
+      <span class="label-text">ノートの最大高さ</span>
+      <input
+        type="number"
+        class="input input-sm"
+        bind:value={options.noteOption.noteHeight}
+      />
       <div class="btn-group mt-4">
         <button
           class="btn btn-outline w-1/2 btn-secondary"

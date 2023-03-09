@@ -1,23 +1,30 @@
 <script lang="ts">
   import type { Note as NoteType } from "misskey-js/built/entities";
-  import type { UserData } from "../../lib/userdata";
+  import type { TimelineOptions, UserData } from "../../lib/userdata";
   import User from "./User.svelte";
   import Mfm from "../Mfm.svelte";
   import Media from "./Media.svelte";
   import Reaction from "./Reaction.svelte";
+  import { onMount } from "svelte";
 
   export let user: UserData;
   export let note: NoteType;
   export let compact = false;
   export let renoteCount = 0;
+  export let collapse = false;
+  export let option: TimelineOptions["noteOption"];
 
-  let showCw = false;
+  let showBody = false;
 
   const destroyEmoji = (emojiName: string, reactions: [key: number]) => {
     // console.log("break")
     // delete reactions[emojiName]
     // reactions = reactions
   };
+
+  onMount(() => {
+    if (option.cwShow) showBody = true;
+  });
 </script>
 
 <div class="flex w-full justify-between">
@@ -97,11 +104,31 @@
   >
 {/if}
 
-{#if note.cw}
-  <button class="alert shadow-md mb-2" on:click={() => (showCw = !showCw)}>
+{#if collapse && ((note.text && note.renote) || (!note.renote))}
+  <div class="card -mt-2 max-h-16 rounded-none overflow-hidden relative">
+    <div class="-my-6 -mx-4 card-body text-left">
+      <div class="opacity-60">
+        {#if note.text}
+          <Mfm
+            bind:text={note.text}
+            hostUrl={user.hostUrl}
+            localEmojis={user.emojis}
+          />
+        {/if}
+      </div>
+    </div>
+    <div class="absolute bottom-0 w-full">
+      <button
+        class="btn btn-xs btn-block btn-info btn-outline bg-base-100 opacity-90"
+        on:click={() => (collapse = false)}>ノートを開く</button
+      >
+    </div>
+  </div>
+{:else if note.cw}
+  <button class="alert shadow-md mb-2" on:click={() => (showBody = !showBody)}>
     <div class="-m-2">
       <div class="badge badge-warning">CW</div>
-      <div class=" link link-hover">
+      <div class=" link link-hover overflow-x-hidden">
         <Mfm
           bind:text={note.cw}
           hostUrl={user.hostUrl}
@@ -111,7 +138,7 @@
     </div>
   </button>
 {/if}
-{#if !note.cw || showCw}
+{#if (!note.cw || showBody) && !collapse}
   {#if note.text}
     <p class="text-ellipsis overflow-hidden">
       <Mfm
@@ -144,8 +171,8 @@
   {/if}
 
   <!-- メディア内容 -->
-  {#if note.files.length > 0 && !compact}
-    <Media files={note.files} />
+  {#if note.files.length > 0 && !compact && !collapse}
+    <Media files={note.files} {option} />
   {/if}
 {/if}
 
@@ -160,14 +187,20 @@
     >
       もっとリノートを見る
     </a>
-  {:else if note.renote}
+  {:else if note.renote && (!collapse || !note.text)}
     <div class="card card-bordered border-accent rounded p-1">
-      <svelte:self {user} note={note.renote} renoteCount={renoteCount + 1} />
+      <svelte:self
+        {user}
+        note={note.renote}
+        renoteCount={renoteCount + 1}
+        {option}
+        {collapse}
+      />
     </div>
   {/if}
 
   <!-- リアクション -->
-  {#if note.reactions}
+  {#if note.reactions && !collapse}
     <div>
       {#each Object.entries(note.reactions) as [name, num]}
         <Reaction

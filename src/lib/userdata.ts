@@ -55,6 +55,12 @@ export type TimelineOptions = {
   initialNotes?: Array<Note>;
   reactionDeck?: Array<string>;
   isCollapsed?: boolean;
+  noteOption?: {
+    cwShow: boolean;
+    nsfwShow: boolean;
+    noteCollapse: boolean;
+    noteHeight?: number;
+  }
 };
 
 export type SettingsType = {

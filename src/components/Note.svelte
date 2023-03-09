@@ -9,10 +9,13 @@
   export let user: UserData;
   export let note: Note;
   export let stream: Stream = null;
-  export let TimelineOptions: TimelineOptions = null;
+  export let timelineOptions: TimelineOptions = null;
   export let compact = false;
 
   let showReactionDeck = false;
+  let collapse = false;
+
+  let noteElement: HTMLDivElement;
 
   const dispatch = createEventDispatcher();
 
@@ -26,6 +29,14 @@
 
   onMount(() => {
     if (!stream) return;
+
+    if (
+      timelineOptions.noteOption.noteCollapse === true &&
+      noteElement.getBoundingClientRect().height >
+        timelineOptions.noteOption.noteHeight
+    )
+      collapse = true;
+
     stream.send("subNote", {
       id: note.id,
     });
@@ -49,9 +60,10 @@
 
 <div
   class="card card-bordered bg-base-100 w-full my-2 shadow-sm hover:border-neutral-focus"
+  bind:this={noteElement}
 >
   <div class="card-body {!compact ? '-my-6 -mx-4' : ' -my-2'}">
-    <Body {note} {user} {compact} />
+    <Body {note} {user} {compact} {collapse} option={timelineOptions.noteOption} />
     {#if !compact}
       <div class="divider -my-3" />
       <div class="flex -mb-1 z-10">
@@ -109,7 +121,7 @@
     {/if}
     {#if showReactionDeck}
       <ReactionDeck
-        customReactionDeck={TimelineOptions.reactionDeck}
+        customReactionDeck={timelineOptions.reactionDeck}
         {user}
         noteId={reactionId()}
         on:breakRequest={reactionDeckBreakRequest}

@@ -3,7 +3,7 @@
   import "../tailwind.css";
   import type { Note as NoteType } from "misskey-js/built/entities";
   import Note from "../components/Note.svelte";
-  import type { userData } from "../lib/userdata";
+  import type { UserData } from "../lib/userdata";
   export let Hst: Hst;
 
   let note: NoteType = {
@@ -23,7 +23,7 @@ https://github.com/syuilo/ai
     createdAt: "2023-02-25T12:19:16.667Z",
     files: [],
   };
-  let user: userData = {
+  let user: UserData = {
     ok: true,
     id: "aaaaaaaa",
     sessionId: "aaaaaaaaaaa",

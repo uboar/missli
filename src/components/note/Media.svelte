@@ -1,8 +1,9 @@
 <script lang="ts">
-  import type { DriveFile, Note } from "misskey-js/built/entities";
-  import { onMount } from "svelte";
+  import type { Note } from "misskey-js/built/entities";
+  import type { TimelineOptions } from "../../lib/userdata";
 
   export let files: Note["files"];
+  export let option: TimelineOptions["noteOption"];
 
   $: file = files[index];
   let index = 0;
@@ -26,11 +27,11 @@
           <img
             src={file.thumbnailUrl}
             alt={file.name}
-            class="object-contain rounded-lg max-h-64 {file.isSensitive ? 'blur-lg' : ''}"
+            class="object-contain rounded-lg max-h-64 {(file.isSensitive && !option.nsfwShow) ? 'blur-lg' : ''}"
           />
         </a>
       {:else if file.type.indexOf("video") >= 0}
-        <video controls class={(file.isSensitive) ? "hidden" : ""}>
+        <video controls class={(file.isSensitive && !option.nsfwShow) ? "hidden" : ""}>
           <source src={file.url} />
           <track kind="captions" />
         </video>
@@ -56,7 +57,7 @@
           </div>
         </a>
       {/if}
-      {#if file.isSensitive}
+      {#if file.isSensitive && !option.nsfwShow}
         <div
           class="absolute w-full h-full top-0 grid content-center justify-center z-20"
         >

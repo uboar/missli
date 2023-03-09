@@ -39,6 +39,12 @@
     initialNotes: [],
     reactionDeck: [],
     isCollapsed: false,
+    noteOption: {
+      cwShow: false,
+      nsfwShow: false,
+      noteCollapse: true,
+      noteHeight: 512,
+    }
   };
 
   const NAV = {
@@ -107,6 +113,11 @@
       ...defaultOption,
       ...options,
     };
+
+    options.noteOption = {
+      ...defaultOption.noteOption,
+      ...options.noteOption,
+    }
 
     if (options.initialNotes.length > 0) notes = options.initialNotes;
     if (dummy) return;
@@ -325,7 +336,7 @@
               <Note
                 {note}
                 {user}
-                TimelineOptions={options}
+                timelineOptions={options}
                 stream={user.stream}
                 on:renoteRequest={() => renoteRequest(note)}
                 on:replyRequest={() => replyRequest(note)}

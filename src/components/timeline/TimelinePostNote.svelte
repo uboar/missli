@@ -1,13 +1,21 @@
 <script lang="ts">
   import type { Note as NoteType } from "misskey-js/built/entities";
   import { createEventDispatcher, onMount } from "svelte";
-  import type { postNote as postNoteType, UserData } from "../../lib/userdata";
+  import type { postNote as postNoteType, TimelineOptions, UserData } from "../../lib/userdata";
   import Note from "../Note.svelte";
 
   export let postNote: postNoteType;
   export let user: UserData | null = null;
   export let replyNote: NoteType | null = null;
   export let renoteNote: NoteType | null = null;
+  export let option: TimelineOptions = {
+    id: 0,
+    noteOption: {
+      cwShow: false,
+      nsfwShow: false,
+      noteCollapse: true,
+    }
+  };
 
   const dispatch = createEventDispatcher();
 
@@ -107,9 +115,9 @@
         </button>
       </div>
       {#if replyNote}
-        <Note compact bind:note={replyNote} {user} />
+        <Note compact bind:note={replyNote} {user} timelineOptions={option} />
       {:else if renoteNote}
-        <Note compact bind:note={renoteNote} {user} />
+        <Note compact bind:note={renoteNote} {user} timelineOptions={option} />
       {/if}
     {/if}
     <div class="flex justify-end w-full">
