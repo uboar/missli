@@ -304,7 +304,7 @@
       </div>
     </div>
     <div
-      class="w-full timeline-body absolute pt-8 h-full overflow-y-scroll z-0 overflow-x-hidden inline-flex overscroll-none"
+      class="w-full timeline-body absolute pt-8 h-full overflow-y-scroll z-0 overflow-x-hidden inline-flex overscroll-y-none overscroll-x-auto"
       bind:this={scrollPos}
       style:--color={options.color + "20"}
     >
