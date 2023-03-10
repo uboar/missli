@@ -20,7 +20,6 @@
   onMount(() => {
     if (!user) return;
     user.notifyUnOpen = false;
-    console.log(user.notifyBuffer);
   });
 
   $: getNotifyTypeName = (notify: Notification) => {
@@ -141,7 +140,7 @@
               <div class="flex link link-hover gap-2">
                 {#if notify.type === "reaction"}
                   <EmojiParser
-                    localEmojis={user.emojis}
+                    localEmojis={(user.emojis.length === 0) ? notify.note.emojis : user.emojis}
                     text={notify.reaction}
                     remoteEmojis={notify.note.reactionEmojis}
                   />
@@ -149,7 +148,7 @@
                 {#if new RegExp("reaction|renote|reply|quote|mention").test(notify.type)}
                   <MfmLite
                     text={getNotifyTypeName(notify)}
-                    localEmojis={user.emojis}
+                    localEmojis={(user.emojis.length === 0) ? notify.note.emojis : user.emojis}
                     remoteEmojis={notify.user.emojis}
                     emojiHeight="h-4"
                     hostUrl={user.hostUrl}

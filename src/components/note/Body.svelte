@@ -14,6 +14,8 @@
   export let collapse = false;
   export let option: TimelineOptions["noteOption"];
 
+  let emojis: UserData["emojis"] = [];
+
   let showBody = false;
 
   const destroyEmoji = (emojiName: string, reactions: [key: number]) => {
@@ -24,6 +26,7 @@
 
   onMount(() => {
     if (option.cwShow) showBody = true;
+    emojis = (user.emojis.length === 0) ? note.emojis : user.emojis;
   });
 </script>
 
@@ -112,7 +115,7 @@
           <Mfm
             bind:text={note.text}
             hostUrl={user.hostUrl}
-            localEmojis={user.emojis}
+            localEmojis={(user.emojis.length === 0) ? note.emojis : user.emojis}
           />
         {/if}
       </div>
@@ -132,7 +135,7 @@
         <Mfm
           bind:text={note.cw}
           hostUrl={user.hostUrl}
-          localEmojis={user.emojis}
+          localEmojis={(user.emojis.length === 0) ? note.emojis : user.emojis}
         />
       </div>
     </div>
@@ -144,7 +147,7 @@
       <Mfm
         bind:text={note.text}
         hostUrl={user.hostUrl}
-        localEmojis={user.emojis}
+        localEmojis={(user.emojis.length === 0) ? note.emojis : user.emojis}
         remoteEmojis={note.emojis}
       />
     </p>
@@ -207,11 +210,12 @@
           {user}
           {name}
           {num}
+          {emojis}
+          bind:reactionEmojis={note.reactionEmojis}
           on:destroy={() => {
             destroyEmoji(name, note.reactions);
           }}
           noteId={note.id}
-          reactionEmojis={note.reactionEmojis}
         />
       {/each}
     </div>

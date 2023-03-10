@@ -5,6 +5,7 @@
   export let name: string;
   export let num: number;
   export let reactionEmojis: [key: string];
+  export let emojis: Array<{name: string, url: string}> = [];
   export let user: UserData;
   export let color = "accent";
   export let noteId = "";
@@ -16,7 +17,7 @@
     try {
       const emojiReplaced = emojiName.replace(/\:|@./gm, "");
 
-      return user.emojis.find((v) => v.name === emojiReplaced).url;
+      return emojis.find((v) => v.name === emojiReplaced).url;
     } catch (err) {
       console.error(err);
       return "エラー";

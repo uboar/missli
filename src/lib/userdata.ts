@@ -35,9 +35,9 @@ export type UserData = {
   notifyBuffer?: Array<Notification>;
   notifyUnOpen?: boolean;
   emojis?: Array<{
-    aliases: Array<string>;
+    aliases?: Array<string>;
     name: string;
-    category: string;
+    category?: string;
     url: string;
   }>;
 };

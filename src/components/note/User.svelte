@@ -26,7 +26,7 @@
       {:else}
         <MfmLite
           text={"🔁" + user.name + "がリノート"}
-          {localEmojis}
+          localEmojis={(localEmojis.length === 0 ? user.emojis : localEmojis)}
           remoteEmojis={user.emojis}
           emojiHeight="h-4"
           {hostUrl}
@@ -46,7 +46,7 @@
         {:else}
           <MfmLite
             text={user.name}
-            {localEmojis}
+            localEmojis={(localEmojis.length === 0 ? user.emojis : localEmojis)}
             remoteEmojis={user.emojis}
             emojiHeight="h-4"
             {hostUrl}
