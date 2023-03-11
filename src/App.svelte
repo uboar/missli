@@ -1,11 +1,7 @@
 <script lang="ts">
   import Navbar from "./components/Navbar.svelte";
-  import {
-    users,
-    timelines,
-    getCookie,
-    settings,
-  } from "./lib/userdata";
+  import { users, timelines, getCookie, settings } from "./lib/userdata";
+  import { notesBuffer, initialNotesBuffer } from "./lib/noteManager";
   import Timeline from "./components/Timeline.svelte";
   import { onMount, tick } from "svelte";
 
@@ -13,14 +9,15 @@
 
   onMount(async () => {
     $users = await getCookie();
+    initialNotesBuffer();
     loading = false;
   });
 
-  const deleteTimeline = async() => {
+  const deleteTimeline = async () => {
     loading = true;
     await tick();
     loading = false;
-  }
+  };
 </script>
 
 <main data-theme={$settings.theme} class="screen">
@@ -35,8 +32,9 @@
       </div>
     {:else}
       <div class="flex flex-row w-fit h-full">
-        {#each $timelines as timeline}
+        {#each $timelines as timeline, index (timeline.id)}
           <Timeline
+            bind:notes={$notesBuffer[index]}
             bind:user={$users[timeline.userDataIndex]}
             bind:options={timeline}
             on:breakRequest={deleteTimeline}

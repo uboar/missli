@@ -54,7 +54,7 @@
     settings: 3,
   };
 
-  let notes: Array<NoteType> = [];
+  export let notes: Array<NoteType> = [];
   let beginNotes = 0;
   let scrollPos: HTMLElement = document.createElement("div");
   let errFlg = false;
