@@ -16,7 +16,7 @@
   $: localEmojiSearch = (emojiName: string): string => {
     try {
       const emojiReplaced = emojiName.replace(/\:|@./gm, "");
-      return emojis.find((v) => v.name === emojiReplaced).url;
+      return emojis.find((v) => v.name.replace("@.", "") === emojiReplaced).url;
     } catch (err) {
       console.error(err);
       return "エラー";
@@ -26,7 +26,11 @@
   $: remoteEmojiSearch = (emojiName: string): string => {
     try {
       const emojiReplaced = emojiName.replace(/\:/gm, "");
-      return reactionEmojis[emojiReplaced];
+      if (reactionEmojis[emojiReplaced] == null) {
+        return reactionEmojis.find((v) => v.name === emojiReplaced).url;
+      } else {
+        return reactionEmojis[emojiReplaced];
+      }
     } catch (err) {
       console.error(err);
       return "エラー";

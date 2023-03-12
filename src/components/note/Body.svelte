@@ -24,6 +24,10 @@
     // reactions = reactions
   };
 
+  if(note.emojis != null) {
+    note.reactionEmojis = note.emojis
+  }
+
   onMount(() => {
     if (option.cwShow) showBody = true;
   });
