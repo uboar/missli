@@ -14,7 +14,7 @@
   export let collapse = false;
   export let option: TimelineOptions["noteOption"];
 
-  let emojis: UserData["emojis"] = [];
+  let emojis: UserData["emojis"] = (user.emojis.length === 0) ? note.emojis : user.emojis;
 
   let showBody = false;
 
@@ -26,7 +26,6 @@
 
   onMount(() => {
     if (option.cwShow) showBody = true;
-    emojis = (user.emojis.length === 0) ? note.emojis : user.emojis;
   });
 </script>
 

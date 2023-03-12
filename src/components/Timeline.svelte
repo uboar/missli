@@ -9,7 +9,6 @@
   import type { Note as NoteType } from "misskey-js/built/entities";
   import type { Connection } from "misskey-js/built/streaming";
   import { timelines } from "../lib/userdata";
-  import uniqBy from "lodash/uniqBy";
   import TimelineOptions from "./timeline/TimelineOptions.svelte";
   import TimelinePostNote from "./timeline/TimelinePostNote.svelte";
   import TimelineNotify from "./timeline/TimelineNotify.svelte";
@@ -17,6 +16,8 @@
     fixChannelData,
     getOldNotes,
     initializeTimeline,
+    notesUpdate,
+    onNote,
   } from "../lib/channel";
 
   const dispatch = createEventDispatcher();
@@ -38,13 +39,14 @@
     bufferNoteNum: 250,
     initialNotes: [],
     reactionDeck: [],
+    notesBuffer: [],
     isCollapsed: false,
     noteOption: {
       cwShow: false,
       nsfwShow: false,
       noteCollapse: true,
       noteHeight: 512,
-    }
+    },
   };
 
   const NAV = {
@@ -54,7 +56,7 @@
     settings: 3,
   };
 
-  export let notes: Array<NoteType> = [];
+  let subscribedNotesId: Array<string> = [];
   let beginNotes = 0;
   let scrollPos: HTMLElement = document.createElement("div");
   let errFlg = false;
@@ -67,7 +69,24 @@
   };
   let unRead = false;
 
-  $: showNotes = notes.slice(beginNotes, options.showNoteNum + beginNotes);
+  options = {
+    ...defaultOption,
+    ...options,
+  };
+
+  options.noteOption = {
+    ...defaultOption.noteOption,
+    ...options.noteOption,
+  };
+
+  options = fixChannelData(options);
+  if (options.initialNotes.length > 0)
+    options.notesBuffer = options.initialNotes;
+
+  $: showNotes = options.notesBuffer.slice(
+    beginNotes,
+    options.showNoteNum + beginNotes
+  );
 
   $: getTimelineTip = () => {
     if (options.channel === "homeTimeline") {
@@ -109,17 +128,6 @@
   };
 
   onMount(async () => {
-    options = {
-      ...defaultOption,
-      ...options,
-    };
-
-    options.noteOption = {
-      ...defaultOption.noteOption,
-      ...options.noteOption,
-    }
-
-    if (options.initialNotes.length > 0) notes = options.initialNotes;
     if (dummy) return;
 
     if (!user || !options || !user.ok) {
@@ -127,19 +135,17 @@
       return;
     }
 
-    options = fixChannelData(options);
     if (options.channel === "channel") postNote.channelId = options.channelId;
 
-    const initializeData = await initializeTimeline(user, options);
-
-    streamChannel = initializeData.streamChannel;
-    notes = uniqBy([...initializeData.notes, ...notes], "id");
+    streamChannel = await initializeTimeline(user, options, subscribedNotesId);
+    options.notesBuffer = options.notesBuffer;
 
     /**
      * ノートの受信
      */
-    streamChannel.on("note", (payload: NoteType) => {
-      notes = uniqBy([payload, ...notes].slice(0, options.bufferNoteNum), "id");
+    streamChannel.on("note", async (payload: NoteType) => {
+      onNote(user, options, subscribedNotesId, payload);
+      options.notesBuffer = options.notesBuffer;
       if (options.isCollapsed) unRead = true;
     });
 
@@ -147,51 +153,9 @@
      * ノート情報の更新
      */
     user.stream.on("noteUpdated", async (e) => {
+      notesUpdate(user, options, subscribedNotesId, e);
+      options.notesBuffer = options.notesBuffer;
       await tick();
-      const noteIndex = notes.findIndex((v) => v.id === e.id);
-      if (noteIndex < 0) {
-        console.error("Note data not found. Cancel subscription.");
-        user.stream.send("unsubNote", {
-          id: e.id,
-        });
-        return;
-      }
-      if (notes[noteIndex]["reactionEmojis"] == null)
-        notes[noteIndex]["reactionEmojis"] = {};
-      if (notes[noteIndex]["reactions"] == null)
-        notes[noteIndex]["reactions"] = {};
-
-      try {
-        if (e.type === "reacted") {
-          if (
-            e.body.reaction.indexOf("@.") < 0 &&
-            e.body.reaction.indexOf("@") >= 0
-          ) {
-            notes[noteIndex].reactionEmojis[e.body.emoji.name] =
-              e.body.emoji.url;
-          } else {
-            if (notes[noteIndex].reactions[e.body.reaction] == null) {
-              notes[noteIndex].reactions[e.body.reaction] = 1;
-            } else {
-              notes[noteIndex].reactions[e.body.reaction]++;
-            }
-          }
-        } else if (e.type === "unreacted") {
-          if (
-            e.body.reaction.indexOf("@.") < 0 &&
-            e.body.reaction.indexOf("@") >= 0
-          ) {
-            notes[noteIndex].reactionEmojis[e.body.emoji.name] =
-              e.body.emoji.url;
-          }
-          notes[noteIndex].reactions[e.body.reaction]--;
-        } else if (e.type === "deleted") {
-          notes.splice(noteIndex, 1);
-          notes = [...notes];
-        }
-      } catch (e) {
-        console.error(e);
-      }
     });
   });
 
@@ -201,13 +165,13 @@
   });
 
   const moreNote = async () => {
-    notes = uniqBy(
-      [
-        ...notes,
-        ...(await getOldNotes(user, options, notes[notes.length - 1].id)),
-      ],
-      "id"
-    ).slice(0, options.bufferNoteNum);
+    await getOldNotes(
+      user,
+      options,
+      subscribedNotesId,
+      options.notesBuffer[options.notesBuffer.length - 1].id
+    );
+    options.notesBuffer = options.notesBuffer;
   };
 
   const swapLeft = () => {
@@ -327,7 +291,7 @@
             on:deleteRequest={() => timelineDelete()}
             on:swapLeft={swapLeft}
             on:swapRight={swapRight}
-            on:getNoteRequest={() => console.log(notes)}
+            on:getNoteRequest={() => console.log(options.notesBuffer)}
           />
         {:else}
           <!-- ノート表示 -->
@@ -349,7 +313,7 @@
                 beginNotes = 0;
               }}>最初に戻る</button
             >
-            {#if notes.length > options.showNoteNum && notes.length - options.showNoteNum > beginNotes}
+            {#if options.notesBuffer.length > options.showNoteNum && options.notesBuffer.length - options.showNoteNum > beginNotes}
               <button
                 class="btn btn-block btn-primary my-2"
                 on:click={() => {

@@ -1,6 +1,5 @@
 <script lang="ts">
   import { TimelineApiEndpoint } from "../lib/channel";
-  import { notesBuffer } from "../lib/noteManager";
   import { users, timelines, type TimelineOptions } from "../lib/userdata";
   let selectedChannel = 0;
   let selectedUserNum = 0;
@@ -81,7 +80,6 @@
     }
 
     timelines.update((val) => [...val, timeline]);
-    notesBuffer.update((val) => [...val, []]);
   };
 </script>
 

@@ -1,6 +1,6 @@
 import { writable, get } from "svelte/store";
 import { Stream, api } from "misskey-js";
-import type { Channels } from "misskey-js/built/streaming.types";
+import type { Channels, NoteUpdatedEvent } from "misskey-js/built/streaming.types";
 import type { Note, Notification } from "misskey-js/built/entities";
 import m from "moment/min/moment-with-locales.min.js";
 import uniqBy from "lodash/uniqBy";
@@ -55,6 +55,7 @@ export type TimelineOptions = {
   initialNotes?: Array<Note>;
   reactionDeck?: Array<string>;
   isCollapsed?: boolean;
+  notesBuffer?: Array<Note>;
   noteOption?: {
     cwShow: boolean;
     nsfwShow: boolean;

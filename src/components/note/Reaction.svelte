@@ -5,7 +5,7 @@
   export let name: string;
   export let num: number;
   export let reactionEmojis: [key: string];
-  export let emojis: Array<{name: string, url: string}> = [];
+  export let emojis: Array<{ name: string; url: string }>;
   export let user: UserData;
   export let color = "accent";
   export let noteId = "";
@@ -16,7 +16,6 @@
   $: localEmojiSearch = (emojiName: string): string => {
     try {
       const emojiReplaced = emojiName.replace(/\:|@./gm, "");
-
       return emojis.find((v) => v.name === emojiReplaced).url;
     } catch (err) {
       console.error(err);
@@ -67,8 +66,7 @@
     {num}
   </button>
 {:else if name.indexOf("@") >= 0}
-  <span class="badge badge-outline h-5" 
-  title={name}>
+  <span class="badge badge-outline h-5" title={name}>
     <img src={remoteEmojiSearch(name)} class="h-4" alt={name} />
     {num}
   </span>

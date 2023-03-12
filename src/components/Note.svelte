@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Stream } from "misskey-js";
   import type { Note } from "misskey-js/built/entities";
-  import { createEventDispatcher, onDestroy, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { type UserData, moment, type TimelineOptions } from "../lib/userdata";
   import Body from "./note/Body.svelte";
   import ReactionDeck from "./note/ReactionDeck.svelte";
@@ -36,16 +36,6 @@
         timelineOptions.noteOption.noteHeight
     )
       collapse = true;
-
-    stream.send("subNote", {
-      id: note.id,
-    });
-  });
-  onDestroy(() => {
-    if (!stream) return;
-    stream.send("unsubNote", {
-      id: note.id,
-    });
   });
 
   $: reactionId = () => {
