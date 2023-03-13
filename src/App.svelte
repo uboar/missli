@@ -20,7 +20,7 @@
 
 <main data-theme={$settings.theme} class="screen">
   <Navbar />
-  <div class="flex flex-col h-full w-fit">
+  <div class="flex flex-col h-full w-full overflow-x-auto">
     <div class="pb-10" />
     {#if loading}
       <progress class="progress w-96 mt-8" />
@@ -45,5 +45,6 @@
 <style>
   .screen {
     height: calc(100svh - 10px);
+    width: 100svw;
   }
 </style>

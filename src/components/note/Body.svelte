@@ -14,7 +14,8 @@
   export let collapse = false;
   export let option: TimelineOptions["noteOption"];
 
-  let emojis: UserData["emojis"] = (user.emojis.length === 0) ? note.emojis : user.emojis;
+  let emojis: UserData["emojis"] =
+    user.emojis.length === 0 ? note.emojis : user.emojis;
 
   let showBody = false;
 
@@ -23,10 +24,6 @@
     // delete reactions[emojiName]
     // reactions = reactions
   };
-
-  if(note.emojis != null) {
-    note.reactionEmojis = note.emojis
-  }
 
   onMount(() => {
     if (option.cwShow) showBody = true;
@@ -110,7 +107,7 @@
   >
 {/if}
 
-{#if collapse && ((note.text && note.renote) || (!note.renote))}
+{#if collapse && ((note.text && note.renote) || !note.renote)}
   <div class="card -mt-2 max-h-16 rounded-none overflow-hidden relative">
     <div class="-my-6 -mx-4 card-body text-left">
       <div class="opacity-60">
@@ -118,7 +115,7 @@
           <Mfm
             bind:text={note.text}
             hostUrl={user.hostUrl}
-            localEmojis={(user.emojis.length === 0) ? note.emojis : user.emojis}
+            localEmojis={user.emojis.length === 0 ? note.emojis : user.emojis}
           />
         {/if}
       </div>
@@ -138,7 +135,7 @@
         <Mfm
           bind:text={note.cw}
           hostUrl={user.hostUrl}
-          localEmojis={(user.emojis.length === 0) ? note.emojis : user.emojis}
+          localEmojis={user.emojis.length === 0 ? note.emojis : user.emojis}
         />
       </div>
     </div>
@@ -150,7 +147,7 @@
       <Mfm
         bind:text={note.text}
         hostUrl={user.hostUrl}
-        localEmojis={(user.emojis.length === 0) ? note.emojis : user.emojis}
+        localEmojis={user.emojis.length === 0 ? note.emojis : user.emojis}
         remoteEmojis={note.emojis}
       />
     </p>
@@ -197,7 +194,7 @@
     <div class="card card-bordered border-accent rounded p-1">
       <svelte:self
         {user}
-        note={note.renote}
+        bind:note={note.renote}
         renoteCount={renoteCount + 1}
         {option}
         {collapse}
@@ -214,7 +211,7 @@
           {name}
           {num}
           {emojis}
-          bind:reactionEmojis={note.reactionEmojis}
+          reactionEmojis={note.reactionEmojis | {}}
           on:destroy={() => {
             destroyEmoji(name, note.reactions);
           }}

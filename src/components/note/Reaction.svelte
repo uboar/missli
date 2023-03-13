@@ -27,7 +27,7 @@
     try {
       const emojiReplaced = emojiName.replace(/\:/gm, "");
       if (reactionEmojis[emojiReplaced] == null) {
-        return reactionEmojis.find((v) => v.name === emojiReplaced).url;
+        return emojis.find((v) => v.name === emojiReplaced).url;
       } else {
         return reactionEmojis[emojiReplaced];
       }

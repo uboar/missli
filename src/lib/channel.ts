@@ -167,6 +167,7 @@ export const getOldNotes = async (
   }
 
   notesBuffer.forEach((note) => {
+    if(note.reactionEmojis == null) note.reactionEmojis = {};
     subscribeNote(user, timeline, subscribedNotesId, note.id);
   });
 
@@ -214,6 +215,7 @@ export const onNote = (
   subscribedNotesId: Array<string>,
   payload: Note
 ) => {
+  if(payload.reactionEmojis == null) payload.reactionEmojis = {};
   timeline.notesBuffer = [payload, ...timeline.notesBuffer];
   subscribeNote(user, timeline, subscribedNotesId, payload.id);
   uniqueNote(user, timeline, subscribedNotesId);
