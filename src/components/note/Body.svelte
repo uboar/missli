@@ -203,7 +203,7 @@
   {/if}
 
   <!-- リアクション -->
-  {#if note.reactions && !collapse}
+  {#if note.reactions && !collapse && !option.reactionHide}
     <div>
       {#each Object.entries(note.reactions) as [name, num]}
         <Reaction
@@ -211,7 +211,7 @@
           {name}
           {num}
           {emojis}
-          reactionEmojis={note.reactionEmojis | {}}
+          reactionEmojis={note.reactionEmojis || {}}
           on:destroy={() => {
             destroyEmoji(name, note.reactions);
           }}

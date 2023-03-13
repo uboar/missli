@@ -57,6 +57,8 @@ export type TimelineOptions = {
   isCollapsed?: boolean;
   notesBuffer?: Array<Note>;
   noteOption?: {
+    mediaHide: boolean;
+    reactionHide: boolean;
     cwShow: boolean;
     nsfwShow: boolean;
     noteCollapse: boolean;

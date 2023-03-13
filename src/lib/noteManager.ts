@@ -1,1 +1,0 @@
-import type { NoteUpdatedEvent } from "misskey-js/built/streaming.types";

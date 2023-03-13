@@ -105,6 +105,14 @@
         bind:value={options.bufferNoteNum}
       />
       <label class="label cursor-pointer">
+        <span class="label-text">メディアを表示しない</span>
+        <input type="checkbox" bind:checked={options.noteOption.mediaHide} class="checkbox" />
+      </label>
+      <label class="label cursor-pointer">
+        <span class="label-text">リアクションを表示しない</span>
+        <input type="checkbox" bind:checked={options.noteOption.reactionHide} class="checkbox" />
+      </label>
+      <label class="label cursor-pointer">
         <span class="label-text">CWを自動展開する</span>
         <input type="checkbox" bind:checked={options.noteOption.cwShow} class="checkbox" />
       </label>

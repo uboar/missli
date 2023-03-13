@@ -42,6 +42,8 @@
     notesBuffer: [],
     isCollapsed: false,
     noteOption: {
+      mediaHide: false,
+      reactionHide: false,
       cwShow: false,
       nsfwShow: false,
       noteCollapse: true,
