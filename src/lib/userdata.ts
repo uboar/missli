@@ -22,6 +22,7 @@ export type postNote = {
 };
 
 export type UserData = {
+  initializeEnded?: boolean;
   ok: boolean;
   isOldVersion?: boolean;
   id: number;
@@ -83,7 +84,7 @@ export const timelines = writable<Array<TimelineOptions>>([]);
  * @param userData
  */
 export const setCookie = (userData: UserData) => {
-  const cookieBuff: userData = {
+  const cookieBuff: UserData = {
     id: userData.id,
     sessionId: userData.sessionId,
     token: userData.token,
@@ -102,73 +103,81 @@ export const setCookie = (userData: UserData) => {
  * @description クッキーから認証情報を取得する
  * @returns
  */
-export const getCookie = async (): Promise<Array<UserData>> => {
+export const getCookie = async () => {
   const cookies = document.cookie;
 
   if (cookies === "") return [];
 
   const strArr = cookies.split("; ");
-  const users: Array<userData> = [];
+  const usersBuff: Array<UserData> = [];
 
   strArr.forEach((elem) => {
-    users.push(JSON.parse(decodeURIComponent(elem.replace(/\d+=/, ""))));
-  });
-
-  for (let i = 0; i < users.length; i++) {
-    try {
-      users[i].stream = new Stream(`https://${users[i].hostUrl}`, {
-        token: users[i].token,
+    usersBuff.push(
+      {
+        ...JSON.parse(decodeURIComponent(elem.replace(/\d+=/, ""))), 
+        initializeEnded: false,
       });
-      users[i].cli = new api.APIClient({
-        origin: `https://${users[i].hostUrl}`,
-        credential: users[i].token,
+  });
+  users.set(usersBuff);
+
+  for (let i = 0; i < usersBuff.length; i++) {
+    usersBuff[i].initializeEnded = false;
+    try {
+      usersBuff[i].stream = new Stream(`https://${usersBuff[i].hostUrl}`, {
+        token: usersBuff[i].token,
+      });
+      usersBuff[i].cli = new api.APIClient({
+        origin: `https://${usersBuff[i].hostUrl}`,
+        credential: usersBuff[i].token,
       });
 
       // 通知の取得
       try {
-        users[i].notifyBuffer = await users[i].cli.request("i/notifications");
-        users[i].notifyUnOpen = false;
+        usersBuff[i].notifyBuffer = await usersBuff[i].cli.request("i/notifications");
+        usersBuff[i].notifyUnOpen = false;
 
-        users[i].mainConnection = users[i].stream.useChannel("main");
-        users[i].mainConnection.on("notification", (notify) => {
-          users[i].notifyBuffer = uniqBy(
-            [notify, ...users[i].notifyBuffer].slice(
+        usersBuff[i].mainConnection = usersBuff[i].stream.useChannel("main");
+        usersBuff[i].mainConnection.on("notification", (notify) => {
+          usersBuff[i].notifyBuffer = uniqBy(
+            [notify, ...usersBuff[i].notifyBuffer].slice(
               0,
               get(settings).notifyBufferNum
             ),
             "id"
           );
-          users[i].notifyUnOpen = true;
+          usersBuff[i].notifyUnOpen = true;
         });
       } catch (err) {
         console.error(err);
-        users[i].notifyBuffer = [];
+        usersBuff[i].notifyBuffer = [];
       }
 
       // カスタム絵文字の取得
       // TODO : Misskey v12以前でちゃんと絵文字を取得出来るようにする。
-      if (!users[i].isOldVersion) {
+      if (!usersBuff[i].isOldVersion) {
         try {
-          users[i].emojis = (await users[i].cli.request("emojis")).emojis;
+          usersBuff[i].emojis = (await usersBuff[i].cli.request("emojis")).emojis;
         } catch (err) {
           console.error(err);
-          users[i].emojis = [];
+          usersBuff[i].emojis = [];
           // window.alert("カスタム絵文字一覧の取得に失敗しました。")
         }
       } else {
-        users[i].emojis = [];
+        usersBuff[i].emojis = [];
       }
+      usersBuff[i].initializeEnded = true;
+      users.set(usersBuff);
     } catch (err) {
       console.error(err);
-      console.log(`${users[i].hostUrl}との認証に失敗しました。`);
-      window.alert(`${users[i].hostUrl}との認証に失敗しました。`);
+      console.log(`${usersBuff[i].hostUrl}との認証に失敗しました。`);
+      window.alert(`${usersBuff[i].hostUrl}との認証に失敗しました。`);
       // Streamがerrorを返さない暫定対応
-      users[i].stream.close();
-      users[i].cli = null;
-      users[i].ok = false;
+      usersBuff[i].stream.close();
+      usersBuff[i].cli = null;
+      usersBuff[i].ok = false;
+      usersBuff[i].initializeEnded = false;
     }
   }
-  return users;
 };
 
 /**

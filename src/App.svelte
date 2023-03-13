@@ -7,8 +7,8 @@
   let loading = true;
 
   onMount(async () => {
-    $users = await getCookie();
     loading = false;
+    getCookie();
   });
 
   const deleteTimeline = async () => {
@@ -31,11 +31,15 @@
     {:else}
       <div class="flex flex-row w-fit h-full">
         {#each $timelines as timeline, index (timeline.id)}
-          <Timeline
-            bind:user={$users[timeline.userDataIndex]}
-            bind:options={timeline}
-            on:breakRequest={deleteTimeline}
-          />
+          {#if $users[timeline.userDataIndex].initializeEnded}
+            <Timeline
+              bind:user={$users[timeline.userDataIndex]}
+              bind:options={timeline}
+              on:breakRequest={deleteTimeline}
+            />
+          {:else}
+            <progress class="progress w-72 mt-8" />
+          {/if}
         {/each}
       </div>
     {/if}

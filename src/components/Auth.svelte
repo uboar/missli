@@ -12,7 +12,7 @@
     try {
       const queries = new URLSearchParams(window.location.search);
       if (queries.has("authed")) {
-        hostUrl = queries.get("authed");
+        hostUrl = decodeURIComponent(queries.get("authed"));
         const sessionId = queries.get("session");
         const res = await fetch(
           `https://${hostUrl}/api/miauth/${sessionId}/check`,
@@ -65,7 +65,7 @@
         import.meta.env.MODE === "development" ? "_Dev" : ""
       }_${version}&permission=write:notes,read:channels,write:channels,read:account,write:account,read:drive,write:drive,read:notifications,write:notifications,write:reactions,write:favorites,read:gallery-likes,write:gallery-likes&callback=${
         window.location.origin + window.location.pathname
-      }?authed=${hostUrl}`;
+      }?authed=${encodeURIComponent(hostUrl)}`;
 
       location.href = url;
     } catch (err) {
@@ -87,7 +87,7 @@
         import.meta.env.MODE === "development" ? "_Dev" : ""
       }_${version}&permission=write:notes,read:channels,write:channels,read:account,write:account,read:drive,write:drive,read:notifications,write:notifications,write:reactions,write:favorites,read:gallery-likes,write:gallery-likes&callback=${
         window.location.origin + window.location.pathname
-      }?userdatanum=${index}%26authed=${hostUrl}`;
+      }?userdatanum=${index}%26authed=${encodeURIComponent(hostUrl)}`;
 
       location.href = url;
     } catch (err) {
