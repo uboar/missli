@@ -1,6 +1,9 @@
 import { writable, get } from "svelte/store";
 import { Stream, api } from "misskey-js";
-import type { Channels, NoteUpdatedEvent } from "misskey-js/built/streaming.types";
+import type {
+  Channels,
+  NoteUpdatedEvent,
+} from "misskey-js/built/streaming.types";
 import type { Note, Notification } from "misskey-js/built/entities";
 import m from "moment/min/moment-with-locales.min.js";
 import uniqBy from "lodash/uniqBy";
@@ -64,7 +67,7 @@ export type TimelineOptions = {
     nsfwShow: boolean;
     noteCollapse: boolean;
     noteHeight?: number;
-  }
+  };
 };
 
 export type SettingsType = {
@@ -112,11 +115,10 @@ export const getCookie = async () => {
   const usersBuff: Array<UserData> = [];
 
   strArr.forEach((elem) => {
-    usersBuff.push(
-      {
-        ...JSON.parse(decodeURIComponent(elem.replace(/\d+=/, ""))), 
-        initializeEnded: false,
-      });
+    usersBuff.push({
+      ...JSON.parse(decodeURIComponent(elem.replace(/\d+=/, ""))),
+      initializeEnded: false,
+    });
   });
   users.set(usersBuff);
 
@@ -133,7 +135,9 @@ export const getCookie = async () => {
 
       // 通知の取得
       try {
-        usersBuff[i].notifyBuffer = await usersBuff[i].cli.request("i/notifications");
+        usersBuff[i].notifyBuffer = await usersBuff[i].cli.request(
+          "i/notifications"
+        );
         usersBuff[i].notifyUnOpen = false;
 
         usersBuff[i].mainConnection = usersBuff[i].stream.useChannel("main");
@@ -156,7 +160,16 @@ export const getCookie = async () => {
       // TODO : Misskey v12以前でちゃんと絵文字を取得出来るようにする。
       if (!usersBuff[i].isOldVersion) {
         try {
-          usersBuff[i].emojis = (await usersBuff[i].cli.request("emojis")).emojis;
+          const res = await usersBuff[i].cli.request("meta");
+
+          // v13はmetaにemojisが含まれない
+          if (res.emojis == null) {
+            usersBuff[i].emojis = (
+              await usersBuff[i].cli.request("emojis")
+            ).emojis;
+          }else{
+            usersBuff[i].emojis = res.emojis;
+          }
         } catch (err) {
           console.error(err);
           usersBuff[i].emojis = [];
