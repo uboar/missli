@@ -12,7 +12,7 @@
     v1.2.1以前のバージョンを使用した事がある方は、お手数ですが⚙（設定）からユーザーの再認証を実施して下さい。
   </div>
   <div>
-    <a href="https://github.com/uboar/missli/releases/tag/1.2.1" target="_blank" rel="noreferrer" class="btn btn-primary btn-outline btn-block">
+    <a href="https://github.com/uboar/missli/releases" target="_blank" rel="noreferrer" class="btn btn-primary btn-outline btn-block">
       リリースノートを見る
     </a>
   </div>
