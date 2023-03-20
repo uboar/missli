@@ -14,7 +14,7 @@
     }
   };
 
-  let parseedHTML: HTMLElement;
+  let parsedHTML: HTMLElement;
   export let text = "";
   export let hostUrl: string;
   export let remoteEmojis: Array<{ name: string; url: string }> = [];
@@ -24,7 +24,7 @@
   onMount(() => {
     const mfmTree = mfm.parse(text);
 
-    mfmTree.forEach((elem) => generateMfmElement(elem, parseedHTML));
+    mfmTree.forEach((elem) => generateMfmElement(elem, parsedHTML));
   });
 
   const generateMfmElement = (node: mfm.MfmNode, parentElemnt: HTMLElement) => {
