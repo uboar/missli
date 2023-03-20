@@ -2,6 +2,7 @@
   import { createEventDispatcher, onMount } from "svelte";
   import type { UserData } from "../../lib/userdata";
   import unicodeEmojis from "../../assets/unicodeEmojis.json";
+  import twemoji from "twemoji";
 
   const suggestEmojiNum = 20;
   let inputElem: HTMLInputElement;
@@ -139,7 +140,9 @@
           class="btn btn-xs btn-outline"
           on:click={() => sendEmoji(emoji.value)}
         >
-          {emoji.value}
+          {@html twemoji.parse(emoji.value, {
+            className: "object-scale-down h-4",
+          })}
         </button>
       {/if}
     {/each}

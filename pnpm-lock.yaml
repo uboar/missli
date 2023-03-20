@@ -4,6 +4,7 @@ specifiers:
   '@histoire/plugin-svelte': ^0.15.9
   '@sveltejs/vite-plugin-svelte': ^2.0.3
   '@tsconfig/svelte': ^3.0.0
+  '@twemoji/api': ^14.1.1
   '@vitejs/plugin-basic-ssl': ^1.0.1
   autoprefixer: ^10.4.14
   daisyui: ^2.51.4
@@ -26,6 +27,7 @@ specifiers:
   vite: ^4.2.0
 
 dependencies:
+  '@twemoji/api': 14.1.1
   '@vitejs/plugin-basic-ssl': 1.0.1_vite@4.2.0
   daisyui: 2.51.4_j7yt3jd32cwenjqavrrga47yr4
   emoji-name-map: 1.2.9
@@ -444,6 +446,15 @@ packages:
   /@tsconfig/svelte/3.0.0:
     resolution: {integrity: sha512-pYrtLtOwku/7r1i9AMONsJMVYAtk3hzOfiGNekhtq5tYBGA7unMve8RvUclKLMT3PrihvJqUmzsRGh0RP84hKg==}
     dev: true
+
+  /@twemoji/api/14.1.1:
+    resolution: {integrity: sha512-8IYxv33kC3ijizk73pT9yiTfbsSVubDzehJL6iPxWOtMALc4BJB/wBF2IhJ1645PPRKhC/3yZAOxlKN+Iahy7A==}
+    dependencies:
+      fs-extra: 8.1.0
+      jsonfile: 5.0.0
+      twemoji-parser: 14.0.0
+      universalify: 0.1.2
+    dev: false
 
   /@types/flexsearch/0.7.3:
     resolution: {integrity: sha512-HXwADeHEP4exXkCIwy2n1+i0f1ilP1ETQOH5KDOugjkTFZPntWo0Gr8stZOaebkxsdx+k0X/K6obU/+it07ocg==}
@@ -1460,6 +1471,14 @@ packages:
 
   /jsonfile/4.0.0:
     resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
+    optionalDependencies:
+      graceful-fs: 4.2.11
+    dev: false
+
+  /jsonfile/5.0.0:
+    resolution: {integrity: sha512-NQRZ5CRo74MhMMC3/3r5g2k4fjodJ/wh8MxjFbCViWKFjxrnudWSY5vomh+23ZaXzAS7J3fBZIR2dV6WbmfM0w==}
+    dependencies:
+      universalify: 0.1.2
     optionalDependencies:
       graceful-fs: 4.2.11
     dev: false

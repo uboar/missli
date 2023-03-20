@@ -30,6 +30,7 @@
     "vite": "^4.2.0"
   },
   "dependencies": {
+    "@twemoji/api": "^14.1.1",
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "daisyui": "^2.51.4",
     "emoji-name-map": "^1.2.9",

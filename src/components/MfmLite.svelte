@@ -2,6 +2,7 @@
   import * as mfm from "mfm-js";
   import { onMount } from "svelte";
   import type { UserData } from "../lib/userdata";
+  import twemoji from "twemoji";
 
   $: localEmojiSearch;
 
@@ -104,7 +105,9 @@
     // UNICODE絵文字
     if (node.type === "unicodeEmoji") {
       let elem = document.createElement("span");
-      elem.innerText = node.props.emoji;
+      elem.innerHTML = twemoji.parse(node.props.emoji, {
+        className: "object-scale-down h-6 inline-flex",
+      });
       parentElemnt.appendChild(elem);
     }
     // メンション

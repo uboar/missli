@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import type { UserData } from "../../lib/userdata";
+  import twemoji from "twemoji";
 
   export let name: string;
   export let num: number;
@@ -81,7 +82,9 @@
       : ''} badge-{color} h-5 unicode-emoji"
     on:click={clickReaction}
   >
-    <span class="h-4">{name}</span>
+    <span class="h-4">
+      {@html twemoji.parse(name, { className: "object-scale-down h-4" })}
+    </span>
     {num}
   </button>
 {/if}
