@@ -3,7 +3,7 @@
   "license": "MIT",
   "author": "uboar",
   "private": true,
-  "version": "1.4.5",
+  "version": "1.4.6",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -30,7 +30,6 @@
     "vite": "^4.2.0"
   },
   "dependencies": {
-    "@twemoji/api": "^14.1.1",
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "daisyui": "^2.51.4",
     "emoji-name-map": "^1.2.9",
@@ -41,6 +40,7 @@
     "moment": "^2.29.4",
     "prettier": "^2.8.4",
     "prettier-plugin-svelte": "^2.9.0",
-    "prettier-plugin-tailwindcss": "^0.2.5"
+    "prettier-plugin-tailwindcss": "^0.2.5",
+    "twemoji": "^14.0.2"
   }
 }

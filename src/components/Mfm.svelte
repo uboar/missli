@@ -106,9 +106,12 @@
     // UNICODE絵文字
     if (node.type === "unicodeEmoji") {
       let elem = document.createElement("span");
-      elem.innerHTML = twemoji.parse(node.props.emoji, {
-        className: "object-scale-down h-6 inline-flex",
-      });
+      let classes = "object-scale-down inline-flex ";
+      if (emojiHeight === "") classes += "h-6";
+      else classes += emojiHeight;
+        elem.innerHTML = twemoji.parse(node.props.emoji, {
+          className: classes,
+        });
       parentElemnt.appendChild(elem);
     }
     // メンション

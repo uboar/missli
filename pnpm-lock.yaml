@@ -4,7 +4,6 @@ specifiers:
   '@histoire/plugin-svelte': ^0.15.9
   '@sveltejs/vite-plugin-svelte': ^2.0.3
   '@tsconfig/svelte': ^3.0.0
-  '@twemoji/api': ^14.1.1
   '@vitejs/plugin-basic-ssl': ^1.0.1
   autoprefixer: ^10.4.14
   daisyui: ^2.51.4
@@ -23,11 +22,11 @@ specifiers:
   svelte-check: ^2.10.3
   tailwindcss: ^3.2.7
   tslib: ^2.5.0
+  twemoji: ^14.0.2
   typescript: ^4.9.5
   vite: ^4.2.0
 
 dependencies:
-  '@twemoji/api': 14.1.1
   '@vitejs/plugin-basic-ssl': 1.0.1_vite@4.2.0
   daisyui: 2.51.4_j7yt3jd32cwenjqavrrga47yr4
   emoji-name-map: 1.2.9
@@ -39,6 +38,7 @@ dependencies:
   prettier: 2.8.4
   prettier-plugin-svelte: 2.9.0_k23gl6auqwrxgr3e6o2bajswou
   prettier-plugin-tailwindcss: 0.2.5_yjdjpc7im5hvpskij45owfsns4
+  twemoji: 14.0.2
 
 devDependencies:
   '@histoire/plugin-svelte': 0.15.9_rfnha2da7blfzlpvbeu3b6qnve
@@ -446,15 +446,6 @@ packages:
   /@tsconfig/svelte/3.0.0:
     resolution: {integrity: sha512-pYrtLtOwku/7r1i9AMONsJMVYAtk3hzOfiGNekhtq5tYBGA7unMve8RvUclKLMT3PrihvJqUmzsRGh0RP84hKg==}
     dev: true
-
-  /@twemoji/api/14.1.1:
-    resolution: {integrity: sha512-8IYxv33kC3ijizk73pT9yiTfbsSVubDzehJL6iPxWOtMALc4BJB/wBF2IhJ1645PPRKhC/3yZAOxlKN+Iahy7A==}
-    dependencies:
-      fs-extra: 8.1.0
-      jsonfile: 5.0.0
-      twemoji-parser: 14.0.0
-      universalify: 0.1.2
-    dev: false
 
   /@types/flexsearch/0.7.3:
     resolution: {integrity: sha512-HXwADeHEP4exXkCIwy2n1+i0f1ilP1ETQOH5KDOugjkTFZPntWo0Gr8stZOaebkxsdx+k0X/K6obU/+it07ocg==}
@@ -2422,6 +2413,15 @@ packages:
 
   /twemoji-parser/14.0.0:
     resolution: {integrity: sha512-9DUOTGLOWs0pFWnh1p6NF+C3CkQ96PWmEFwhOVmT3WbecRC+68AIqpsnJXygfkFcp4aXbOp8Dwbhh/HQgvoRxA==}
+    dev: false
+
+  /twemoji/14.0.2:
+    resolution: {integrity: sha512-BzOoXIe1QVdmsUmZ54xbEH+8AgtOKUiG53zO5vVP2iUu6h5u9lN15NcuS6te4OY96qx0H7JK9vjjl9WQbkTRuA==}
+    dependencies:
+      fs-extra: 8.1.0
+      jsonfile: 5.0.0
+      twemoji-parser: 14.0.0
+      universalify: 0.1.2
     dev: false
 
   /type-check/0.3.2:

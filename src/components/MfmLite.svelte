@@ -57,7 +57,7 @@
       } else {
         elem.src = remoteEmojis[node.props.name];
       }
-      if(emojiHeight === "") elem.className = "h-6 inline-flex";
+      if (emojiHeight === "") elem.className = "h-6 inline-flex";
       else elem.className = emojiHeight + " inline-flex";
       elem.alt = node.props.name;
       elem.title = node.props.name;
@@ -79,7 +79,8 @@
     // 引用
     if (node.type === "quote") {
       let elem = document.createElement("div");
-      elem.className = "border-l-2 border-base-content pl-2 rounded-sm bg-base-200"
+      elem.className =
+        "border-l-2 border-base-content pl-2 rounded-sm bg-base-200";
       parentElemnt.appendChild(elem);
       node.children.forEach((child) => generateMfmElement(child, elem));
     }
@@ -105,9 +106,12 @@
     // UNICODE絵文字
     if (node.type === "unicodeEmoji") {
       let elem = document.createElement("span");
-      elem.innerHTML = twemoji.parse(node.props.emoji, {
-        className: "object-scale-down h-6 inline-flex",
-      });
+      let classes = "object-scale-down inline-flex ";
+      if (emojiHeight === "") classes += "h-6";
+      else classes += emojiHeight;
+        elem.innerHTML = twemoji.parse(node.props.emoji, {
+          className: classes,
+        });
       parentElemnt.appendChild(elem);
     }
     // メンション
