@@ -3,6 +3,7 @@ import type { Note } from "misskey-js/built/entities";
 import type { Connection } from "misskey-js/built/streaming";
 import type { TimelineOptions, UserData } from "./userdata";
 import uniqBy from "lodash/uniqBy";
+import remove from "lodash/remove";
 import type { NoteUpdatedEvent } from "misskey-js/built/streaming.types";
 
 export const TimelineApiEndpoint: Record<string, keyof Endpoints> = {
@@ -91,7 +92,7 @@ export const initializeTimeline = async (
     }
 
     notesBuffer.forEach((note) => {
-      subscribeNote(user, timeline, subscribedNotesId, note.id);
+      subscribeNote(user, timeline, subscribedNotesId, note);
     });
 
     timeline.notesBuffer = notesBuffer;
@@ -167,8 +168,8 @@ export const getOldNotes = async (
   }
 
   notesBuffer.forEach((note) => {
-    if(note.reactionEmojis == null) note.reactionEmojis = {};
-    subscribeNote(user, timeline, subscribedNotesId, note.id);
+    if (note.reactionEmojis == null) note.reactionEmojis = {};
+    subscribeNote(user, timeline, subscribedNotesId, note);
   });
 
   timeline.notesBuffer = [...timeline.notesBuffer, ...notesBuffer];
@@ -194,7 +195,7 @@ export const uniqueNote = (
 
   // 溢れたノートのサブスクリプションを解除する
   overflowNotes.forEach((note) => {
-    unSubscribeNote(user, timeline, subscribedNotesId, note.id);
+    unSubscribeNote(user, timeline, subscribedNotesId, note);
 
     timeline.notesBuffer = timeline.notesBuffer.slice(
       0,
@@ -215,9 +216,9 @@ export const onNote = (
   subscribedNotesId: Array<string>,
   payload: Note
 ) => {
-  if(payload.reactionEmojis == null) payload.reactionEmojis = {};
+  if (payload.reactionEmojis == null) payload.reactionEmojis = {};
   timeline.notesBuffer = [payload, ...timeline.notesBuffer];
-  subscribeNote(user, timeline, subscribedNotesId, payload.id);
+  subscribeNote(user, timeline, subscribedNotesId, payload);
   uniqueNote(user, timeline, subscribedNotesId);
 };
 
@@ -231,14 +232,16 @@ export const subscribeNote = (
   user: UserData,
   timeline: TimelineOptions,
   subscribedNotesId: Array<string>,
-  noteId: string
+  note: Note
 ) => {
-  if (!subscribedNotesId.includes(noteId)) {
+  if (!subscribedNotesId.includes(note.id)) {
     user.stream.send("subNote", {
-      id: noteId,
+      id: note.id,
     });
-    subscribedNotesId.push(noteId);
+    subscribedNotesId.push(note.id);
   }
+  if (note.renote)
+    subscribeNote(user, timeline, subscribedNotesId, note.renote);
 };
 
 /**
@@ -251,12 +254,14 @@ export const unSubscribeNote = (
   user: UserData,
   timeline: TimelineOptions,
   subscribedNotesId: Array<string>,
-  noteId: string
+  note: Note
 ) => {
   user.stream.send("unsubNote", {
-    id: noteId,
+    id: note.id,
   });
-  subscribedNotesId = subscribedNotesId.filter((id) => id !== noteId);
+  subscribedNotesId = subscribedNotesId.filter((id) => id !== note.id);
+  if (note.renote)
+    unSubscribeNote(user, timeline, subscribedNotesId, note.renote);
 };
 
 /**
@@ -271,14 +276,37 @@ export const notesUpdate = (
   subscribedNotesId: Array<string>,
   e: NoteUpdatedEvent
 ) => {
-  const noteIndex = timeline.notesBuffer.findIndex((v) => v.id === e.id);
+  if (e.type === "deleted") {
+    remove(timeline.notesBuffer, (v: Note) => v.id === e.id);
+    unSubscribeNote(user, timeline, subscribedNotesId, e.id);
+  } else {
+    timeline.notesBuffer.forEach((v, index, arr) => {
+      noteUpdateExecuter(user, timeline, subscribedNotesId, e, arr[index]);
+    });
+  }
+};
 
-  if (noteIndex < 0) return;
+const noteUpdateExecuter = (
+  user: UserData,
+  timeline: TimelineOptions,
+  subscribedNotesId: Array<string>,
+  e: NoteUpdatedEvent,
+  note: Note
+): boolean => {
+  let renoteStatus = false;
 
-  if (timeline.notesBuffer[noteIndex]["reactionEmojis"] == null)
-    timeline.notesBuffer[noteIndex]["reactionEmojis"] = {};
-  if (timeline.notesBuffer[noteIndex]["reactions"] == null)
-    timeline.notesBuffer[noteIndex]["reactions"] = {};
+  if (note.renote)
+    renoteStatus = noteUpdateExecuter(
+      user,
+      timeline,
+      subscribedNotesId,
+      e,
+      note.renote
+    );
+  if (note.id !== e.id) return renoteStatus;
+
+  if (note["reactionEmojis"] == null) note["reactionEmojis"] = {};
+  if (note["reactions"] == null) note["reactions"] = {};
 
   try {
     if (e.type === "reacted") {
@@ -286,15 +314,12 @@ export const notesUpdate = (
         e.body.reaction.indexOf("@.") < 0 &&
         e.body.reaction.indexOf("@") >= 0
       ) {
-        timeline.notesBuffer[noteIndex].reactionEmojis[e.body.emoji.name] =
-          e.body.emoji.url;
+        note.reactionEmojis[e.body.emoji.name] = e.body.emoji.url;
       } else {
-        if (
-          timeline.notesBuffer[noteIndex].reactions[e.body.reaction] == null
-        ) {
-          timeline.notesBuffer[noteIndex].reactions[e.body.reaction] = 1;
+        if (note.reactions[e.body.reaction] == null) {
+          note.reactions[e.body.reaction] = 1;
         } else {
-          timeline.notesBuffer[noteIndex].reactions[e.body.reaction]++;
+          note.reactions[e.body.reaction]++;
         }
       }
     } else if (e.type === "unreacted") {
@@ -302,10 +327,9 @@ export const notesUpdate = (
         e.body.reaction.indexOf("@.") < 0 &&
         e.body.reaction.indexOf("@") >= 0
       ) {
-        timeline.notesBuffer[noteIndex].reactionEmojis[e.body.emoji.name] =
-          e.body.emoji.url;
+        note.reactionEmojis[e.body.emoji.name] = e.body.emoji.url;
       }
-      timeline.notesBuffer[noteIndex].reactions[e.body.reaction]--;
+      note.reactions[e.body.reaction]--;
     } else if (e.type === "deleted") {
       timeline.notesBuffer.splice(noteIndex, 1);
       timeline.notesBuffer = [...timeline.notesBuffer];
@@ -314,6 +338,8 @@ export const notesUpdate = (
   } catch (e) {
     console.error(e);
   }
+
+  return true;
 };
 
 /**
