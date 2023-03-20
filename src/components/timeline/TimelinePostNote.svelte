@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { Note as NoteType } from "misskey-js/built/entities";
   import { createEventDispatcher, onMount } from "svelte";
-  import type { postNote as postNoteType, TimelineOptions, UserData } from "../../lib/userdata";
+  import type {
+    postNote as postNoteType,
+    TimelineOptions,
+    UserData,
+  } from "../../lib/userdata";
   import Note from "../Note.svelte";
 
   export let postNote: postNoteType;
@@ -11,10 +15,12 @@
   export let option: TimelineOptions = {
     id: 0,
     noteOption: {
+      mediaHide: false,
+      reactionHide: false,
       cwShow: false,
       nsfwShow: false,
       noteCollapse: true,
-    }
+    },
   };
 
   const dispatch = createEventDispatcher();
@@ -70,7 +76,7 @@
       postNote.cw = "";
       renoteNote = null;
       replyNote = null;
-      if(!keepOpen) dispatch("breakRequest");
+      if (!keepOpen) dispatch("breakRequest");
     } catch (err) {
       console.error(err);
       noteBusy = false;
@@ -186,12 +192,12 @@
     />
     <div class="card-actions">
       <button
-        class="btn btn-block btn-sm btn-primary {noteBusy || disablePost()
+        class="btn btn-block btn-sm btn-primary normal-case {noteBusy || disablePost()
           ? 'btn-disabled'
           : ''}"
         on:click={sendNote}
       >
-        {renoteText()}
+        {user.userName}@{user.hostUrl}で{renoteText()}
       </button>
     </div>
   </div>

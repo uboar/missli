@@ -336,7 +336,7 @@
       {/if}
     </div>
     <div
-      class="absolute bottom-0 w-full z-50 bg-base-200 bg-opacity-95 border-b-4"
+      class="absolute bottom-0 w-full z-50 bg-base-200 bg-opacity-95 border-b-2 border-t-2"
       style="border-color:{options.color}"
     >
       <!-- タイムラインのフッター -->
@@ -346,6 +346,7 @@
           bind:postNote
           bind:replyNote
           bind:renoteNote
+          bind:option={options}
           on:breakRequest={() => (showNav = NAV.none)}
         />
       {/if}
@@ -439,20 +440,33 @@
   <div
     class="h-full bg-base-300 relative rounded w-8 grid place-content-center"
   >
+    <div
+      class="tooltip tooltip-bottom absolute top-0 right-1"
+      data-tip="タイムラインを開く"
+    >
+      <button
+        class="btn btn-xs btn-square mt-1 btn-outline"
+        style="color: {options.color};"
+        on:click={() => {
+          options.isCollapsed = false;
+          unRead = true;
+        }}>❯</button
+      >
+    </div>
     <div class="indicator -rotate-90">
       {#if unRead}
         <span class="indicator-item flex">
           <span
-            class="animate-ping absolute top-0.5 right-0.5 inline-flex h-4 w-4 rounded-full bg-secondary opacity-75"
+            class="animate-ping absolute top-1 right-0.5 inline-flex h-4 w-4 rounded-full bg-secondary opacity-75"
           />
           <span
-            class="absolute inline-flex top-0.5 right-0.5 rounded-full h-4 w-4 bg-secondary"
+            class="absolute inline-flex top-1 right-0.5 rounded-full h-4 w-4 bg-secondary"
           />
         </span>
       {/if}
       <button
-        class="badge badge-outline link link-hover animate-none"
-        style="color: {options.color}; width: 70vh"
+        class="btn btn-xs no-animation btn-outline normal-case"
+        style="color: {options.color}; width: 80vh"
         on:click={() => {
           options.isCollapsed = false;
           unRead = false;

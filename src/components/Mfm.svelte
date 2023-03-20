@@ -164,4 +164,4 @@
   };
 </script>
 
-<div bind:this={parseedHTML} />
+<div bind:this={parsedHTML} />
