@@ -466,7 +466,7 @@
       {/if}
       <button
         class="btn btn-xs no-animation btn-outline normal-case"
-        style="color: {options.color}; width: 80vh"
+        style="color: {options.color}; width: 75vh"
         on:click={() => {
           options.isCollapsed = false;
           unRead = false;

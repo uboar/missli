@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { Notification } from "misskey-js/built/entities";
   import { onMount } from "svelte";
-  import type { UserData, users } from "../../lib/userdata";
+  import { moment, type UserData, type users } from "../../lib/userdata";
   import EmojiParser from "../EmojiParser.svelte";
   import MfmLite from "../MfmLite.svelte";
+  import uniqBy from "lodash/uniqBy";
 
   export let user: UserData | null = null;
 
@@ -128,6 +129,15 @@
         return `${origin}/my/notifications`;
     }
   };
+
+  const moreNotify = async () => {
+    const res = await user.cli.request("i/notifications", {
+      untilId: user.notifyBuffer[user.notifyBuffer.length - 1].id,
+    });
+
+    user.notifyBuffer = [...user.notifyBuffer, ...res];
+    user.notifyBuffer = uniqBy(user.notifyBuffer, "id");
+  };
 </script>
 
 <div class="card card-compact">
@@ -136,11 +146,13 @@
       {#each user.notifyBuffer as notify (notify.id)}
         <li>
           <a href={getNotifyLink(notify)} target="_blank" rel="noreferrer">
-            <div class="flex flex-col">
+            <div class="flex flex-col w-full">
               <div class="flex link link-hover gap-2">
                 {#if notify.type === "reaction"}
                   <EmojiParser
-                    localEmojis={(user.emojis.length === 0) ? notify.note.emojis : user.emojis}
+                    localEmojis={user.emojis.length === 0
+                      ? notify.note.emojis
+                      : user.emojis}
                     text={notify.reaction}
                     remoteEmojis={notify.note.reactionEmojis}
                   />
@@ -148,7 +160,9 @@
                 {#if new RegExp("reaction|renote|reply|quote|mention").test(notify.type)}
                   <MfmLite
                     text={getNotifyTypeName(notify)}
-                    localEmojis={(user.emojis.length === 0) ? notify.note.emojis : user.emojis}
+                    localEmojis={user.emojis.length === 0
+                      ? notify.note.emojis
+                      : user.emojis}
                     remoteEmojis={notify.user.emojis}
                     emojiHeight="h-4"
                     hostUrl={user.hostUrl}
@@ -172,10 +186,16 @@
                   </div>
                 </a>
               {/if}
+              <div class="text-sm -mb-2 text-end">
+                {moment(notify.createdAt).fromNow()}
+              </div>
             </div>
           </a>
         </li>
       {/each}
+      <button class="btn btn-block btn-sm btn-primary" on:click={moreNotify}>
+        もっと表示
+      </button>
     </ul>
   </div>
 </div>
