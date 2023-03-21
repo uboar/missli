@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import type { UserData } from "../lib/userdata";
-
+  import twemoji from "twemoji";
   let src = "";
 
   export let text = "";
@@ -48,5 +48,7 @@
 {:else if text.indexOf(":") >= 0}
   <img src={localEmojiSearch(text)} class="h-4" alt={text} />
 {:else}
-  <span class="h-4">{text}</span>
+  <span class="h-4">
+    {@html twemoji.parse(text, { className: "object-scale-down h-4" })}
+  </span>
 {/if}
