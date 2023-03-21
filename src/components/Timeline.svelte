@@ -180,14 +180,18 @@
     const self = $timelines.findIndex((v) => v.id === options.id);
     if ($timelines.length === 1) return;
     if (self === 0) return;
-    $timelines.splice(self - 1, 2, $timelines[self], $timelines[self - 1]);
+    const timelinesBuffer = [...$timelines];
+    timelinesBuffer.splice(self - 1, 2, timelinesBuffer[self], timelinesBuffer[self - 1]);
+    $timelines = timelinesBuffer;
     dispatch("breakRequest");
   };
   const swapRight = () => {
     const self = $timelines.findIndex((v) => v.id === options.id);
     if ($timelines.length === 1) return;
     if (self === $timelines.length - 1) return;
-    $timelines.splice(self, 2, $timelines[self + 1], $timelines[self]);
+    const timelinesBuffer = [...$timelines];
+    timelinesBuffer.splice(self, 2, timelinesBuffer[self + 1], timelinesBuffer[self]);
+    $timelines = timelinesBuffer;
     dispatch("breakRequest");
   };
   const timelineDelete = () => {

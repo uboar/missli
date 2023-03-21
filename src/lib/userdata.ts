@@ -167,7 +167,7 @@ export const getCookie = async () => {
             usersBuff[i].emojis = (
               await usersBuff[i].cli.request("emojis")
             ).emojis;
-          }else{
+          } else {
             usersBuff[i].emojis = res.emojis;
           }
         } catch (err) {
@@ -256,10 +256,14 @@ const settingsLocal = JSON.parse(
 if (settingsLocal) settings.set({ ...get(settings), ...settingsLocal });
 if (timelineLocal) timelines.set(timelineLocal);
 
-timelines.subscribe((val) => {
-  localStorage.setItem("timelines", JSON.stringify(val));
-});
+window.addEventListener("beforeunload", () => {
+  let timelinesBuffer = get(timelines);
+  let settingsBuffer = get(settings);
 
-settings.subscribe((val) => {
-  localStorage.setItem("settings", JSON.stringify(val));
+  timelinesBuffer.forEach((v) => {
+    delete v.notesBuffer;
+  });
+
+  localStorage.setItem("timelines", JSON.stringify(timelinesBuffer));
+  localStorage.setItem("settings", JSON.stringify(settingsBuffer));
 });
