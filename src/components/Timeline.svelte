@@ -449,7 +449,7 @@
         style="color: {options.color};"
         on:click={() => {
           options.isCollapsed = false;
-          unRead = true;
+          unRead = false;
         }}>❯</button
       >
     </div>
