@@ -146,7 +146,7 @@
       {#each user.notifyBuffer as notify (notify.id)}
         <li class="text-ellipsis w-full">
           <a href={getNotifyLink(notify)} target="_blank" rel="noreferrer">
-            <div class="flex flex-col max-w-full">
+            <div class="flex flex-col w-full">
               <div class="flex link link-hover gap-2">
                 {#if notify.type === "reaction"}
                   <EmojiParser

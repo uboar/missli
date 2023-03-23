@@ -48,6 +48,26 @@
       elem.innerText = node.props.text;
       parentElemnt.appendChild(elem);
     }
+    // 検索
+    if (node.type === "search") {
+      let inputGroup = document.createElement("div");
+      inputGroup.className = "input-group w-full";
+      let input = document.createElement("input");
+      input.type = "text";
+      input.readOnly = true;
+      input.value = node.props.query
+      input.className = "input input-sm input-bordered readonly w-10/12"
+      let button = document.createElement("a");
+      button.className = "btn btn-square btn-sm w-2/12"
+      button.href = `https://www.google.com/search?q=${node.props.query}`
+      button.target = "_blank";
+      button.innerText = "検索";
+      button.rel = "noreferrer";
+      inputGroup.appendChild(input);
+      inputGroup.appendChild(button);
+      
+      parentElemnt.appendChild(inputGroup);
+    }
     // カスタム絵文字
     if (node.type === "emojiCode") {
       let elem = document.createElement("img");
