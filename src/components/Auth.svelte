@@ -182,8 +182,7 @@ v1.2.1以前に本アプリを使用した事がある方は、権限設定が�
           追加したいアカウントのサーバーURL(例：misskey.io)を入力してください。
         </p>
         <p class="text-warning font-bold">
-          現在、Misskey
-          v12系のサーバーではカスタム絵文字を正しく取得出来ません。
+          現在、Misskey v11以前のサーバーでカスタム絵文字を正しく取得出来ない場合があります。
         </p>
         <input
           type="text"
@@ -207,7 +206,7 @@ v1.2.1以前に本アプリを使用した事がある方は、権限設定が�
       {:else if selectedTab === 1}
         <h2 class="text-xl font-bold">アクセストークンの直接入力</h2>
         <p>
-          取得したアクセストークンを直接入力します。MiAuth認証していない古いバージョンのMisskeyを使用する際に使用して下さい。
+          取得したアクセストークンを直接入力します。MiAuth認証に対応していない古いバージョンのMisskeyを使用する際に使用して下さい。
         </p>
         <div class="form-control">
           <span class="label-text">ホストURL</span>

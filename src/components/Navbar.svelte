@@ -44,7 +44,7 @@
           viewBox="0 0 24 24"
           ><path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg
         >
-        <span class="hidden md:inline">ノート</span>
+        <span class="hidden md:inline">同時ノート</span>
       </label>
       <label
         class="btn group gap-2 btn-outline border-primary-content btn-sm p-1 mx-2 text-primary-content hover:text-primary-focus"

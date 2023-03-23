@@ -53,7 +53,13 @@
   bind:this={noteElement}
 >
   <div class="card-body {!compact ? '-my-6 -mx-4' : ' -my-2'}">
-    <Body {note} {user} {compact} {collapse} option={timelineOptions.noteOption} />
+    <Body
+      {note}
+      {user}
+      {compact}
+      {collapse}
+      option={timelineOptions.noteOption}
+    />
     {#if !compact}
       <div class="divider -my-3" />
       <div class="flex -mb-1 z-10">
@@ -99,14 +105,16 @@
           </button>
         </div>
         <div class="basis-1/5" />
-        <a
-          class="basis-1/5 text-xs link pt-1"
-          href={`https://${user.hostUrl}/notes/${note.id}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {moment(note.createdAt).fromNow()}
-        </a>
+        <div class="basis-1/5 tooltip" data-tip="ノートのURLを開く">
+          <a
+            class="text-xs link pt-1"
+            href={`https://${user.hostUrl}/notes/${note.id}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {moment(note.createdAt).fromNow()}
+          </a>
+        </div>
       </div>
     {/if}
     {#if showReactionDeck}
