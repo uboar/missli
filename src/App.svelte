@@ -19,7 +19,6 @@
 </script>
 
 <main data-theme={$settings.theme} class="screen">
-  <Navbar />
   <div class="flex flex-col h-full w-full overflow-x-auto">
     <div class="pb-10" />
     {#if loading}
@@ -44,6 +43,7 @@
       </div>
     {/if}
   </div>
+  <Navbar />
 </main>
 
 <style>

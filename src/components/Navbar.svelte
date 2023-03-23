@@ -19,7 +19,7 @@
   });
 </script>
 
-<div class="navbar bg-primary fixed z-50 shadow-lg w-screen">
+<div class="navbar bg-primary fixed top-0 z-40 shadow-lg w-screen">
   <div class="navbar-start">
     <a
       class="btn btn-ghost normal-case text-xl text-primary-content btn-sm"
@@ -79,29 +79,29 @@
 </div>
 
 <input type="checkbox" id="post-modal" class="modal-toggle" />
-<div class="modal">
+<label for="post-modal" class="modal">
   <Post />
-</div>
+</label>
 
 <input type="checkbox" id="addtimeline-modal" class="modal-toggle" />
-<div class="modal">
-  <div class="modal-box">
+<label for="addtimeline-modal" class="modal">
+  <label class="modal-box" for="">
     <AddTimeline />
     <div class="modal-action">
       <label for="addtimeline-modal" class="btn btn-primary w-40">閉じる</label>
     </div>
-  </div>
-</div>
+  </label>
+</label>
 
 <input type="checkbox" id="settings-modal" class="modal-toggle" />
-<div class="modal">
-  <div class="modal-box md:w-11/12 md:max-w-5xl h-4/5">
+<label for="settings-modal" class="modal">
+  <label for="" class="modal-box md:w-11/12 md:max-w-5xl h-4/5">
     <Settings />
     <div class="modal-action">
       <label for="settings-modal" class="btn btn-primary w-40">閉じる</label>
     </div>
-  </div>
-</div>
+  </label>
+</label>
 
 <input
   type="checkbox"
@@ -109,11 +109,11 @@
   class="modal-toggle"
   bind:this={notifyModal}
 />
-<div class="modal">
-  <div class="modal-box">
+<label for="update-modal" class="modal">
+  <label for="" class="modal-box">
     <VersionNotify />
     <div class="modal-action">
       <label for="update-modal" class="btn btn-primary w-40">閉じる</label>
     </div>
-  </div>
-</div>
+  </label>
+</label>

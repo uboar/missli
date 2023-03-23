@@ -44,7 +44,7 @@
   };
 </script>
 
-<div class="modal-box w-11/12 max-w-3xl">
+<label class="modal-box w-11/12 max-w-3xl" for="">
   <div>
     <div class="form-control w-full">
       <div class="flex gap-4">
@@ -117,4 +117,4 @@
     >
     <label for="post-modal" class="btn btn-secondary btn-outline">閉じる</label>
   </div>
-</div>
+</label>
