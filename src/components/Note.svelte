@@ -49,7 +49,7 @@
 </script>
 
 <div
-  class="card card-bordered bg-base-100 w-full my-2 shadow-sm hover:border-neutral-focus"
+  class="card card-bordered bg-base-100 w-full shadow-sm hover:border-neutral-focus"
   bind:this={noteElement}
 >
   <div class="card-body {!compact ? '-my-6 -mx-4' : ' -my-2'}">

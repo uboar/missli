@@ -1,12 +1,13 @@
 <script lang="ts">
   import type { Note as NoteType } from "misskey-js/built/entities";
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount, tick } from "svelte";
   import type {
     postNote as postNoteType,
     TimelineOptions,
     UserData,
   } from "../../lib/userdata";
   import Note from "../Note.svelte";
+  import Mfm from "../Mfm.svelte";
 
   export let postNote: postNoteType;
   export let user: UserData | null = null;
@@ -33,6 +34,7 @@
   let noteBusy = false;
   let showCw = false;
   let keepOpen = false;
+  let preview = false;
 
   let focusNoteText: HTMLTextAreaElement;
 
@@ -83,6 +85,14 @@
     }
   };
 
+  const updateInput = async () => {
+    if(preview) {
+      preview = false;
+      await tick();
+      preview = true;
+    }
+  }
+
   $: renoteText = () => {
     if (renoteNote && postNote.text === "") return "リノートする";
     else if (renoteNote) return "引用リノートする";
@@ -99,9 +109,9 @@
 <div class="card card-compact">
   <div class="card-body">
     {#if replyNote || renoteNote}
-      <div class="flex justify-between -my-3">
+      <div class="flex justify-between">
         {#if replyNote}
-          <span class="badge mt-1">↩️返信</span>
+          <span class="badge badge-outline badge-info mt-1">↩️返信</span>
         {/if}
         {#if renoteNote}
           <span class="badge badge-outline badge-accent mt-1">🔁リノート</span>
@@ -121,12 +131,39 @@
         </button>
       </div>
       {#if replyNote}
-        <Note compact bind:note={replyNote} {user} timelineOptions={option} />
+        <div class="border border-info rounded">
+          <Note compact bind:note={replyNote} {user} timelineOptions={option} />
+        </div>
       {:else if renoteNote}
-        <Note compact bind:note={renoteNote} {user} timelineOptions={option} />
+        <div class="border border-accent rounded">
+          <Note
+            compact
+            bind:note={renoteNote}
+            {user}
+            timelineOptions={option}
+          />
+        </div>
       {/if}
     {/if}
-    <div class="flex justify-end w-full">
+    {#if preview}
+      <Mfm
+        bind:text={postNote.text}
+        hostUrl={user.hostUrl}
+        remoteEmojis={[]}
+        localEmojis={user.emojis}
+      />
+    {/if}
+    <div class="flex justify-between w-full">
+      <div class="form-control -my-3 w-fit">
+        <label class="label cursor-pointer">
+          <span class="label-text mx-2">プレビュー</span>
+          <input
+            type="checkbox"
+            class="checkbox bg-base-100"
+            bind:checked={preview}
+          />
+        </label>
+      </div>
       <div class="form-control -my-3 w-fit">
         <label class="label cursor-pointer">
           <span class="label-text mx-2">投稿してもウィンドウを閉じない</span>
@@ -189,10 +226,12 @@
       on:keydown={(e) => {
         if (e.ctrlKey && e.code === "Enter") sendNote();
       }}
+      on:input={updateInput}
     />
     <div class="card-actions">
       <button
-        class="btn btn-block btn-sm btn-primary normal-case {noteBusy || disablePost()
+        class="btn btn-block btn-sm btn-primary normal-case {noteBusy ||
+        disablePost()
           ? 'btn-disabled'
           : ''}"
         on:click={sendNote}

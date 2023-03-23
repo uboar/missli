@@ -181,7 +181,12 @@
     if ($timelines.length === 1) return;
     if (self === 0) return;
     const timelinesBuffer = [...$timelines];
-    timelinesBuffer.splice(self - 1, 2, timelinesBuffer[self], timelinesBuffer[self - 1]);
+    timelinesBuffer.splice(
+      self - 1,
+      2,
+      timelinesBuffer[self],
+      timelinesBuffer[self - 1]
+    );
     $timelines = timelinesBuffer;
     dispatch("breakRequest");
   };
@@ -190,7 +195,12 @@
     if ($timelines.length === 1) return;
     if (self === $timelines.length - 1) return;
     const timelinesBuffer = [...$timelines];
-    timelinesBuffer.splice(self, 2, timelinesBuffer[self + 1], timelinesBuffer[self]);
+    timelinesBuffer.splice(
+      self,
+      2,
+      timelinesBuffer[self + 1],
+      timelinesBuffer[self]
+    );
     $timelines = timelinesBuffer;
     dispatch("breakRequest");
   };
@@ -303,14 +313,16 @@
           <!-- ノート表示 -->
           <div class="relative w-full z-10">
             {#each showNotes as note (note.id)}
-              <Note
-                {note}
-                {user}
-                timelineOptions={options}
-                stream={user.stream}
-                on:renoteRequest={() => renoteRequest(note)}
-                on:replyRequest={() => replyRequest(note)}
-              />
+              <div class="my-1">
+                <Note
+                  {note}
+                  {user}
+                  timelineOptions={options}
+                  stream={user.stream}
+                  on:renoteRequest={() => renoteRequest(note)}
+                  on:replyRequest={() => replyRequest(note)}
+                />
+              </div>
             {/each}
             <button
               class="btn btn-block btn-secondary my-2"
