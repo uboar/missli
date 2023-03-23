@@ -8,6 +8,7 @@
   } from "../../lib/userdata";
   import Note from "../Note.svelte";
   import Mfm from "../Mfm.svelte";
+  import ReactionDeck from "../note/ReactionDeck.svelte";
 
   export let postNote: postNoteType;
   export let user: UserData | null = null;
@@ -35,6 +36,7 @@
   let showCw = false;
   let keepOpen = false;
   let preview = false;
+  let showReactionDeck = false;
 
   let focusNoteText: HTMLTextAreaElement;
 
@@ -86,12 +88,17 @@
   };
 
   const updateInput = async () => {
-    if(preview) {
+    if (preview) {
       preview = false;
       await tick();
       preview = true;
     }
-  }
+  };
+
+  const addEmoji = (e: CustomEvent) => {
+    postNote.text += e.detail.replace("@.", "");
+    updateInput();
+  };
 
   $: renoteText = () => {
     if (renoteNote && postNote.text === "") return "リノートする";
@@ -229,6 +236,22 @@
       on:input={updateInput}
     />
     <div class="card-actions">
+      {#if showReactionDeck}
+        <div class="p-2 w-full overflow-hidden">
+          <ReactionDeck
+            {user}
+            customReactionDeck={option.reactionDeck}
+            on:breakRequest={addEmoji}
+          />
+        </div>
+      {:else}
+        <button
+          class="btn btn-block btn-xs btn-outline normal-case"
+          on:click={() => {
+            showReactionDeck = true;
+          }}>絵文字を追加</button
+        >
+      {/if}
       <button
         class="btn btn-block btn-sm btn-primary normal-case {noteBusy ||
         disablePost()
