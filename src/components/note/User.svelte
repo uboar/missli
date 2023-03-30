@@ -22,7 +22,7 @@
   {#if isRenote}
     <div class="text-xs -mb-2 pr-3">
       {#if user.name === null}
-        🔁user.usernameがリノート
+        🔁{user.username}がリノート
       {:else}
         <MfmLite
           text={"🔁" + user.name + "がリノート"}
