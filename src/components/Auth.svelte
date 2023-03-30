@@ -55,6 +55,7 @@
 
   const openMiAuth = async () => {
     hostUrl = hostUrl.replace("https://", "");
+    if(hostUrl.endsWith("/")) hostUrl = hostUrl.slice(0, -1);
     busy = true;
     try {
       const sessionId = await (
