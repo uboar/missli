@@ -157,24 +157,8 @@ export const getCookie = async () => {
       }
 
       // カスタム絵文字の取得
-      // TODO : Misskey v12以前でちゃんと絵文字を取得出来るようにする。
       if (!usersBuff[i].isOldVersion) {
-        try {
-          const res = await usersBuff[i].cli.request("meta");
-
-          // v13はmetaにemojisが含まれない
-          if (res.emojis == null) {
-            usersBuff[i].emojis = (
-              await usersBuff[i].cli.request("emojis")
-            ).emojis;
-          } else {
-            usersBuff[i].emojis = res.emojis;
-          }
-        } catch (err) {
-          console.error(err);
-          usersBuff[i].emojis = [];
-          // window.alert("カスタム絵文字一覧の取得に失敗しました。")
-        }
+        await getEmojis(usersBuff[i]);
       } else {
         usersBuff[i].emojis = [];
       }
@@ -267,3 +251,35 @@ window.addEventListener("beforeunload", () => {
   localStorage.setItem("timelines", JSON.stringify(timelinesBuffer));
   localStorage.setItem("settings", JSON.stringify(settingsBuffer));
 });
+
+export const getEmojis = async (user: UserData, ignoreCache = false) => {
+  try {
+    const cache = await caches.open(user.id.toString());
+
+    const cacheMeta = await cache.match("/meta");
+
+    if (cacheMeta === undefined || ignoreCache) {
+      const res = await user.cli.request("meta");
+
+      // TODO:Misskey-jsのAPIからResponseが帰ってくるオプションが欲しいのでなんとかする
+      const cacheResMeta = new Response(JSON.stringify(res));
+      cache.put("/meta", cacheResMeta);
+
+      // v13はmetaにemojisが含まれない
+      if (res.emojis == null) {
+        user.emojis = (await user.cli.request("emojis")).emojis;
+      } else {
+        user.emojis = res.emojis;
+      }
+      const cacheResEmojis = new Response(JSON.stringify(user.emojis));
+      cache.put("/emojis", cacheResEmojis);
+    } else {
+      const cacheEmojis = await cache.match("/emojis");
+      user.emojis = await cacheEmojis.json();
+    }
+  } catch (err) {
+    console.error(err);
+    user.emojis = [];
+    // window.alert("カスタム絵文字一覧の取得に失敗しました。")
+  }
+};
