@@ -137,9 +137,3 @@
     {/if}
   </div>
 </div>
-
-<style>
-  .a {
-    background-color: aqua;
-  }
-</style>
