@@ -375,7 +375,11 @@
           class="tooltip"
           data-tip={showNav === NAV.notify ? "閉じる" : "通知"}
         >
-          <div class="indicator">
+          <button
+            class="indicator group"
+            on:click={() =>
+              (showNav = showNav === NAV.notify ? NAV.none : NAV.notify)}
+          >
             {#if user.notifyUnOpen}
               <span class="indicator-item flex">
                 <span
@@ -388,8 +392,6 @@
             {/if}
             <button
               class="btn btn-circle btn-outline fill-base-content hover:fill-base-100"
-              on:click={() =>
-                (showNav = showNav === NAV.notify ? NAV.none : NAV.notify)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -402,7 +404,7 @@
                 /></svg
               >
             </button>
-          </div>
+          </button>
         </div>
         <!-- ノートボタン -->
         <div
