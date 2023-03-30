@@ -2,13 +2,15 @@
   import Auth from "./Auth.svelte";
   import { version } from "../../package.json";
   import { settings } from "../lib/userdata";
+  import UserSetting from "./settings/UserSetting.svelte";
 
   let selectedTab = 0;
 
   const tabs = [
-    { name: "アカウントの設定", value: 0 },
-    { name: "全般設定", value: 1 },
-    { name: "missLIについて", value: 2 },
+    { name: "連携設定", value: 0 },
+    { name: "ユーザー毎の設定", value: 1 },
+    { name: "全般設定", value: 2 },
+    { name: "missLIについて", value: 3 },
   ];
 
   const themes = [
@@ -59,13 +61,15 @@
   {#if selectedTab === 0}
     <Auth />
   {:else if selectedTab === 1}
+    <UserSetting />
+  {:else if selectedTab === 2}
     <span class="label-text">カラーテーマ</span>
     <select bind:value={$settings.theme} class="select select-bordered w-full">
       {#each themes as theme}
         <option>{theme}</option>
       {/each}
     </select>
-  {:else if selectedTab === 2}
+  {:else if selectedTab === 3}
     <h1 class="font-bold text-3xl">missLI {version}</h1>
     <h2 class="font-bold text-lg">リポジトリ</h2>
     <a

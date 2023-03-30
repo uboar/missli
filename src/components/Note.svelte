@@ -100,7 +100,11 @@
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               class="h-4 w-4"
-              ><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg
+            >
+              {#if showReactionDeck}<path d="M19,13H5V11H19V13Z" />
+              {:else}
+                <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+              {/if}</svg
             >
           </button>
         </div>
