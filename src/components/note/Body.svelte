@@ -127,7 +127,7 @@
       >
     </div>
   </div>
-{:else if note.cw}
+{:else if note.cw != null}
   <button class="alert shadow-md mb-2" on:click={() => (showBody = !showBody)}>
     <div class="-m-2">
       <div class="badge badge-warning">CW</div>
@@ -141,7 +141,7 @@
     </div>
   </button>
 {/if}
-{#if (!note.cw || showBody) && !collapse}
+{#if (note.cw == null || showBody) && !collapse}
   {#if note.text}
     <p class="text-ellipsis overflow-hidden">
       <Mfm
