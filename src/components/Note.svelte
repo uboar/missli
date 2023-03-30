@@ -14,6 +14,7 @@
 
   let showReactionDeck = false;
   let collapse = false;
+  let remoteColor = "#0000";
 
   let noteElement: HTMLDivElement;
 
@@ -36,6 +37,10 @@
         timelineOptions.noteOption.noteHeight
     )
       collapse = true;
+
+    if (note.user.instance != null) {
+      remoteColor = note.user.instance.themeColor;
+    }
   });
 
   $: reactionId = () => {
@@ -49,8 +54,9 @@
 </script>
 
 <div
-  class="card card-bordered bg-base-100 w-full shadow-sm hover:border-neutral-focus"
+  class="card card-bordered bg-base-100 w-full shadow-sm"
   bind:this={noteElement}
+  style="border-color: {remoteColor}"
 >
   <div class="card-body {!compact ? '-my-6 -mx-4' : ' -my-2'}">
     <Body
@@ -131,3 +137,9 @@
     {/if}
   </div>
 </div>
+
+<style>
+  .a {
+    background-color: aqua;
+  }
+</style>
