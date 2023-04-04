@@ -262,9 +262,11 @@
         >
       {/if}
       <button
-        class="btn btn-block btn-sm btn-primary normal-case {noteBusy ||
-        disablePost() ||
-        user.busy
+        class="btn btn-block btn-sm {renoteNote
+          ? 'btn-accent'
+          : replyNote
+          ? 'btn-info'
+          : 'btn-primary'} normal-case {noteBusy || disablePost() || user.busy
           ? 'btn-disabled'
           : ''}"
         on:click={sendNote}

@@ -317,12 +317,12 @@
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <div
             class="relative w-full z-10"
-            on:click={() => {
+            on:mousedown={() => {
               if (options.autoCollapse) showNav = NAV.none;
             }}
           >
             {#each showNotes as note (note.id)}
-              <div class="my-1">
+              <div class="my-1 z-20">
                 <Note
                   {note}
                   {user}
