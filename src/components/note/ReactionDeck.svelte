@@ -45,19 +45,17 @@
           if (emoji.name.indexOf(text) >= 0) return true;
         })
         .slice(0, suggestEmojiNum);
-      filteredEmoji = user.emojis
-        .filter((emoji) => {
-          let flg = false;
-          if (emoji.name.indexOf(text) >= 0) return true;
-          for (let i = 0; i < emoji.aliases.length; i++) {
-            if (emoji.aliases[i].indexOf(text) >= 0) {
-              flg = true;
-              break;
-            }
+      filteredEmoji = user.emojis.filter((emoji) => {
+        let flg = false;
+        if (emoji.name.indexOf(text) >= 0) return true;
+        for (let i = 0; i < emoji.aliases.length; i++) {
+          if (emoji.aliases[i].indexOf(text) >= 0) {
+            flg = true;
+            break;
           }
-          return flg;
-        })
-        .slice(0, suggestEmojiNum);
+        }
+        return flg;
+      });
     }
     suggestedText = [];
 
@@ -76,7 +74,17 @@
       });
     });
 
-    suggestedText = suggestedText;
+    suggestedText = suggestedText
+      .sort((a, b) => {
+        if (b.name === text) {
+          return 1;
+        }
+        if (b.name.startsWith(text)) {
+          return 1;
+        }
+        return -1;
+      })
+      .slice(0, suggestEmojiNum);
   };
 
   const sendEmoji = async (isUnicodeEmoji?: string) => {
