@@ -134,6 +134,10 @@
         <span class="label-text">高さの大きいノートを自動で畳む</span>
         <input type="checkbox" bind:checked={options.noteOption.noteCollapse} class="checkbox" />
       </label>
+      <label class="label cursor-pointer">
+        <span class="label-text">連続ノートを制限する(Misskey.io向け)</span>
+        <input type="checkbox" bind:checked={options.lowRate} class="checkbox" />
+      </label>
       <span class="label-text">ノートの最大高さ</span>
       <input
         type="number"

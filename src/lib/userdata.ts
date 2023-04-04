@@ -38,6 +38,7 @@ export type UserData = {
   mainConnection?: Connection;
   notifyBuffer?: Array<Notification>;
   notifyUnOpen?: boolean;
+  busy?: boolean;
   emojis?: Array<{
     aliases?: Array<string>;
     name: string;
@@ -61,6 +62,7 @@ export type TimelineOptions = {
   isCollapsed?: boolean;
   autoCollapse?: boolean;
   notesBuffer?: Array<Note>;
+  lowRate?: boolean;
   noteOption?: {
     mediaHide: boolean;
     reactionHide: boolean;
@@ -164,6 +166,7 @@ export const getCookie = async () => {
       } else {
         usersBuff[i].emojis = [];
       }
+      usersBuff[i].busy = false;
       usersBuff[i].initializeEnded = true;
       users.set(usersBuff);
     } catch (err) {

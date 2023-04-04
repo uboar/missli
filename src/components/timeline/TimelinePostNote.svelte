@@ -18,6 +18,7 @@
     id: 0,
     noteOption: {
       mediaHide: false,
+      reactionSize: 16,
       reactionHide: false,
       cwShow: false,
       nsfwShow: false,
@@ -62,6 +63,7 @@
 
   const sendNote = async () => {
     noteBusy = true;
+    if (user.busy) return;
     try {
       let postNoteBuff = { ...postNote };
 
@@ -75,11 +77,17 @@
       }
 
       await user.cli.request("notes/create", postNoteBuff);
-      noteBusy = false;
       postNote.text = "";
       postNote.cw = "";
       renoteNote = null;
       replyNote = null;
+      noteBusy = false;
+      if (option.lowRate) {
+        user.busy = true;
+        window.setTimeout(() => {
+          user.busy = false;
+        }, 5000);
+      }
       if (!keepOpen) dispatch("breakRequest");
     } catch (err) {
       console.error(err);
@@ -255,7 +263,8 @@
       {/if}
       <button
         class="btn btn-block btn-sm btn-primary normal-case {noteBusy ||
-        disablePost()
+        disablePost() ||
+        user.busy
           ? 'btn-disabled'
           : ''}"
         on:click={sendNote}

@@ -42,6 +42,7 @@
     notesBuffer: [],
     isCollapsed: false,
     autoCollapse: true,
+    lowRate: false,
     noteOption: {
       mediaHide: false,
       reactionSize: 16,

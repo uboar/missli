@@ -68,6 +68,11 @@
       channelName: "",
     };
 
+    // misskey.ioの場合低レートモードを有効にする
+    if($users[selectedUserNum].hostUrl === "misskey.io"){
+      timeline.lowRate = true;
+    }
+
     if (TimelineApiEndpoint[channelTypes[selectedChannel].value] == null) {
       // タイムライン以外
       timeline.channelName = `${userChannels[selectedChannelNum].name} / ${$users[selectedUserNum].hostUrl}`;
