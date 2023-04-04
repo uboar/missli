@@ -10,6 +10,7 @@
   export let user: UserData;
   export let color = "accent";
   export let noteId = "";
+  export let size = 16;
   export let isReacted = false;
 
   const dispatch = createEventDispatcher();
@@ -63,28 +64,41 @@
 
 {#if name.indexOf("@.") >= 0}
   <button
-    class="badge {!isReacted ? 'badge-outline' : ''} badge-{color} h-5"
+    class="badge {!isReacted ? 'badge-outline' : ''} badge-{color} h-fit"
+    style="--reactionSize: {size + 'px'}"
     on:click={clickReaction}
     title={name}
   >
-    <img src={localEmojiSearch(name)} class="h-4" alt={name} />
+    <img src={localEmojiSearch(name)} alt={name} class="reaction-img" />
     {num}
   </button>
 {:else if name.indexOf("@") >= 0}
-  <span class="badge badge-outline h-5" title={name}>
-    <img src={remoteEmojiSearch(name)} class="h-4" alt={name} />
+  <span
+    class="badge badge-outline h-fit"
+    title={name}
+    style="--reactionSize: {size + 'px'}"
+  >
+    <img src={remoteEmojiSearch(name)} alt={name} class="reaction-img" />
     {num}
   </span>
 {:else}
   <button
     class="badge {!isReacted
       ? 'badge-outline'
-      : ''} badge-{color} h-5 unicode-emoji"
+      : ''} badge-{color} unicode-emoji h-fit"
     on:click={clickReaction}
+    style="--reactionSize: {size + 'px'}"
   >
-    <span class="h-4">
-      {@html twemoji.parse(name, { className: "object-scale-down h-4" })}
+    <span>
+      {@html twemoji.parse(name, { className: "reaction-img" })}
     </span>
     {num}
   </button>
 {/if}
+
+
+<style>
+  :global(.reaction-img) {
+    height: var(--reactionSize);
+  }
+</style>

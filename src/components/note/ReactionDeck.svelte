@@ -28,6 +28,7 @@
   export let user: UserData;
   export let noteId: string = "";
   export let customReactionDeck: Array<string> = [];
+  export let size = 16;
 
   let text = "";
   const dispatch = createEventDispatcher();
@@ -113,7 +114,7 @@
   });
 </script>
 
-<div class="card-actions">
+<div class="card-actions" style="--reactionSize: {size + 'px'}">
   <input
     type="text"
     bind:this={inputElem}
@@ -129,19 +130,19 @@
     {#each suggestedText as emoji, index}
       {#if !emoji.isUnicodeEmoji}
         <button
-          class="btn btn-xs btn-outline"
+          class="btn btn-xs btn-outline h-fit"
           on:click={() => pushBtn(index)}
           title={emoji.name}
         >
-          <img class="h-4" src={emoji.url} alt={emoji.name} />
+          <img class="reaction-img" src={emoji.url} alt={emoji.name} />
         </button>
       {:else}
         <button
-          class="btn btn-xs btn-outline"
+          class="btn btn-xs btn-outline h-fit"
           on:click={() => sendEmoji(emoji.value)}
         >
           {@html twemoji.parse(emoji.value, {
-            className: "object-scale-down h-4",
+            className: "object-scale-down reaction-img",
           })}
         </button>
       {/if}
@@ -151,19 +152,19 @@
     {#each customReactionDeck as reaction}
       {#if reaction.indexOf("@.") >= 0}
         <button
-          class="btn btn-xs btn-outline btn-success"
+          class="btn btn-xs btn-outline btn-success h-fit"
           on:click={() => directSendEmoji(reaction)}
           title={reaction.replace(/\:|@./gm, "")}
         >
           <img
-            class="h-4"
+            class="reaction-img"
             src={localEmojiSearch(reaction)}
             alt={reaction.replace(/\:|@./gm, "")}
           />
         </button>
       {:else}
         <button
-          class="btn btn-xs btn-outline btn-success"
+          class="btn btn-xs btn-outline btn-success h-fit"
           on:click={() => sendEmoji(reaction)}
         >
           {reaction}
@@ -172,3 +173,10 @@
     {/each}
   </div>
 </div>
+
+<style>
+  :global(.reaction-img) {
+    height: var(--reactionSize);
+    padding: 1px;
+  }
+</style>

@@ -241,6 +241,7 @@
           <ReactionDeck
             {user}
             customReactionDeck={option.reactionDeck}
+            size={option.noteOption.reactionSize}
             on:breakRequest={addEmoji}
           />
         </div>

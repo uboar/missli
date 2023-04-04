@@ -41,8 +41,10 @@
     reactionDeck: [],
     notesBuffer: [],
     isCollapsed: false,
+    autoCollapse: true,
     noteOption: {
       mediaHide: false,
+      reactionSize: 16,
       reactionHide: false,
       cwShow: false,
       nsfwShow: false,
@@ -311,7 +313,13 @@
           />
         {:else}
           <!-- ノート表示 -->
-          <div class="relative w-full z-10">
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <div
+            class="relative w-full z-10"
+            on:click={() => {
+              if (options.autoCollapse) showNav = NAV.none;
+            }}
+          >
             {#each showNotes as note (note.id)}
               <div class="my-1">
                 <Note

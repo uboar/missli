@@ -104,6 +104,16 @@
         class="input input-sm"
         bind:value={options.bufferNoteNum}
       />
+      <span class="label-text">リアクションの大きさ</span>
+      <input
+        type="number"
+        class="input input-sm"
+        bind:value={options.noteOption.reactionSize}
+      />
+      <label class="label cursor-pointer">
+        <span class="label-text">タイムラインをクリックした際に通知・ノート表示を畳む</span>
+        <input type="checkbox" bind:checked={options.autoCollapse} class="checkbox" />
+      </label>
       <label class="label cursor-pointer">
         <span class="label-text">メディアを表示しない</span>
         <input type="checkbox" bind:checked={options.noteOption.mediaHide} class="checkbox" />
@@ -180,6 +190,7 @@
     <div class="form-control mt-4">
       <ReactionDeck
         user={$users[options.userDataIndex]}
+        size={options.noteOption.reactionSize}
         on:breakRequest={addReaction}
         customReactionDeck={options.reactionDeck}
       />

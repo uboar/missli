@@ -131,6 +131,7 @@
       <ReactionDeck
         customReactionDeck={timelineOptions.reactionDeck}
         {user}
+        size={timelineOptions.noteOption.reactionSize}
         noteId={reactionId()}
         on:breakRequest={reactionDeckBreakRequest}
       />

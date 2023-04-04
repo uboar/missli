@@ -211,6 +211,7 @@
           {name}
           {num}
           {emojis}
+          size={option.reactionSize}
           reactionEmojis={note.reactionEmojis || {}}
           on:destroy={() => {
             destroyEmoji(name, note.reactions);
