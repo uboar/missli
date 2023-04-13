@@ -156,7 +156,7 @@
       {/if}
     {/each}
   </div>
-  <div class="flex flex-wrap gap-1">
+  <div class="flex flex-wrap gap-1 z-10">
     {#each customReactionDeck as reaction}
       {#if reaction.indexOf("@.") >= 0}
         <button
