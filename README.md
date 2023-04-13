@@ -26,6 +26,7 @@ MissLIは、[Misskey](https://join.misskey.page/ja-JP/)向けのサードパー�
 - Misskey v11以前での絵文字取得対応
 - ノートへのメディア添付
 - ノートに対する色々なアクション（お気に入り、クリップなど…）
+- Safari対応
 
 ## ⚒️使い方
 いつかかく
