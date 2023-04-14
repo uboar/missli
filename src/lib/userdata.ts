@@ -50,7 +50,7 @@ export type UserData = {
 export type TimelineOptions = {
   id: number;
   userDataIndex?: number;
-  channel?: keyof Channels;
+  channel?: keyof Channels | string;
   channelId?: string;
   channelName?: string;
   color?: string;

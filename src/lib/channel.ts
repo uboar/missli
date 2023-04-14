@@ -25,6 +25,10 @@ export const UserListApiEndPoint: Record<string, keyof Endpoints> = {
   userList: "notes/user-list-timeline",
 };
 
+export const RoleTimelineApiEndpoint: Record<string, keyof Endpoints> = {
+  roleTimeline: "roles/notes",
+};
+
 /**
  * @description タイムラインを初期化する
  * @param user
@@ -88,6 +92,19 @@ export const initializeTimeline = async (
       );
       streamChannel = user.stream.useChannel(timeline.channel, {
         listId: timeline.channelId,
+      });
+    } else if (RoleTimelineApiEndpoint[timeline.channel] != null) {
+      // ロール
+      
+      notesBuffer = await user.cli.request(
+        RoleTimelineApiEndpoint[timeline.channel],
+        {
+          roleId: timeline.channelId,
+          limit: getNotesNum,
+        }
+      );
+      streamChannel = user.stream.useChannel(timeline.channel, {
+        roleId: timeline.channelId,
       });
     }
 
@@ -159,6 +176,16 @@ export const getOldNotes = async (
           limit: getNotesNum,
           untilId: untilId,
           listId: timeline.channelId,
+        }
+      );
+    } else if (RoleTimelineApiEndpoint[timeline.channel] != null) {
+      // チャンネル
+      notesBuffer = await user.cli.request(
+        RoleTimelineApiEndpoint[timeline.channel],
+        {
+          limit: getNotesNum,
+          untilId: untilId,
+          roleId: timeline.channelId,
         }
       );
     }
@@ -350,7 +377,7 @@ const noteUpdateExecuter = (
 export const fixChannelData = (timeline: TimelineOptions): TimelineOptions => {
   if (
     new RegExp(
-      "globalTimeline|hybridTimeline|localTimeline|homeTimeline|channel|antenna|list|admin|hashtag|drive|main|queueStats|serverStats|userList"
+      "roleTimeline|globalTimeline|hybridTimeline|localTimeline|homeTimeline|channel|antenna|list|admin|hashtag|drive|main|queueStats|serverStats|userList"
     ).test(timeline.channel) === false
   ) {
     timeline.channelId = timeline.channel;

@@ -13,6 +13,7 @@
     { name: "チャンネル", value: "channel" },
     { name: "アンテナ", value: "antenna" },
     { name: "リスト", value: "userList" },
+    { name: "ロール", value: "roleTimeline"}
   ];
 
   let userChannels: Array<{ name: string; id: string }> = [];
@@ -42,6 +43,14 @@
         // リスト
         const buffer = await $users[selectedUserNum].cli.request(
           "users/lists/list"
+        );
+        userChannels = buffer.map((v) => {
+          return { name: v.name, id: v.id };
+        });
+      } else if (channelTypes[selectedChannel].value === "roleTimeline") {
+        //ロール
+        const buffer = await $users[selectedUserNum].cli.request(
+          "roles/list"
         );
         userChannels = buffer.map((v) => {
           return { name: v.name, id: v.id };
@@ -84,7 +93,9 @@
       timeline.channel = channelTypes[selectedChannel].value;
     }
 
+    console.log(timeline);
     timelines.update((val) => [...val, timeline]);
+    console.log($timelines)
   };
 </script>
 
@@ -122,7 +133,7 @@
       {#if TimelineApiEndpoint[channelTypes[selectedChannel].value] == null}
         <select
           bind:value={selectedChannelNum}
-          class="select select-bordered w-full"
+          class="select select-bordered w-full mt-2"
         >
           {#each userChannels as userChannel, index}
             <option value={index}>{userChannel.name}</option>
