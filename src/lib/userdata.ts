@@ -45,6 +45,12 @@ export type UserData = {
     category?: string;
     url: string;
   }>;
+  
+  localStorageOptions?: {
+    id: number;
+    ignoreCache?: boolean;
+    defaultTimelineOptions?: TimelineOptions;
+  }
 };
 
 export type TimelineOptions = {
@@ -128,6 +134,21 @@ export const getCookie = async () => {
 
   for (let i = 0; i < usersBuff.length; i++) {
     usersBuff[i].initializeEnded = false;
+
+    // localStorage設定の取得
+    const userLocalStorage = userLocal.filter(v => v.id === usersBuff[i].id)
+    if(userLocalStorage.length !== 1){
+      usersBuff[i].localStorageOptions = {
+        id: usersBuff[i].id,
+        ignoreCache: false,
+        defaultTimelineOptions: {
+          id: 0,
+        }
+      }
+    }else{
+      usersBuff[i].localStorageOptions = userLocalStorage[0];
+    }
+
     try {
       usersBuff[i].stream = new Stream(`https://${usersBuff[i].hostUrl}`, {
         token: usersBuff[i].token,
@@ -162,7 +183,7 @@ export const getCookie = async () => {
 
       // カスタム絵文字の取得
       if (!usersBuff[i].isOldVersion) {
-        await getEmojis(usersBuff[i]);
+        await getEmojis(usersBuff[i], usersBuff[i].localStorageOptions.ignoreCache);
       } else {
         usersBuff[i].emojis = [];
       }
@@ -207,7 +228,7 @@ export const deleteUser = (
     if (cookies === "") return [];
 
     const strArr = cookies.split("; ");
-    const users: Array<userData> = [];
+    const users: Array<UserData> = [];
     strArr.forEach((elem) => {
       users.push(JSON.parse(decodeURIComponent(elem.replace(/\d+=/, ""))));
     });
@@ -242,8 +263,13 @@ const settingsLocal = JSON.parse(
   localStorage.getItem("settings")
 ) as unknown as SettingsType;
 
+let userLocal = JSON.parse(
+  localStorage.getItem("users")
+) as unknown as Array<UserData["localStorageOptions"]>
+
 if (settingsLocal) settings.set({ ...get(settings), ...settingsLocal });
 if (timelineLocal) timelines.set(timelineLocal);
+if (!userLocal) userLocal = []; 
 
 window.addEventListener("beforeunload", () => {
   let timelinesBuffer = get(timelines);
@@ -253,8 +279,15 @@ window.addEventListener("beforeunload", () => {
     delete v.notesBuffer;
   });
 
+  
+  let userLocalStorage: Array<UserData["localStorageOptions"]> = []
+  get(users).forEach(v => {
+    userLocalStorage.push(v.localStorageOptions);
+  })
+
   localStorage.setItem("timelines", JSON.stringify(timelinesBuffer));
   localStorage.setItem("settings", JSON.stringify(settingsBuffer));
+  localStorage.setItem("users", JSON.stringify(userLocalStorage));
 });
 
 export const getEmojis = async (user: UserData, ignoreCache = false) => {

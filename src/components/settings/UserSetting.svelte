@@ -27,5 +27,10 @@
       <option value={index}>{user.userName}@{user.hostUrl}</option>
     {/each}
   </select>
-  <button class="btn btn-secondary" disabled={loading} on:click={reGetEmojis}>カスタム絵文字データの再取得</button>
+  
+  <label class="label cursor-pointer">
+    <span class="label-text">カスタム絵文字データを常に最新にする(起動時間が長くなります)</span>
+    <input type="checkbox" bind:checked={$users[selectedUserNum].localStorageOptions.ignoreCache} class="checkbox" />
+  </label>
+  <button class="btn btn-secondary btn-block mt-4" disabled={loading} on:click={reGetEmojis}>カスタム絵文字データの再取得</button>
 </div>
