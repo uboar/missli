@@ -20,7 +20,7 @@
 </script>
 
 <!-- メディア内容 -->
-<div class="w-full">
+<div class="w-full my-2">
   {#if files.length > 0}
     {#if !mediaHide}
       <div class="relative w-full flex justify-center max-h-64 min-h-16">
