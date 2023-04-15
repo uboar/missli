@@ -1,7 +1,7 @@
 import type { Endpoints } from "misskey-js";
 import type { Note } from "misskey-js/built/entities";
 import type { Connection } from "misskey-js/built/streaming";
-import type { TimelineOptions, UserData } from "./userdata";
+import type { TimelineOptions, UserData } from "../types/type";
 import uniqBy from "lodash/uniqBy";
 import remove from "lodash/remove";
 import type { NoteUpdatedEvent } from "misskey-js/built/streaming.types";
@@ -357,10 +357,6 @@ const noteUpdateExecuter = (
         note.reactionEmojis[e.body.emoji.name] = e.body.emoji.url;
       }
       note.reactions[e.body.reaction]--;
-    } else if (e.type === "deleted") {
-      timeline.notesBuffer.splice(noteIndex, 1);
-      timeline.notesBuffer = [...timeline.notesBuffer];
-      unSubscribeNote(user, timeline, subscribedNotesId, e.id);
     }
   } catch (e) {
     console.error(e);

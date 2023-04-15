@@ -2,10 +2,10 @@
   import type { Note as NoteType } from "misskey-js/built/entities";
   import { createEventDispatcher, onMount, tick } from "svelte";
   import type {
-    postNote as postNoteType,
+    PostNote as postNoteType,
     TimelineOptions,
     UserData,
-  } from "../../lib/userdata";
+  } from "../../types/type";
   import Note from "../Note.svelte";
   import Mfm from "../Mfm.svelte";
   import ReactionDeck from "../note/ReactionDeck.svelte";

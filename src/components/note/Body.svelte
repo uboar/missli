@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Note as NoteType } from "misskey-js/built/entities";
-  import type { TimelineOptions, UserData } from "../../lib/userdata";
+  import type { TimelineOptions, UserData } from "../../types/type";
   import User from "./User.svelte";
   import Mfm from "../Mfm.svelte";
   import Media from "./Media.svelte";
@@ -136,6 +136,7 @@
           bind:text={note.cw}
           hostUrl={user.hostUrl}
           localEmojis={user.emojis.length === 0 ? note.emojis : user.emojis}
+          remoteEmojis={note.emojis}
         />
       </div>
     </div>

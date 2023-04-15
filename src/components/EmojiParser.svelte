@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { UserData } from "../lib/userdata";
+  import type { UserData } from "../types/type";
   import twemoji from "twemoji";
   let src = "";
 

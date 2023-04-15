@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { Notification } from "misskey-js/built/entities";
   import { onMount } from "svelte";
-  import { moment, type UserData, type users } from "../../lib/userdata";
+  import { moment } from "../../lib/userdata";
+  import type { UserData } from "../../types/type";
   import EmojiParser from "../EmojiParser.svelte";
   import MfmLite from "../MfmLite.svelte";
   import uniqBy from "lodash/uniqBy";

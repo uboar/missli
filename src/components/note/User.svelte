@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { User } from "misskey-js/built/entities";
-  import type { UserData } from "../../lib/userdata";
+  import type { UserData } from "../../types/type";
   import MfmLite from "../MfmLite.svelte";
 
   export let user: User;

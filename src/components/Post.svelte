@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { users, type postNote as postNoteType } from "../lib/userdata";
+  import { users } from "../lib/userdata";
+  import type { PostNote } from "../types/type";
 
-  let postNote: postNoteType = {
+  let postNote: PostNote = {
     text: "",
     localOnly: false,
     cw: "",

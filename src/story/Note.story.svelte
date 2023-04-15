@@ -3,7 +3,7 @@
   import "../tailwind.css";
   import type { Note as NoteType } from "misskey-js/built/entities";
   import Note from "../components/Note.svelte";
-  import type { UserData } from "../lib/userdata";
+  import type { UserData } from "../types/type";
   export let Hst: Hst;
 
   let note: NoteType = {

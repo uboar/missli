@@ -2,7 +2,8 @@
   import type { Stream } from "misskey-js";
   import type { Note } from "misskey-js/built/entities";
   import { createEventDispatcher, onMount } from "svelte";
-  import { type UserData, moment, type TimelineOptions } from "../lib/userdata";
+  import { moment } from "../lib/userdata";
+  import type { UserData, TimelineOptions } from "../types/type";
   import Body from "./note/Body.svelte";
   import ReactionDeck from "./note/ReactionDeck.svelte";
 

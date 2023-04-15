@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import { users, type TimelineOptions } from "../../lib/userdata";
+  import { users } from "../../lib/userdata";
+  import type {TimelineOptions} from "../../types/type";
   import ReactionDeck from "../note/ReactionDeck.svelte";
 
   export let options: TimelineOptions;

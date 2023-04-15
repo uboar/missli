@@ -2,7 +2,7 @@
   import { version } from "../../package.json";
   import { onMount } from "svelte";
   import { users, setCookie, deleteUser } from "../lib/userdata";
-  import type { UserData } from "../lib/userdata";
+  import type { UserData } from "../types/type";
   import { Stream, api } from "misskey-js";
 
   let hostUrl = "";

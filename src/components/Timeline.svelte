@@ -4,8 +4,9 @@
   import type {
     UserData,
     TimelineOptions as Option,
-    postNote as postNoteType,
-  } from "../lib/userdata";
+    PostNote as postNoteType,
+  } from "../types/type";
+
   import type { Note as NoteType } from "misskey-js/built/entities";
   import type { Connection } from "misskey-js/built/streaming";
   import { timelines } from "../lib/userdata";

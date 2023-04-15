@@ -1,89 +1,13 @@
 import { writable, get } from "svelte/store";
 import { Stream, api } from "misskey-js";
-import type {
-  Channels,
-  NoteUpdatedEvent,
-} from "misskey-js/built/streaming.types";
-import type { Note, Notification } from "misskey-js/built/entities";
 import m from "moment/min/moment-with-locales.min.js";
 import uniqBy from "lodash/uniqBy";
 import "moment/locale/ja";
-import type { Connection } from "misskey-js/built/streaming";
+import type { SettingsType, UserData, TimelineOptions } from "../types/type";
 
 m.locale("ja");
 
 export const moment = m;
-
-export type postNote = {
-  text: string;
-  visibility?: "public" | "home" | "followers" | "specified";
-  cw?: string;
-  localOnly?: boolean;
-  replyId?: string;
-  renoteId?: string;
-  channelId?: string;
-};
-
-export type UserData = {
-  initializeEnded?: boolean;
-  ok: boolean;
-  isOldVersion?: boolean;
-  id: number;
-  sessionId?: string;
-  token: string;
-  userName: string;
-  hostUrl: string;
-  stream?: Stream;
-  cli?: api.APIClient;
-  mainConnection?: Connection;
-  notifyBuffer?: Array<Notification>;
-  notifyUnOpen?: boolean;
-  busy?: boolean;
-  emojis?: Array<{
-    aliases?: Array<string>;
-    name: string;
-    category?: string;
-    url: string;
-  }>;
-
-  localStorageOptions?: {
-    id: number;
-    ignoreCache?: boolean;
-    defaultTimelineOptions?: TimelineOptions;
-  };
-};
-
-export type TimelineOptions = {
-  id: number;
-  userDataIndex?: number;
-  channel?: keyof Channels | string;
-  channelId?: string;
-  channelName?: string;
-  color?: string;
-  width?: string;
-  showNoteNum?: number;
-  bufferNoteNum?: number;
-  initialNotes?: Array<Note>;
-  reactionDeck?: Array<string>;
-  isCollapsed?: boolean;
-  autoCollapse?: boolean;
-  notesBuffer?: Array<Note>;
-  lowRate?: boolean;
-  noteOption?: {
-    mediaHide: boolean;
-    reactionHide: boolean;
-    reactionSize: number;
-    cwShow: boolean;
-    nsfwShow: boolean;
-    noteCollapse: boolean;
-    noteHeight?: number;
-  };
-};
-
-export type SettingsType = {
-  theme?: string;
-  notifyBufferNum: number;
-};
 
 export const settings = writable<SettingsType>({
   theme: "light",

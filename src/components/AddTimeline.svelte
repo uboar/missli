@@ -1,6 +1,8 @@
 <script lang="ts">
   import { TimelineApiEndpoint } from "../lib/channel";
-  import { users, timelines, type TimelineOptions } from "../lib/userdata";
+  import { users, timelines } from "../lib/userdata";
+  import type { TimelineOptions } from "../types/type";
+  
   let selectedChannel = 0;
   let selectedUserNum = 0;
   let selectedChannelNum = -1;
@@ -13,7 +15,7 @@
     { name: "チャンネル", value: "channel" },
     { name: "アンテナ", value: "antenna" },
     { name: "リスト", value: "userList" },
-    { name: "ロール", value: "roleTimeline"}
+    { name: "ロール", value: "roleTimeline" },
   ];
 
   let userChannels: Array<{ name: string; id: string }> = [];
@@ -49,9 +51,7 @@
         });
       } else if (channelTypes[selectedChannel].value === "roleTimeline") {
         //ロール
-        const buffer = await $users[selectedUserNum].cli.request(
-          "roles/list"
-        );
+        const buffer = await $users[selectedUserNum].cli.request("roles/list");
         userChannels = buffer.map((v) => {
           return { name: v.name, id: v.id };
         });
@@ -78,7 +78,7 @@
     };
 
     // misskey.ioの場合低レートモードを有効にする
-    if($users[selectedUserNum].hostUrl === "misskey.io"){
+    if ($users[selectedUserNum].hostUrl === "misskey.io") {
       timeline.lowRate = true;
     }
 
@@ -95,7 +95,7 @@
 
     console.log(timeline);
     timelines.update((val) => [...val, timeline]);
-    console.log($timelines)
+    console.log($timelines);
   };
 </script>
 
