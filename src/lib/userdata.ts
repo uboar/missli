@@ -1,5 +1,5 @@
 import { writable, get } from "svelte/store";
-import { Stream, api } from "misskey-js";
+import { Stream, api } from "@misskey-js";
 import m from "moment/min/moment-with-locales.min.js";
 import uniqBy from "lodash/uniqBy";
 import "moment/locale/ja";

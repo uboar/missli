@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Hst } from "@histoire/plugin-svelte";
   import "../tailwind.css";
-  import type { Note as NoteType } from "misskey-js/built/entities";
+  import type { Note as NoteType } from "@misskey-js/entities";
   import Note from "../components/Note.svelte";
   import type { UserData } from "../types/type";
   export let Hst: Hst;

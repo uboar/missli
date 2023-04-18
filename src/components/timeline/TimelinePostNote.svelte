@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Note as NoteType } from "misskey-js/built/entities";
+  import type { Note as NoteType } from "@misskey-js/entities";
   import { createEventDispatcher, onMount, tick } from "svelte";
   import type {
     PostNote as postNoteType,

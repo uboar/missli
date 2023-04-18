@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { User } from "misskey-js/built/entities";
+  import type { User } from "@misskey-js/entities";
   import type { UserData } from "../../types/type";
   import MfmLite from "../MfmLite.svelte";
 

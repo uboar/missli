@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Stream } from "misskey-js";
-  import type { Note } from "misskey-js/built/entities";
+  import type { Stream } from "@misskey-js";
+  import type { Note } from "@misskey-js/entities";
   import { createEventDispatcher, onMount } from "svelte";
   import { moment } from "../lib/userdata";
   import type { UserData, TimelineOptions } from "../types/type";

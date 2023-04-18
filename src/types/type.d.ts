@@ -1,10 +1,10 @@
 import type {
   Channels,
   NoteUpdatedEvent,
-} from "misskey-js/built/streaming.types";
-import type { Note, Notification } from "misskey-js/built/entities";
-import type { Connection } from "misskey-js/built/streaming";
-import { Stream, api } from "misskey-js";
+} from "@misskey-js/streaming.types";
+import type { Note, Notification } from "@misskey-js/entities";
+import type { Connection } from "@misskey-js/streaming";
+import { Stream, api } from "@misskey-js";
 
 export type PostNote = {
   text: string;
@@ -48,7 +48,7 @@ export type UserData = {
 export type TimelineOptions = {
   id: number;
   userDataIndex?: number;
-  channel?: keyof Channels | string;
+  channel?: keyof Channels;
   channelId?: string;
   channelName?: string;
   color?: string;

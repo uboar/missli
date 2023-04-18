@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import { users, setCookie, deleteUser } from "../lib/userdata";
   import type { UserData } from "../types/type";
-  import { Stream, api } from "misskey-js";
+  import { Stream, api } from "@misskey-js";
 
   let hostUrl = "";
   let busy = false;

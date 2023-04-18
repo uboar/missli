@@ -1,10 +1,10 @@
-import type { Endpoints } from "misskey-js";
-import type { Note } from "misskey-js/built/entities";
-import type { Connection } from "misskey-js/built/streaming";
+import type { Endpoints } from "@misskey-js";
+import type { Note } from "@misskey-js/entities";
+import type { Connection } from "@misskey-js/streaming";
 import type { TimelineOptions, UserData } from "../types/type";
 import uniqBy from "lodash/uniqBy";
 import remove from "lodash/remove";
-import type { NoteUpdatedEvent } from "misskey-js/built/streaming.types";
+import type { NoteUpdatedEvent } from "@misskey-js/streaming.types";
 
 export const TimelineApiEndpoint: Record<string, keyof Endpoints> = {
   globalTimeline: "notes/global-timeline",
@@ -55,7 +55,9 @@ export const initializeTimeline = async (
         }
       );
 
-      streamChannel = user.stream.useChannel(timeline.channel);
+      streamChannel = user.stream.useChannel(
+        timeline.channel
+      ) as unknown as Connection;
     } else if (ChannelApiEndPoint[timeline.channel] != null) {
       // チャンネル
       notesBuffer = await user.cli.request(
@@ -68,7 +70,7 @@ export const initializeTimeline = async (
 
       streamChannel = user.stream.useChannel(timeline.channel, {
         channelId: timeline.channelId,
-      });
+      }) as unknown as Connection;
     } else if (AntennaApiEndPoint[timeline.channel] != null) {
       // アンテナ
       notesBuffer = await user.cli.request(
@@ -80,7 +82,7 @@ export const initializeTimeline = async (
       );
       streamChannel = user.stream.useChannel(timeline.channel, {
         antennaId: timeline.channelId,
-      });
+      }) as unknown as Connection;
     } else if (UserListApiEndPoint[timeline.channel] != null) {
       // リスト
       notesBuffer = await user.cli.request(
@@ -92,10 +94,10 @@ export const initializeTimeline = async (
       );
       streamChannel = user.stream.useChannel(timeline.channel, {
         listId: timeline.channelId,
-      });
+      }) as unknown as Connection;
     } else if (RoleTimelineApiEndpoint[timeline.channel] != null) {
       // ロール
-      
+
       notesBuffer = await user.cli.request(
         RoleTimelineApiEndpoint[timeline.channel],
         {
@@ -105,7 +107,7 @@ export const initializeTimeline = async (
       );
       streamChannel = user.stream.useChannel(timeline.channel, {
         roleId: timeline.channelId,
-      });
+      }) as unknown as Connection;
     }
 
     notesBuffer.forEach((note) => {

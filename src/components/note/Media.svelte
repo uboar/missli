@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Note } from "misskey-js/built/entities";
+  import type { Note } from "@misskey-js/entities";
   import type { TimelineOptions } from "../../types/type";
 
   export let files: Note["files"];

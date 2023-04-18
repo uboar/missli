@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Note as NoteType } from "misskey-js/built/entities";
+  import type { Note as NoteType } from "@misskey-js/entities";
   import type { TimelineOptions, UserData } from "../../types/type";
   import User from "./User.svelte";
   import Mfm from "../Mfm.svelte";

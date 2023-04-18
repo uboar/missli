@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Notification } from "misskey-js/built/entities";
+  import type { Notification } from "@misskey-js/entities";
   import { onMount } from "svelte";
   import { moment } from "../../lib/userdata";
   import type { UserData } from "../../types/type";
