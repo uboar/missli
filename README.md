@@ -35,6 +35,7 @@ MissLIは、[Misskey](https://join.misskey.page/ja-JP/)向けのサードパー�
 
 ``` sh
 pnpm install
+bash init_misskey_js.sh
 pnpm dev
 ```
 
