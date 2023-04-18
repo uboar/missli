@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Auth from "./Auth.svelte";
+  import Auth from "@/components/Auth.svelte";
   import { version } from "../../package.json";
-  import { settings } from "../lib/userdata";
-  import UserSetting from "./settings/UserSetting.svelte";
+  import { settings } from "@/lib/userdata";
+  import UserSetting from "@/components/settings/UserSetting.svelte";
 
   let selectedTab = 0;
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { User } from "@misskey-js/entities";
-  import type { UserData } from "../../types/type";
-  import MfmLite from "../MfmLite.svelte";
+  import type { UserData } from "@/types/type";
+  import MfmLite from "@/components/MfmLite.svelte";
 
   export let user: User;
   export let hostUrl: string;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getEmojis, users } from "../../lib/userdata";
+  import { getEmojis, users } from "@/lib/userdata";
 
   let loading = false;
   let selectedUserNum = 0;

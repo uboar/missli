@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { Notification } from "@misskey-js/entities";
   import { onMount } from "svelte";
-  import { moment } from "../../lib/userdata";
-  import type { UserData } from "../../types/type";
-  import EmojiParser from "../EmojiParser.svelte";
-  import MfmLite from "../MfmLite.svelte";
+  import { moment } from "@/lib/userdata";
+  import type { UserData } from "@/types/type";
+  import EmojiParser from "@/components/EmojiParser.svelte";
+  import MfmLite from "@/components/MfmLite.svelte";
   import uniqBy from "lodash/uniqBy";
 
   export let user: UserData | null = null;

@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as mfm from "mfm-js";
   import { onMount } from "svelte";
-  import type { UserData } from "../types/type";
+  import type { UserData } from "@/types/type";
   import twemoji from "twemoji";
 
   $: localEmojiSearch;

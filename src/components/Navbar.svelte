@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { version } from "../../package.json";
-  import { users } from "../lib/userdata";
-  import AddTimeline from "./AddTimeline.svelte";
-  import Post from "./Post.svelte";
-  import Settings from "./Settings.svelte";
-  import VersionNotify from "./VersionNotify.svelte";
+  import { users } from "@/lib/userdata";
+  import AddTimeline from "@/components/AddTimeline.svelte";
+  import Post from "@/components/Post.svelte";
+  import Settings from "@/components/Settings.svelte";
+  import VersionNotify from "@/components/VersionNotify.svelte";
 
   let notifyModal: HTMLInputElement = document.createElement("input");
 

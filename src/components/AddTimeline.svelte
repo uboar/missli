@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { TimelineApiEndpoint } from "../lib/channel";
-  import { users, timelines } from "../lib/userdata";
-  import type { TimelineOptions } from "../types/type";
+  import { TimelineApiEndpoint } from "@/lib/channel";
+  import { users, timelines } from "@/lib/userdata";
+  import type { TimelineOptions } from "@/types/type";
   
   let selectedChannel = 0;
   let selectedUserNum = 0;

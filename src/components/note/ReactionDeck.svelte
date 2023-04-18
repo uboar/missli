@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
-  import type { UserData } from "../../types/type";
-  import unicodeEmojis from "../../assets/unicodeEmojis.json";
+  import type { UserData } from "@/types/type";
+  import unicodeEmojis from "@/assets/unicodeEmojis.json";
   import twemoji from "twemoji";
 
   const suggestEmojiNum = 20;

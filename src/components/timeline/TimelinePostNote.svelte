@@ -5,10 +5,10 @@
     PostNote as postNoteType,
     TimelineOptions,
     UserData,
-  } from "../../types/type";
-  import Note from "../Note.svelte";
-  import Mfm from "../Mfm.svelte";
-  import ReactionDeck from "../note/ReactionDeck.svelte";
+  } from "@/types/type";
+  import Note from "@/components/Note.svelte";
+  import Mfm from "@/components/Mfm.svelte";
+  import ReactionDeck from "@/components/note/ReactionDeck.svelte";
 
   export let postNote: postNoteType;
   export let user: UserData | null = null;

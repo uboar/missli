@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { users } from "../lib/userdata";
-  import type { PostNote } from "../types/type";
+  import { users } from "@/lib/userdata";
+  import type { PostNote } from "@/types/type";
 
   let postNote: PostNote = {
     text: "",

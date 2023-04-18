@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { Note as NoteType } from "@misskey-js/entities";
-  import type { TimelineOptions, UserData } from "../../types/type";
-  import User from "./User.svelte";
-  import Mfm from "../Mfm.svelte";
-  import Media from "./Media.svelte";
-  import Reaction from "./Reaction.svelte";
+  import type { TimelineOptions, UserData } from "@/types/type";
+  import User from "@/components/note/User.svelte";
+  import Mfm from "@/components/Mfm.svelte";
+  import Media from "@/components/note/Media.svelte";
+  import Reaction from "@/components/note/Reaction.svelte";
   import { onMount } from "svelte";
 
   export let user: UserData;

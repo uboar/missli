@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { UserData } from "../../types/type";
+  import type { UserData } from "@/types/type";
   import twemoji from "twemoji";
 
   export let name: string;
