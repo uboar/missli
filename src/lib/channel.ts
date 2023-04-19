@@ -1,4 +1,4 @@
-import type { Endpoints } from "@misskey-js";
+import type { Endpoints } from "@misskey-js/api.types";
 import type { Note } from "@misskey-js/entities";
 import type { Connection } from "@misskey-js/streaming";
 import type { TimelineOptions, UserData } from "../types/type";
