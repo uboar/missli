@@ -24,7 +24,7 @@
   {#if files.length > 0}
     {#if !mediaHide}
       <div
-        class="relative w-full flex justify-center h-64 media"
+        class="relative w-full flex justify-center media"
         style="--mediaSize: {option.mediaSize + 'px'}"
       >
         {#if file.type.indexOf("image") >= 0}
@@ -87,7 +87,7 @@
     {:else}
       <button
         class="btn btn-info btn-block btn-sm my-1"
-        on:click={() => (mediaHide = false)}>観覧注意メディアを見る</button
+        on:click={() => (mediaHide = false)}>メディアを見る</button
       >
     {/if}
   {/if}
