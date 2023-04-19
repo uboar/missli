@@ -100,11 +100,14 @@
 </div>
 {#if note.replyId}
   <a
-    class="badge badge-sm -mb-1"
+    class="tooltip tooltip-right w-fit"
+    data-tip="返信元のノートを開く"
     href={`https://${user.hostUrl}/notes/${note.replyId}`}
     target="_blank"
-    rel="noreferrer">↩️返信</a
+    rel="noreferrer"
   >
+    <span class="badge badge-sm -mb-1">↩️返信</span>
+  </a>
 {/if}
 
 {#if collapse && ((note.text && note.renote) || !note.renote)}
