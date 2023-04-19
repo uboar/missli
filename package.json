@@ -30,6 +30,7 @@
     "vite": "^4.2.1"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.9",
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "daisyui": "^2.51.5",
     "emoji-name-map": "^1.2.9",

@@ -4,15 +4,13 @@
   import { marked } from "marked";
 
   let md = "";
-  marked.setOptions({
-    breaks: true,
-  });
   onMount(async () => {
     md = (
       await (
         await fetch("https://api.github.com/repos/uboar/missli/releases/latest")
       ).json()
     ).body;
+    console.log(md);
   });
 </script>
 
@@ -21,7 +19,9 @@
   <div class="text-lg font-bold">
     Version {version}
   </div>
-  {@html marked(md)}
+  <article class="prose max-h-64 overflow-y-scroll overscroll-y-none my-2">
+    {@html marked(md)}
+  </article>
   <div>
     <a
       href="https://github.com/uboar/missli/releases"
