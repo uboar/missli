@@ -20,6 +20,7 @@
     notesUpdate,
     onNote,
   } from "../lib/channel";
+  import TimelineLinks from "./timeline/TimelineLinks.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -61,6 +62,7 @@
     note: 1,
     notify: 2,
     settings: 3,
+    links: 4,
   };
 
   let subscribedNotesId: Array<string> = [];
@@ -384,57 +386,54 @@
       {#if showNav === NAV.notify}
         <TimelineNotify bind:user />
       {/if}
-      <div class="flex my-1 justify-around">
-        <!-- 通知ボタン -->
-        <div
-          class="tooltip"
-          data-tip={showNav === NAV.notify ? "閉じる" : "通知"}
-        >
+      {#if showNav === NAV.links}
+        <TimelineLinks {options} {user} />
+      {/if}
+      <div class="mx-2">
+        <div class="btn-group w-full">
+          <!-- 通知ボタン -->
           <button
-            class="indicator group"
+            class="btn w-1/3 btn-outline tooltip fill-base-content hover:fill-base-100"
+            data-tip={showNav === NAV.notify ? "閉じる" : "通知"}
             on:click={() =>
               (showNav = showNav === NAV.notify ? NAV.none : NAV.notify)}
           >
-            {#if user.notifyUnOpen}
-              <span class="indicator-item flex">
-                <span
-                  class="animate-ping absolute top-0 right-0 inline-flex h-4 w-4 rounded-full bg-secondary opacity-75"
-                />
-                <span
-                  class="absolute inline-flex top-0 right-0 rounded-full h-4 w-4 bg-secondary"
-                />
-              </span>
-            {/if}
-            <button
-              class="btn btn-circle btn-outline fill-base-content hover:fill-base-100"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                class="h-8 w-8"
-                ><path
-                  d={showNav === NAV.notify
-                    ? "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
-                    : "M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4A2,2 0 0,1 12,2A2,2 0 0,1 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21"}
-                /></svg
-              >
-            </button>
+            <div class="indicator group">
+              {#if user.notifyUnOpen}
+                <span class="indicator-item flex">
+                  <span
+                    class="animate-ping absolute top-0 right-0 inline-flex h-4 w-4 rounded-full bg-secondary opacity-75"
+                  />
+                  <span
+                    class="absolute inline-flex top-0 right-0 rounded-full h-4 w-4 bg-secondary"
+                  />
+                </span>
+              {/if}
+              <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  class="h-8 w-full"
+                  ><path
+                    d={showNav === NAV.notify
+                      ? "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                      : "M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4A2,2 0 0,1 12,2A2,2 0 0,1 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21"}
+                  /></svg
+                >
+              </div>
+            </div>
           </button>
-        </div>
-        <!-- ノートボタン -->
-        <div
-          class="tooltip"
-          data-tip={showNav === NAV.note ? "閉じる" : "ノート"}
-        >
+          <!-- ノートボタン -->
           <button
-            class="btn btn-circle btn-primary fill-base-100"
+            class="btn btn-primary w-1/3 fill-base-100 tooltip"
             on:click={() =>
               (showNav = showNav === NAV.note ? NAV.none : NAV.note)}
+            data-tip={showNav === NAV.note ? "閉じる" : "ノート"}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              class="h-8 w-8"
+              class="h-8 w-full"
               ><path
                 d={showNav === NAV.note
                   ? "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
@@ -442,15 +441,30 @@
               /></svg
             >
           </button>
-        </div>
-
-        <!-- 設定ボタン -->
-        <div
-          class="tooltip"
-          data-tip={showNav === NAV.settings ? "閉じる" : "タイムラインの設定"}
-        >
+          <!-- リンクボタン -->
           <button
-            class="btn btn-circle btn-outline fill-base-content hover:fill-base-100"
+            class="tooltip btn btn-outline fill-base-content hover:fill-base-100"
+            data-tip={showNav === NAV.links ? "閉じる" : "リンク"}
+            on:click={() =>
+              (showNav = showNav === NAV.links ? NAV.none : NAV.links)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              class="h-8 w-8"
+              ><path
+                d={showNav === NAV.links
+                  ? "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                  : "M3.9,12C3.9,10.29 5.29,8.9 7,8.9H11V7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H11V15.1H7C5.29,15.1 3.9,13.71 3.9,12M8,13H16V11H8V13M17,7H13V8.9H17C18.71,8.9 20.1,10.29 20.1,12C20.1,13.71 18.71,15.1 17,15.1H13V17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7Z"}
+              /></svg
+            >
+          </button>
+          <!-- 設定ボタン -->
+          <button
+            class="tooltip btn btn-outline fill-base-content hover:fill-base-100"
+            data-tip={showNav === NAV.settings
+              ? "閉じる"
+              : "タイムラインの設定"}
             on:click={() =>
               (showNav = showNav === NAV.settings ? NAV.none : NAV.settings)}
           >
