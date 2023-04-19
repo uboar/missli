@@ -20,10 +20,13 @@
 </script>
 
 <!-- メディア内容 -->
-<div class="w-full my-2">
+<div class="w-full my-2 bg-base-300 rounded-lg">
   {#if files.length > 0}
     {#if !mediaHide}
-      <div class="relative w-full flex justify-center max-h-64 min-h-16">
+      <div
+        class="relative w-full flex justify-center h-64 media"
+        style="--mediaSize: {option.mediaSize + 'px'}"
+      >
         {#if file.type.indexOf("image") >= 0}
           <a
             href={file.url}
@@ -34,10 +37,10 @@
             <img
               src={file.thumbnailUrl}
               alt={file.name}
-              class="object-contain rounded-lg max-h-64 {file.isSensitive &&
-              !option.nsfwShow
+              class="object-contain media {file.isSensitive && !option.nsfwShow
                 ? 'blur-lg'
                 : ''}"
+              style="--mediaSize: {option.mediaSize + 'px'}"
             />
           </a>
         {:else if file.type.indexOf("video") >= 0}
@@ -80,22 +83,29 @@
             >
           </div>
         {/if}
-        {#if files.length > 1}
-          <div
-            class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2"
-          >
-            <button
-              class="btn btn-circle btn-sm opacity-70"
-              on:click={previousFile}>❮</button
-            >
-            <button class="btn btn-circle btn-sm opacity-70" on:click={nextFile}
-              >❯</button
-            >
-          </div>
-        {/if}
       </div>
     {:else}
-      <button class="btn btn-info btn-block btn-sm my-1" on:click={() => mediaHide = false}>メディアを見る</button>
+      <button
+        class="btn btn-info btn-block btn-sm my-1"
+        on:click={() => (mediaHide = false)}>観覧注意メディアを見る</button
+      >
     {/if}
   {/if}
 </div>
+{#if files.length > 1}
+  <div class="alert z-10">
+    <div class="flex w-full -my-2">
+      <button class="btn btn-sm w-1/3" on:click={previousFile}>❮</button>
+      <div class="text-center w-1/3">
+        {index + 1} / {files.length}
+      </div>
+      <button class="btn btn-sm w-1/3" on:click={nextFile}>❯</button>
+    </div>
+  </div>
+{/if}
+
+<style>
+  :global(.media) {
+    height: var(--mediaSize);
+  }
+</style>

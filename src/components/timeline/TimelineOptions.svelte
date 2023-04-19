@@ -111,6 +111,12 @@
         class="input input-sm"
         bind:value={options.noteOption.reactionSize}
       />
+      <span class="label-text">メディアの高さ</span>
+      <input
+        type="number"
+        class="input input-sm"
+        bind:value={options.noteOption.mediaSize}
+      />
       <label class="label cursor-pointer">
         <span class="label-text">タイムラインをクリックした際に通知・ノート表示を畳む</span>
         <input type="checkbox" bind:checked={options.autoCollapse} class="checkbox" />

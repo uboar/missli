@@ -63,6 +63,7 @@ export type TimelineOptions = {
   lowRate?: boolean;
   noteOption?: {
     mediaHide: boolean;
+    mediaSize: number;
     reactionHide: boolean;
     reactionSize: number;
     cwShow: boolean;

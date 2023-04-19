@@ -46,6 +46,7 @@
     lowRate: false,
     noteOption: {
       mediaHide: false,
+      mediaSize: 256,
       reactionSize: 16,
       reactionHide: false,
       cwShow: false,
