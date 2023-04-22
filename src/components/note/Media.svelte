@@ -24,8 +24,7 @@
   {#if files.length > 0}
     {#if !mediaHide}
       <div
-        class="relative w-full flex justify-center media"
-        style="--mediaSize: {option.mediaSize + 'px'}"
+        class="relative w-full flex justify-center"
       >
         {#if file.type.indexOf("image") >= 0}
           <a
