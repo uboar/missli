@@ -266,6 +266,8 @@
     showNav = NAV.note;
   };
   let replyNote: NoteType | null = null;
+
+  $: iconSize = (options.width !== "12rem") ? "8" : "4"
 </script>
 
 {#if !options.isCollapsed}
@@ -389,7 +391,7 @@
       {#if showNav === NAV.links}
         <TimelineLinks {options} {user} />
       {/if}
-      <div class="mx-2">
+      <div>
         <div class="btn-group w-full">
           <!-- 通知ボタン -->
           <button
@@ -413,7 +415,7 @@
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
-                  class="h-8 w-full"
+                  class="h-{iconSize} w-full"
                   ><path
                     d={showNav === NAV.notify
                       ? "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
@@ -433,7 +435,7 @@
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              class="h-8 w-full"
+              class="h-{iconSize} w-full"
               ><path
                 d={showNav === NAV.note
                   ? "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
@@ -443,7 +445,7 @@
           </button>
           <!-- リンクボタン -->
           <button
-            class="tooltip btn btn-outline fill-base-content hover:fill-base-100"
+            class="tooltip btn btn-outline fill-base-content hover:fill-base-100 w-1/6"
             data-tip={showNav === NAV.links ? "閉じる" : "リンク"}
             on:click={() =>
               (showNav = showNav === NAV.links ? NAV.none : NAV.links)}
@@ -451,7 +453,7 @@
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              class="h-8 w-8"
+              class="{(options.width === "12rem") ? "-ml-2 h-4 w-4" : "h-8 w-8"}"
               ><path
                 d={showNav === NAV.links
                   ? "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
@@ -461,7 +463,7 @@
           </button>
           <!-- 設定ボタン -->
           <button
-            class="tooltip btn btn-outline fill-base-content hover:fill-base-100"
+            class="tooltip btn btn-outline fill-base-content hover:fill-base-100 w-1/6"
             data-tip={showNav === NAV.settings
               ? "閉じる"
               : "タイムラインの設定"}
@@ -471,7 +473,7 @@
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              class="h-8 w-8"
+              class="{(options.width === "12rem") ? "-ml-2 h-4 w-4" : "h-8 w-8"}"
               ><path
                 d={showNav === NAV.settings
                   ? "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
