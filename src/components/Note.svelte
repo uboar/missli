@@ -16,7 +16,7 @@
   let showReactionDeck = false;
   let collapse = false;
   let remoteColor = "#0000";
-
+  let unParsedMfm = false;
   let noteElement: HTMLDivElement;
 
   const dispatch = createEventDispatcher();
@@ -66,6 +66,7 @@
       {compact}
       {collapse}
       option={timelineOptions.noteOption}
+      on:unParsedMfm={() => (unParsedMfm = true)}
     />
     {#if !compact}
       <div class="divider -my-3" />
@@ -118,7 +119,7 @@
         <div class="basis-1/5" />
         <div class="basis-1/5 tooltip" data-tip="ノートのURLを開く">
           <a
-            class="text-xs link pt-1"
+            class="text-xs link pt-1 {(unParsedMfm) ? "link-accent" : ""}"
             href={`https://${user.hostUrl}/notes/${note.id}`}
             target="_blank"
             rel="noreferrer"

@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as mfm from "mfm-js";
-  import { onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import type { UserData } from "@/types/type";
   import twemoji from "twemoji";
 
@@ -14,6 +14,8 @@
       return "エラー";
     }
   };
+
+  const dispatch = createEventDispatcher();
 
   let parsedHTML: HTMLElement;
   export let text = "";
@@ -39,6 +41,7 @@
     // 関数
     if (node.type === "fn") {
       let elem = document.createElement("span");
+      dispatch("unParsedMfm");
       parentElemnt.appendChild(elem);
       node.children.forEach((child) => generateMfmElement(child, elem));
     }

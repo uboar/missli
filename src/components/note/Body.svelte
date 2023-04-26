@@ -5,7 +5,7 @@
   import Mfm from "@/components/Mfm.svelte";
   import Media from "@/components/note/Media.svelte";
   import Reaction from "@/components/note/Reaction.svelte";
-  import { onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
 
   export let user: UserData;
   export let note: NoteType;
@@ -18,6 +18,7 @@
     user.emojis.length === 0 ? note.emojis : user.emojis;
 
   let showBody = false;
+  const dispatch = createEventDispatcher();
 
   const destroyEmoji = (emojiName: string, reactions: [key: number]) => {
     // console.log("break")
@@ -119,6 +120,7 @@
             bind:text={note.text}
             hostUrl={user.hostUrl}
             localEmojis={user.emojis.length === 0 ? note.emojis : user.emojis}
+            on:unParsedMfm={() => dispatch("unParsedMfm")}
           />
         {/if}
       </div>
@@ -140,6 +142,7 @@
           hostUrl={user.hostUrl}
           localEmojis={user.emojis.length === 0 ? note.emojis : user.emojis}
           remoteEmojis={note.emojis}
+          on:unParsedMfm={() => dispatch("unParsedMfm")}
         />
       </div>
     </div>
@@ -153,6 +156,7 @@
         hostUrl={user.hostUrl}
         localEmojis={user.emojis.length === 0 ? note.emojis : user.emojis}
         remoteEmojis={note.emojis}
+        on:unParsedMfm={() => dispatch("unParsedMfm")}
       />
     </p>
   {/if}
