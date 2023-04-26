@@ -28,6 +28,7 @@
 
   onMount(() => {
     if (option.cwShow) showBody = true;
+    note.reactions = Object.fromEntries(Object.entries(note.reactions).sort((a, b) => b[1] - a[1]));
   });
 </script>
 
