@@ -119,7 +119,11 @@
         <div class="basis-1/5" />
         <div class="basis-1/5 tooltip" data-tip="ノートのURLを開く">
           <a
-            class="text-xs link pt-1 {(unParsedMfm) ? "link-accent" : ""}"
+            class="link pt-1 {unParsedMfm
+              ? 'link-accent'
+              : ''} {timelineOptions.width === '12rem'
+              ? ' text-xxs truncate'
+              : 'text-xs'}"
             href={`https://${user.hostUrl}/notes/${note.id}`}
             target="_blank"
             rel="noreferrer"
@@ -140,3 +144,9 @@
     {/if}
   </div>
 </div>
+
+<style>
+  .text-xxs {
+    font-size: 0.25rem /* 4px */;
+  }
+</style>
