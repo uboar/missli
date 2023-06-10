@@ -64,7 +64,7 @@ export const getCookie = async () => {
     if (userLocalStorage.length !== 1) {
       usersBuff[i].localStorageOptions = {
         id: usersBuff[i].id,
-        ignoreCache: false,
+        ignoreCache: true,
         defaultTimelineOptions: {
           id: 0,
         },
@@ -198,7 +198,7 @@ if (settingsLocal) settings.set({ ...get(settings), ...settingsLocal });
 if (timelineLocal) timelines.set(timelineLocal);
 if (!userLocal) userLocal = [];
 
-window.addEventListener("beforeunload", () => {
+window.addEventListener("pagehide", () => {
   let timelinesBuffer = get(timelines);
   let settingsBuffer = get(settings);
 
@@ -211,7 +211,7 @@ window.addEventListener("beforeunload", () => {
     if (!v.localStorageOptions["id"]) {
       userLocalStorage.push({
         id: v.id,
-        ignoreCache: false,
+        ignoreCache: true,
         defaultTimelineOptions: {
           id: 0,
         },
