@@ -2,7 +2,7 @@
   import type { Hst } from "@histoire/plugin-svelte";
   import "../tailwind.css";
 
-  import notes from "./assets/timeline.json";
+  // import notes from "./assets/timeline.json";
   // import notes from "../../.idea/timeline.json";
   import Timeline from "../components/Timeline.svelte";
   import type { TimelineOptions, UserData } from "../types/type";
@@ -11,7 +11,7 @@
 
   let options: TimelineOptions = {
     id: new Date().valueOf(),
-    initialNotes: notes as any,
+    initialNotes: [],
     channelName: "タイムライン",
     userDataIndex: 0,
     color: "#808080",
