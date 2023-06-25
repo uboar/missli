@@ -198,7 +198,7 @@ if (settingsLocal) settings.set({ ...get(settings), ...settingsLocal });
 if (timelineLocal) timelines.set(timelineLocal);
 if (!userLocal) userLocal = [];
 
-window.addEventListener("pagehide", () => {
+const beforePageLeave = () => {
   let timelinesBuffer = get(timelines);
   let settingsBuffer = get(settings);
 
@@ -224,7 +224,9 @@ window.addEventListener("pagehide", () => {
   localStorage.setItem("timelines", JSON.stringify(timelinesBuffer));
   localStorage.setItem("settings", JSON.stringify(settingsBuffer));
   localStorage.setItem("users", JSON.stringify(userLocalStorage));
-});
+}
+window.addEventListener("pagehide", beforePageLeave);
+window.addEventListener("beforeunload", beforePageLeave);
 
 export const getEmojis = async (user: UserData, ignoreCache = false) => {
   try {
