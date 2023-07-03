@@ -4,6 +4,7 @@ import m from "moment/min/moment-with-locales.min.js";
 import uniqBy from "lodash/uniqBy";
 import "moment/locale/ja";
 import type { SettingsType, UserData, TimelineOptions } from "../types/type";
+import type { LiteInstanceMetadata } from "@misskey-js/entities";
 
 m.locale("ja");
 
@@ -224,7 +225,7 @@ const beforePageLeave = () => {
   localStorage.setItem("timelines", JSON.stringify(timelinesBuffer));
   localStorage.setItem("settings", JSON.stringify(settingsBuffer));
   localStorage.setItem("users", JSON.stringify(userLocalStorage));
-}
+};
 window.addEventListener("pagehide", beforePageLeave);
 window.addEventListener("beforeunload", beforePageLeave);
 
@@ -235,18 +236,34 @@ export const getEmojis = async (user: UserData, ignoreCache = false) => {
     const cacheMeta = await cache.match("/meta");
 
     if (cacheMeta === undefined || ignoreCache) {
-      const res = await user.cli.request("meta");
+      let res: LiteInstanceMetadata;
+      if (user.hostUrl === "misskey.io") {
+        res = (await (
+          await fetch("https://misskey.io/api/meta", {
+            mode: "cors",
+          })
+        ).json()) as LiteInstanceMetadata;
+        user.emojis = (
+          await (
+            await fetch("https://misskey.io/api/emojis", {
+              mode: "cors",
+            })
+          ).json()
+        ).emojis;
+      } else {
+        res = await user.cli.request("meta");
+        // v13はmetaにemojisが含まれない
+        if (res.emojis == null) {
+          user.emojis = (await user.cli.request("emojis")).emojis;
+        } else {
+          user.emojis = res.emojis;
+        }
+      }
 
       // TODO:Misskey-jsのAPIからResponseが帰ってくるオプションが欲しいのでなんとかする
       const cacheResMeta = new Response(JSON.stringify(res));
       cache.put("/meta", cacheResMeta);
 
-      // v13はmetaにemojisが含まれない
-      if (res.emojis == null) {
-        user.emojis = (await user.cli.request("emojis")).emojis;
-      } else {
-        user.emojis = res.emojis;
-      }
       const cacheResEmojis = new Response(JSON.stringify(user.emojis));
       cache.put("/emojis", cacheResEmojis);
     } else {
