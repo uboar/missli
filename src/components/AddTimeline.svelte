@@ -70,11 +70,12 @@
     }
   };
 
-  const addTimeline = () => {
+  const addTimeline = async () => {
     let timeline: TimelineOptions = {
       id: new Date().valueOf(),
       userDataIndex: selectedUserNum,
       channelName: "",
+      color: $users[selectedUserNum].themeColor,
     };
 
     // misskey.ioの場合低レートモードを有効にする
@@ -87,6 +88,14 @@
       timeline.channelName = `${userChannels[selectedChannelNum].name} / ${$users[selectedUserNum].hostUrl}`;
       timeline.channel = channelTypes[selectedChannel].value;
       timeline.channelId = userChannels[selectedChannelNum].id;
+      if (timeline.channel === "channel") {
+        const color = (
+          await $users[selectedUserNum].cli.request("channels/show", {
+            channelId: timeline.channelId,
+          })
+        ).color;
+        timeline.color = color;
+      }
     } else {
       // タイムライン
       timeline.channelName = `${channelTypes[selectedChannel].name} / ${$users[selectedUserNum].hostUrl}`;

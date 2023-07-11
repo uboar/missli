@@ -16,6 +16,7 @@ export type PostNote = {
 export type UserData = {
   initializeEnded?: boolean;
   ok: boolean;
+  themeColor?: string;
   isOldVersion?: boolean;
   id: number;
   sessionId?: string;

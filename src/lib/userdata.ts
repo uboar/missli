@@ -259,6 +259,7 @@ export const getEmojis = async (user: UserData, ignoreCache = false) => {
           user.emojis = res.emojis;
         }
       }
+      user.themeColor = res.themeColor;
 
       // TODO:Misskey-jsのAPIからResponseが帰ってくるオプションが欲しいのでなんとかする
       const cacheResMeta = new Response(JSON.stringify(res));
@@ -269,6 +270,7 @@ export const getEmojis = async (user: UserData, ignoreCache = false) => {
     } else {
       const cacheEmojis = await cache.match("/emojis");
       user.emojis = await cacheEmojis.json();
+      user.themeColor = (await cacheMeta.json()).themeColor;
     }
   } catch (err) {
     console.error(err);
