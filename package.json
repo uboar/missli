@@ -3,7 +3,7 @@
   "license": "MIT",
   "author": "uboar",
   "private": true,
-  "version": "1.7.3b",
+  "version": "1.7.4",
   "type": "module",
   "scripts": {
     "dev": "vite",
