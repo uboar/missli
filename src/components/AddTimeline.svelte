@@ -141,6 +141,7 @@
         </select>
       {/if}
 
+      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
       <label
         for="addtimeline-modal"
         class={`${

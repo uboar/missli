@@ -137,18 +137,23 @@
   </div>
 {:else if note.cw != null}
   <button class="alert mb-2 shadow-md" on:click={() => (showBody = !showBody)}>
-    <div class="-m-2">
-      <div class="badge badge-warning">CW</div>
-      <div class=" link-hover link overflow-x-hidden">
-        <Mfm
-          bind:text={note.cw}
-          hostUrl={user.hostUrl}
-          localEmojis={user.emojis.length === 0 ? note.emojis : user.emojis}
-          remoteEmojis={note.emojis}
-          on:unParsedMfm={() => dispatch("unParsedMfm")}
-        />
-      </div>
-    </div>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      class="-m-2 h-6 w-6 fill-warning"
+      ><path
+        d="M12,2L1,21H23M12,6L19.53,19H4.47M11,10V14H13V10M11,16V18H13V16"
+      /></svg
+    >
+    <span class="link-hover link -m-2 overflow-x-hidden">
+      <Mfm
+        bind:text={note.cw}
+        hostUrl={user.hostUrl}
+        localEmojis={user.emojis.length === 0 ? note.emojis : user.emojis}
+        remoteEmojis={note.emojis}
+        on:unParsedMfm={() => dispatch("unParsedMfm")}
+      />
+    </span>
   </button>
 {/if}
 {#if (note.cw == null || showBody) && !collapse}

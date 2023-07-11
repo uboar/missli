@@ -111,6 +111,7 @@
     </div>
   </div>
   <div class="modal-action flex">
+    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <label
       for="post-modal"
       class="btn-primary btn flex-1 {postNote.text === ''
