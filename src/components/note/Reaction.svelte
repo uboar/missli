@@ -96,7 +96,6 @@
   </button>
 {/if}
 
-
 <style>
   :global(.reaction-img) {
     height: var(--reactionSize);

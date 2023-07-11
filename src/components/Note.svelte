@@ -55,11 +55,11 @@
 </script>
 
 <div
-  class="card card-bordered bg-base-100 w-full shadow-sm"
+  class="card-bordered card w-full bg-base-100 shadow-sm"
   bind:this={noteElement}
   style="border-color: {remoteColor}"
 >
-  <div class="card-body {!compact ? '-my-6 -mx-4' : ' -my-2'}">
+  <div class="card-body {!compact ? '-mx-4 -my-6' : ' -my-2'}">
     <Body
       {note}
       {user}
@@ -70,10 +70,10 @@
     />
     {#if !compact}
       <div class="divider -my-3" />
-      <div class="flex -mb-1 z-10">
-        <div class="basis-1/5 tooltip" data-tip="返信">
+      <div class="z-10 -mb-1 flex">
+        <div class="tooltip basis-1/5" data-tip="返信">
           <button
-            class="btn btn-ghost btn-block btn-xs fill-base-content"
+            class="btn-ghost btn-block btn-xs btn fill-base-content"
             on:click={replyRequest}
           >
             <svg
@@ -86,9 +86,9 @@
             >
           </button>
         </div>
-        <div class="basis-1/5 tooltip" data-tip="リノート/引用リノート">
+        <div class="tooltip basis-1/5" data-tip="リノート/引用リノート">
           <button
-            class="btn btn-ghost btn-block btn-xs fill-base-content"
+            class="btn-ghost btn-block btn-xs btn fill-base-content"
             on:click={renoteRequest}
             ><svg
               xmlns="http://www.w3.org/2000/svg"
@@ -100,9 +100,9 @@
             >
           </button>
         </div>
-        <div class="basis-1/5 tooltip" data-tip="リアクション">
+        <div class="tooltip basis-1/5" data-tip="リアクション">
           <button
-            class="btn btn-ghost btn-block btn-xs fill-base-content"
+            class="btn-ghost btn-block btn-xs btn fill-base-content"
             on:click={() => (showReactionDeck = !showReactionDeck)}
             ><svg
               xmlns="http://www.w3.org/2000/svg"
@@ -117,7 +117,7 @@
           </button>
         </div>
         <div class="basis-1/5" />
-        <div class="basis-1/5 tooltip" data-tip="ノートのURLを開く">
+        <div class="tooltip basis-1/5" data-tip="ノートのURLを開く">
           <a
             class="link pt-1 {unParsedMfm
               ? 'link-accent'

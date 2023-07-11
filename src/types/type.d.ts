@@ -1,7 +1,4 @@
-import type {
-  Channels,
-  NoteUpdatedEvent,
-} from "@misskey-js/streaming.types";
+import type { Channels, NoteUpdatedEvent } from "@misskey-js/streaming.types";
 import type { Note, Notification } from "@misskey-js/entities";
 import type { Connection } from "@misskey-js/streaming";
 import { Stream, api } from "@misskey-js";

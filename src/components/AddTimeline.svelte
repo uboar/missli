@@ -2,7 +2,7 @@
   import { TimelineApiEndpoint } from "@/lib/channel";
   import { users, timelines } from "@/lib/userdata";
   import type { TimelineOptions } from "@/types/type";
-  
+
   let selectedChannel = 0;
   let selectedUserNum = 0;
   let selectedChannelNum = -1;
@@ -106,7 +106,7 @@
       <span class="label-text">ユーザー</span>
       <select
         bind:value={selectedUserNum}
-        class="select select-bordered w-full"
+        class="select-bordered select w-full"
         on:change={() => {
           if (TimelineApiEndpoint[channelTypes[selectedChannel].value] == null)
             getChannels();
@@ -123,7 +123,7 @@
           if (TimelineApiEndpoint[channelTypes[selectedChannel].value] == null)
             getChannels();
         }}
-        class="select select-bordered w-full"
+        class="select-bordered select w-full"
       >
         {#each channelTypes as channelType, index}
           <option value={index}>{channelType.name}</option>
@@ -133,7 +133,7 @@
       {#if TimelineApiEndpoint[channelTypes[selectedChannel].value] == null}
         <select
           bind:value={selectedChannelNum}
-          class="select select-bordered w-full mt-2"
+          class="select-bordered select mt-2 w-full"
         >
           {#each userChannels as userChannel, index}
             <option value={index}>{userChannel.name}</option>
@@ -152,7 +152,7 @@
             selectedChannelNum !== null)
             ? ""
             : "btn-disabled"
-        } btn btn-primary mt-2`}
+        } btn-primary btn mt-2`}
         on:click={addTimeline}
         on:keydown={(e) => {
           if (e.code === "Enter") addTimeline();

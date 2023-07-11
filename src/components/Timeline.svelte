@@ -267,18 +267,18 @@
   };
   let replyNote: NoteType | null = null;
 
-  $: iconSize = (options.width !== "12rem") ? "8" : "4"
+  $: iconSize = options.width !== "12rem" ? "8" : "4";
 </script>
 
 {#if !options.isCollapsed}
   <div
-    class="h-full bg-base-300 relative rounded"
+    class="relative h-full rounded bg-base-300"
     style="width:{options.width}"
   >
-    <div class="absolute w-full flex justify-center z-10">
+    <div class="absolute z-10 flex w-full justify-center">
       <div class="tooltip tooltip-bottom" data-tip={getTimelineTip()}>
         <button
-          class="btn btn-xs bg-base-100 my-1 mx-3 btn-outline btn-square"
+          class="btn-outline btn-square btn-xs btn mx-3 my-1 bg-base-100"
           style="color: {options.color}; fill:{options.color}"
         >
           <svg
@@ -288,9 +288,9 @@
           >
         </button>
       </div>
-      <div class="flex flex-col w-full">
+      <div class="flex w-full flex-col">
         <button
-          class="btn btn-xs bg-base-100 btn-outline btn-block my-1 normal-case"
+          class="btn-outline btn-block btn-xs btn my-1 bg-base-100 normal-case"
           style="color: {options.color}"
           on:click={() => (scrollPos.scrollTop = 0)}
         >
@@ -299,7 +299,7 @@
       </div>
       <div class="tooltip tooltip-bottom" data-tip="タイムラインを畳む">
         <button
-          class="btn btn-xs bg-base-100 my-1 mx-3 btn-outline btn-square"
+          class="btn-outline btn-square btn-xs btn mx-3 my-1 bg-base-100"
           style="color: {options.color}"
           on:click={() => (options.isCollapsed = true)}
         >
@@ -308,7 +308,7 @@
       </div>
     </div>
     <div
-      class="w-full timeline-body absolute pt-8 h-full overflow-y-scroll z-0 overflow-x-hidden inline-flex overscroll-y-none overscroll-x-auto"
+      class="timeline-body absolute z-0 inline-flex h-full w-full overflow-x-hidden overflow-y-scroll overscroll-y-none overscroll-x-auto pt-8"
       bind:this={scrollPos}
       style:--color={options.color + "20"}
     >
@@ -324,15 +324,15 @@
           />
         {:else}
           <!-- ノート表示 -->
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
           <div
-            class="relative w-full z-10"
+            class="relative z-10 w-full"
             on:mousedown={() => {
               if (options.autoCollapse) showNav = NAV.none;
             }}
           >
             {#each showNotes as note (note.id)}
-              <div class="my-1 z-20">
+              <div class="z-20 my-1">
                 <Note
                   {note}
                   {user}
@@ -344,7 +344,7 @@
               </div>
             {/each}
             <button
-              class="btn btn-block btn-secondary my-2"
+              class="btn-secondary btn-block btn my-2"
               on:click={() => {
                 scrollPos.scrollTop = 0;
                 beginNotes = 0;
@@ -352,13 +352,13 @@
             >
             {#if options.notesBuffer.length > options.showNoteNum && options.notesBuffer.length - options.showNoteNum > beginNotes}
               <button
-                class="btn btn-block btn-primary my-2"
+                class="btn-primary btn-block btn my-2"
                 on:click={() => {
                   beginNotes += options.showNoteNum / 2;
                 }}>もっと表示</button
               >
             {:else}
-              <button class="btn btn-block btn-primary my-2" on:click={moreNote}
+              <button class="btn-primary btn-block btn my-2" on:click={moreNote}
                 >もっと表示(追加読み込み)</button
               >{/if}
             <div class="pt-16" />
@@ -371,7 +371,7 @@
       {/if}
     </div>
     <div
-      class="absolute bottom-0 w-full z-50 bg-base-200 bg-opacity-95 border-b-2 border-t-2"
+      class="absolute bottom-0 z-50 w-full border-b-2 border-t-2 bg-base-200 bg-opacity-95"
       style="border-color:{options.color}"
     >
       <!-- タイムラインのフッター -->
@@ -395,19 +395,19 @@
         <div class="btn-group w-full">
           <!-- 通知ボタン -->
           <button
-            class="btn w-1/3 btn-outline tooltip fill-base-content hover:fill-base-100"
+            class="btn-outline btn tooltip w-1/3 fill-base-content hover:fill-base-100"
             data-tip={showNav === NAV.notify ? "閉じる" : "通知"}
             on:click={() =>
               (showNav = showNav === NAV.notify ? NAV.none : NAV.notify)}
           >
-            <div class="indicator group">
+            <div class="group indicator">
               {#if user.notifyUnOpen}
                 <span class="indicator-item flex">
                   <span
-                    class="animate-ping absolute top-0 right-0 inline-flex h-4 w-4 rounded-full bg-secondary opacity-75"
+                    class="absolute right-0 top-0 inline-flex h-4 w-4 animate-ping rounded-full bg-secondary opacity-75"
                   />
                   <span
-                    class="absolute inline-flex top-0 right-0 rounded-full h-4 w-4 bg-secondary"
+                    class="absolute right-0 top-0 inline-flex h-4 w-4 rounded-full bg-secondary"
                   />
                 </span>
               {/if}
@@ -427,7 +427,7 @@
           </button>
           <!-- ノートボタン -->
           <button
-            class="btn btn-primary w-1/3 fill-base-100 tooltip"
+            class="btn-primary btn tooltip w-1/3 fill-base-100"
             on:click={() =>
               (showNav = showNav === NAV.note ? NAV.none : NAV.note)}
             data-tip={showNav === NAV.note ? "閉じる" : "ノート"}
@@ -445,7 +445,7 @@
           </button>
           <!-- リンクボタン -->
           <button
-            class="tooltip btn btn-outline fill-base-content hover:fill-base-100 w-1/6"
+            class="btn-outline btn tooltip w-1/6 fill-base-content hover:fill-base-100"
             data-tip={showNav === NAV.links ? "閉じる" : "リンク"}
             on:click={() =>
               (showNav = showNav === NAV.links ? NAV.none : NAV.links)}
@@ -453,7 +453,7 @@
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              class="{(options.width === "12rem") ? "-ml-2 h-4 w-4" : "h-8 w-8"}"
+              class={options.width === "12rem" ? "-ml-2 h-4 w-4" : "h-8 w-8"}
               ><path
                 d={showNav === NAV.links
                   ? "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
@@ -463,7 +463,7 @@
           </button>
           <!-- 設定ボタン -->
           <button
-            class="tooltip btn btn-outline fill-base-content hover:fill-base-100 w-1/6"
+            class="btn-outline btn tooltip w-1/6 fill-base-content hover:fill-base-100"
             data-tip={showNav === NAV.settings
               ? "閉じる"
               : "タイムラインの設定"}
@@ -473,7 +473,7 @@
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              class="{(options.width === "12rem") ? "-ml-2 h-4 w-4" : "h-8 w-8"}"
+              class={options.width === "12rem" ? "-ml-2 h-4 w-4" : "h-8 w-8"}
               ><path
                 d={showNav === NAV.settings
                   ? "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
@@ -487,14 +487,14 @@
   </div>
 {:else}
   <div
-    class="h-full bg-base-300 relative rounded w-8 grid place-content-center"
+    class="relative grid h-full w-8 place-content-center rounded bg-base-300"
   >
     <div
-      class="tooltip tooltip-bottom absolute top-0 right-1"
+      class="tooltip tooltip-bottom absolute right-1 top-0"
       data-tip="タイムラインを開く"
     >
       <button
-        class="btn btn-xs btn-square mt-1 btn-outline"
+        class="btn-outline btn-square btn-xs btn mt-1"
         style="color: {options.color};"
         on:click={() => {
           options.isCollapsed = false;
@@ -506,15 +506,15 @@
       {#if unRead}
         <span class="indicator-item flex">
           <span
-            class="animate-ping absolute top-1 right-0.5 inline-flex h-4 w-4 rounded-full bg-secondary opacity-75"
+            class="absolute right-0.5 top-1 inline-flex h-4 w-4 animate-ping rounded-full bg-secondary opacity-75"
           />
           <span
-            class="absolute inline-flex top-1 right-0.5 rounded-full h-4 w-4 bg-secondary"
+            class="absolute right-0.5 top-1 inline-flex h-4 w-4 rounded-full bg-secondary"
           />
         </span>
       {/if}
       <button
-        class="btn btn-xs no-animation btn-outline normal-case"
+        class="btn-outline no-animation btn-xs btn normal-case"
         style="color: {options.color}; width: 75vh"
         on:click={() => {
           options.isCollapsed = false;

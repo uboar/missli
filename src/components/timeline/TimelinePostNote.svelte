@@ -126,13 +126,13 @@
     {#if replyNote || renoteNote}
       <div class="flex justify-between">
         {#if replyNote}
-          <span class="badge badge-outline badge-info mt-1">↩️返信</span>
+          <span class="badge badge-info badge-outline mt-1">↩️返信</span>
         {/if}
         {#if renoteNote}
-          <span class="badge badge-outline badge-accent mt-1">🔁リノート</span>
+          <span class="badge badge-accent badge-outline mt-1">🔁リノート</span>
         {/if}
         <button
-          class="btn btn-xs btn-warning fill-warning-content"
+          class="btn-warning btn-xs btn fill-warning-content"
           on:click={deleteAttachNote}
         >
           <svg
@@ -146,11 +146,11 @@
         </button>
       </div>
       {#if replyNote}
-        <div class="border border-info rounded">
+        <div class="rounded border border-info">
           <Note compact bind:note={replyNote} {user} timelineOptions={option} />
         </div>
       {:else if renoteNote}
-        <div class="border border-accent rounded">
+        <div class="rounded border border-accent">
           <Note
             compact
             bind:note={renoteNote}
@@ -168,7 +168,7 @@
         localEmojis={user.emojis}
       />
     {/if}
-    <div class="flex justify-between w-full">
+    <div class="flex w-full justify-between">
       <div class="form-control -my-3 w-fit">
         <label class="label cursor-pointer">
           <span class="label-text mx-2">プレビュー</span>
@@ -194,7 +194,7 @@
       <div class="form-control flex-1">
         <span class="label-text">公開範囲</span>
         <select
-          class="select select-bordered select-sm"
+          class="select-bordered select select-sm"
           bind:value={postNote.visibility}
         >
           {#each noteVisibilityEnum as noteVisibility (noteVisibility.name)}
@@ -228,13 +228,13 @@
     {#if showCw}
       <input
         type="text"
-        class="input input-sm input-bordered"
+        class="input-bordered input input-sm"
         placeholder="CW"
         bind:value={postNote.cw}
       />
     {/if}
     <textarea
-      class="textarea textarea-bordered"
+      class="textarea-bordered textarea"
       bind:this={focusNoteText}
       bind:value={postNote.text}
       placeholder="ノートする内容を入力して下さい！"
@@ -245,7 +245,7 @@
     />
     <div class="card-actions">
       {#if showReactionDeck}
-        <div class="p-2 w-full overflow-hidden">
+        <div class="w-full overflow-hidden p-2">
           <ReactionDeck
             {user}
             customReactionDeck={option.reactionDeck}
@@ -255,14 +255,14 @@
         </div>
       {:else}
         <button
-          class="btn btn-block btn-xs btn-outline normal-case"
+          class="btn-outline btn-block btn-xs btn normal-case"
           on:click={() => {
             showReactionDeck = true;
           }}>絵文字を追加</button
         >
       {/if}
       <button
-        class="btn btn-block btn-sm {renoteNote
+        class="btn-block btn-sm btn {renoteNote
           ? 'btn-accent'
           : replyNote
           ? 'btn-info'

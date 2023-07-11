@@ -12,7 +12,7 @@
 </script>
 
 <a
-  class="card-title link link-hover rounded-full {isRenote
+  class="link-hover link card-title rounded-full {isRenote
     ? 'link-accent'
     : 'hover:bg-base-300'} w-fit max-w-full pr-3"
   href={`https://${hostUrl}/${useridStr}`}
@@ -20,13 +20,13 @@
   rel="noreferrer"
 >
   {#if isRenote}
-    <div class="text-xs -mb-2 pr-3">
+    <div class="-mb-2 pr-3 text-xs">
       {#if user.name === null}
         🔁{user.username}がリノート
       {:else}
         <MfmLite
           text={"🔁" + user.name + "がリノート"}
-          localEmojis={(localEmojis.length === 0 ? user.emojis : localEmojis)}
+          localEmojis={localEmojis.length === 0 ? user.emojis : localEmojis}
           remoteEmojis={user.emojis}
           emojiHeight="h-4"
           {hostUrl}
@@ -40,20 +40,20 @@
       </div>
     </div>
     <div class="w-full overflow-clip">
-      <div class="text-sm truncate -mb-1">
+      <div class="-mb-1 truncate text-sm">
         {#if user.name === null}
           {user.username}
         {:else}
           <MfmLite
             text={user.name}
-            localEmojis={(localEmojis.length === 0 ? user.emojis : localEmojis)}
+            localEmojis={localEmojis.length === 0 ? user.emojis : localEmojis}
             remoteEmojis={user.emojis}
             emojiHeight="h-4"
             {hostUrl}
           />
         {/if}
       </div>
-      <div class="text-xs truncate">
+      <div class="truncate text-xs">
         {useridStr}
       </div>
     </div>

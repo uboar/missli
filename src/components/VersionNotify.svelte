@@ -19,7 +19,7 @@
   <div class="text-lg font-bold">
     Version {version}
   </div>
-  <article class="prose max-h-64 overflow-y-scroll overscroll-y-none my-2">
+  <article class="prose my-2 max-h-64 overflow-y-scroll overscroll-y-none">
     {@html marked(md)}
   </article>
   <div>
@@ -27,7 +27,7 @@
       href="https://github.com/uboar/missli/releases"
       target="_blank"
       rel="noreferrer"
-      class="btn btn-primary btn-outline btn-block"
+      class="btn-primary btn-outline btn-block btn"
     >
       GitHubでリリースノートを見る
     </a>

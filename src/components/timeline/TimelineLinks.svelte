@@ -108,13 +108,13 @@
         href={link.href}
         target="_blank"
         rel="noreferrer"
-        class="btn btn-sm btn-{link.color}"
+        class="btn-sm btn btn-{link.color}"
       >
         {#if link.svg}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
-            class="h-5 mr-2 fill-base-content"><path d={link.svg} /></svg
+            class="mr-2 h-5 fill-base-content"><path d={link.svg} /></svg
           >
         {/if}
         {link.name}</a

@@ -19,22 +19,22 @@
   });
 </script>
 
-<div class="navbar bg-primary fixed top-0 z-40 shadow-lg w-screen">
+<div class="navbar fixed top-0 z-40 w-screen bg-primary shadow-lg">
   <div class="navbar-start">
     <a
-      class="btn btn-ghost normal-case text-xl text-primary-content btn-sm"
+      class="btn-ghost btn-sm btn text-xl normal-case text-primary-content"
       href="https://github.com/uboar/missli"
       target="_blank"
       rel="noreferrer"
     >
       MissLI
-      <span class="text-sm mx-4">{version}</span>
+      <span class="mx-4 text-sm">{version}</span>
     </a>
   </div>
   <div class="navbar-end">
     {#if $users.length > 0}
       <label
-        class="btn group gap-2 btn-outline border-accent btn-sm p-1 md:px-16 mx-2 text-accent hover:text-primary-focus"
+        class="group btn-outline btn-sm btn mx-2 gap-2 border-accent p-1 text-accent hover:text-primary-focus md:px-16"
         for="post-modal"
       >
         <!-- ノートアイコン -->
@@ -47,7 +47,7 @@
         <span class="hidden md:inline">同時ノート</span>
       </label>
       <label
-        class="btn group gap-2 btn-outline border-primary-content btn-sm p-1 mx-2 text-primary-content hover:text-primary-focus"
+        class="group btn-outline btn-sm btn mx-2 gap-2 border-primary-content p-1 text-primary-content hover:text-primary-focus"
         for="addtimeline-modal"
       >
         <!-- +アイコン -->
@@ -61,7 +61,7 @@
       </label>
     {/if}
     <label
-      class="btn group gap-2 btn-outline border-primary-content btn-sm p-1 mx-2 text-primary-content hover:text-primary-focus"
+      class="group btn-outline btn-sm btn mx-2 gap-2 border-primary-content p-1 text-primary-content hover:text-primary-focus"
       for="settings-modal"
     >
       <!-- 設定アイコン -->
@@ -88,17 +88,17 @@
   <label class="modal-box" for="">
     <AddTimeline />
     <div class="modal-action">
-      <label for="addtimeline-modal" class="btn btn-primary w-40">閉じる</label>
+      <label for="addtimeline-modal" class="btn-primary btn w-40">閉じる</label>
     </div>
   </label>
 </label>
 
 <input type="checkbox" id="settings-modal" class="modal-toggle" />
 <label for="settings-modal" class="modal">
-  <label for="" class="modal-box md:w-11/12 md:max-w-5xl h-4/5">
+  <label for="" class="modal-box h-4/5 md:w-11/12 md:max-w-5xl">
     <Settings />
     <div class="modal-action">
-      <label for="settings-modal" class="btn btn-primary w-40">閉じる</label>
+      <label for="settings-modal" class="btn-primary btn w-40">閉じる</label>
     </div>
   </label>
 </label>
@@ -113,7 +113,7 @@
   <label for="" class="modal-box">
     <VersionNotify />
     <div class="modal-action">
-      <label for="update-modal" class="btn btn-primary w-40">閉じる</label>
+      <label for="update-modal" class="btn-primary btn w-40">閉じる</label>
     </div>
   </label>
 </label>

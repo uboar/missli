@@ -145,10 +145,10 @@
   <div class="card-body h-96 overflow-y-scroll">
     <ul class="menu bg-base-100">
       {#each user.notifyBuffer as notify (notify.id)}
-        <li class="text-ellipsis w-full">
+        <li class="w-full text-ellipsis">
           <a href={getNotifyLink(notify)} target="_blank" rel="noreferrer">
-            <div class="flex flex-col w-full">
-              <div class="flex link link-hover gap-2">
+            <div class="flex w-full flex-col">
+              <div class="link-hover link flex gap-2">
                 {#if notify.type === "reaction"}
                   <EmojiParser
                     localEmojis={user.emojis.length === 0
@@ -179,7 +179,7 @@
                   rel="noreferrer"
                 >
                   <div
-                    class="card card-compact bg-base-100 card-bordered link link-hover border-base-content"
+                    class="link-hover card-bordered card link card-compact border-base-content bg-base-100"
                   >
                     <div class="card-body -my-2">
                       {noteText(notify)}
@@ -187,14 +187,14 @@
                   </div>
                 </a>
               {/if}
-              <div class="text-sm -mb-2 text-end">
+              <div class="-mb-2 text-end text-sm">
                 {moment(notify.createdAt).fromNow()}
               </div>
             </div>
           </a>
         </li>
       {/each}
-      <button class="btn btn-block btn-sm btn-primary" on:click={moreNotify}>
+      <button class="btn-primary btn-block btn-sm btn" on:click={moreNotify}>
         もっと表示
       </button>
     </ul>

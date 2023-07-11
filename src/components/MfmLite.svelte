@@ -55,17 +55,17 @@
       let input = document.createElement("input");
       input.type = "text";
       input.readOnly = true;
-      input.value = node.props.query
-      input.className = "input input-sm input-bordered readonly w-10/12"
+      input.value = node.props.query;
+      input.className = "input input-sm input-bordered readonly w-10/12";
       let button = document.createElement("a");
-      button.className = "btn btn-square btn-sm w-2/12"
-      button.href = `https://www.google.com/search?q=${node.props.query}`
+      button.className = "btn btn-square btn-sm w-2/12";
+      button.href = `https://www.google.com/search?q=${node.props.query}`;
       button.target = "_blank";
       button.innerText = "検索";
       button.rel = "noreferrer";
       inputGroup.appendChild(input);
       inputGroup.appendChild(button);
-      
+
       parentElemnt.appendChild(inputGroup);
     }
     // カスタム絵文字
@@ -129,9 +129,9 @@
       let classes = "object-scale-down inline-flex ";
       if (emojiHeight === "") classes += "h-6";
       else classes += emojiHeight;
-        elem.innerHTML = twemoji.parse(node.props.emoji, {
-          className: classes,
-        });
+      elem.innerHTML = twemoji.parse(node.props.emoji, {
+        className: classes,
+      });
       parentElemnt.appendChild(elem);
     }
     // メンション

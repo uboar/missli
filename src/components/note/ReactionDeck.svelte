@@ -128,17 +128,17 @@
     bind:this={inputElem}
     bind:value={text}
     placeholder="絵文字を検索..."
-    class="w-full input input-bordered input-sm"
+    class="input-bordered input input-sm w-full"
     on:keydown={(e) => {
       if (e.code === "Enter") sendEmoji();
     }}
     on:input={emojiSuggest}
   />
-  <div class="flex flex-nowrap gap-1 w-full">
+  <div class="flex w-full flex-nowrap gap-1">
     {#each suggestedText as emoji, index}
       {#if !emoji.isUnicodeEmoji}
         <button
-          class="btn btn-xs btn-outline h-fit"
+          class="btn-outline btn-xs btn h-fit"
           on:click={() => pushBtn(index)}
           title={emoji.name}
         >
@@ -146,7 +146,7 @@
         </button>
       {:else}
         <button
-          class="btn btn-xs btn-outline h-fit"
+          class="btn-outline btn-xs btn h-fit"
           on:click={() => sendEmoji(emoji.value)}
         >
           {@html twemoji.parse(emoji.value, {
@@ -156,11 +156,11 @@
       {/if}
     {/each}
   </div>
-  <div class="flex flex-wrap gap-1 z-10">
+  <div class="z-10 flex flex-wrap gap-1">
     {#each customReactionDeck as reaction}
       {#if reaction.indexOf("@.") >= 0}
         <button
-          class="btn btn-xs btn-outline btn-success h-fit"
+          class="btn-success btn-outline btn-xs btn h-fit"
           on:click={() => directSendEmoji(reaction)}
           title={reaction.replace(/\:|@./gm, "")}
         >
@@ -172,7 +172,7 @@
         </button>
       {:else}
         <button
-          class="btn btn-xs btn-outline btn-success h-fit"
+          class="btn-success btn-outline btn-xs btn h-fit"
           on:click={() => sendEmoji(reaction)}
         >
           {reaction}

@@ -20,12 +20,10 @@
 </script>
 
 <!-- メディア内容 -->
-<div class="w-full my-2 bg-base-300 rounded-lg">
+<div class="my-2 w-full rounded-lg bg-base-300">
   {#if files.length > 0}
     {#if !mediaHide}
-      <div
-        class="relative w-full flex justify-center"
-      >
+      <div class="relative flex w-full justify-center">
         {#if file.type.indexOf("image") >= 0}
           <a
             href={file.url}
@@ -36,7 +34,7 @@
             <img
               src={file.thumbnailUrl}
               alt={file.name}
-              class="object-contain media {file.isSensitive && !option.nsfwShow
+              class="media object-contain {file.isSensitive && !option.nsfwShow
                 ? 'blur-lg'
                 : ''}"
               style="--mediaSize: {option.mediaSize + 'px'}"
@@ -57,7 +55,7 @@
             href={file.url}
             target="_blank"
             rel="noreferrer"
-            class="alert w-full link link-hover"
+            class="alert link-hover link w-full"
           >
             <div>
               <svg
@@ -74,10 +72,10 @@
         {/if}
         {#if file.isSensitive && !option.nsfwShow}
           <div
-            class="absolute w-full h-full top-0 grid content-center justify-center z-20"
+            class="absolute top-0 z-20 grid h-full w-full content-center justify-center"
           >
             <button
-              class="btn w-32 btn-warning shadow-md"
+              class="btn-warning btn w-32 shadow-md"
               on:click={() => (file.isSensitive = false)}>メディアを見る</button
             >
           </div>
@@ -85,7 +83,7 @@
       </div>
     {:else}
       <button
-        class="btn btn-info btn-block btn-sm my-1"
+        class="btn-info btn-block btn-sm btn my-1"
         on:click={() => (mediaHide = false)}>メディアを見る</button
       >
     {/if}
@@ -93,12 +91,12 @@
 </div>
 {#if files.length > 1}
   <div class="alert z-10">
-    <div class="flex w-full -my-2">
-      <button class="btn btn-sm w-1/3" on:click={previousFile}>❮</button>
-      <div class="text-center w-1/3">
+    <div class="-my-2 flex w-full">
+      <button class="btn-sm btn w-1/3" on:click={previousFile}>❮</button>
+      <div class="w-1/3 text-center">
         {index + 1} / {files.length}
       </div>
-      <button class="btn btn-sm w-1/3" on:click={nextFile}>❯</button>
+      <button class="btn-sm btn w-1/3" on:click={nextFile}>❯</button>
     </div>
   </div>
 {/if}

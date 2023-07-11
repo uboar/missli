@@ -19,16 +19,16 @@
 </script>
 
 <main data-theme={$settings.theme} class="screen">
-  <div class="flex flex-col h-full w-full overflow-x-auto">
+  <div class="flex h-full w-full flex-col overflow-x-auto">
     <div class="pb-10" />
     {#if loading}
-      <progress class="progress w-96 mt-8" />
+      <progress class="progress mt-8 w-96" />
     {:else if $users.length === 0}
-      <div class="mt-4 text-2xl w-screen text-center">
+      <div class="mt-4 w-screen text-center text-2xl">
         ↗にある⚙（設定）からユーザーを追加してください！
       </div>
     {:else}
-      <div class="flex flex-row w-fit h-full">
+      <div class="flex h-full w-fit flex-row">
         {#each $timelines as timeline, index (timeline.id)}
           {#if $users[timeline.userDataIndex].initializeEnded}
             <Timeline
@@ -37,7 +37,7 @@
               on:breakRequest={deleteTimeline}
             />
           {:else}
-            <progress class="progress w-72 mt-8" />
+            <progress class="progress mt-8 w-72" />
           {/if}
         {/each}
       </div>

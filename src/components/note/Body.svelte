@@ -28,7 +28,9 @@
 
   onMount(() => {
     if (option.cwShow) showBody = true;
-    note.reactions = Object.fromEntries(Object.entries(note.reactions).sort((a, b) => b[1] - a[1]));
+    note.reactions = Object.fromEntries(
+      Object.entries(note.reactions).sort((a, b) => b[1] - a[1])
+    );
   });
 </script>
 
@@ -42,7 +44,7 @@
   <div class="flex gap-2">
     {#if note.localOnly}
       <div
-        class="fill-base-content tooltip tooltip-left grid items-center"
+        class="tooltip tooltip-left grid items-center fill-base-content"
         data-tip="連合なし"
       >
         <svg
@@ -57,7 +59,7 @@
     {/if}
     {#if note.visibility === "home"}
       <div
-        class="fill-base-content tooltip tooltip-left grid items-center"
+        class="tooltip tooltip-left grid items-center fill-base-content"
         data-tip="ホーム"
       >
         <svg
@@ -71,7 +73,7 @@
       </div>
     {:else if note.visibility === "followers"}
       <div
-        class="fill-base-content tooltip tooltip-left grid items-center"
+        class="tooltip tooltip-left grid items-center fill-base-content"
         data-tip="フォロワーのみ"
       >
         <svg
@@ -85,7 +87,7 @@
       </div>
     {:else if note.visibility === "specified"}
       <div
-        class="fill-base-content tooltip tooltip-left grid items-center"
+        class="tooltip tooltip-left grid items-center fill-base-content"
         data-tip="ダイレクト"
       >
         <svg
@@ -113,8 +115,8 @@
 {/if}
 
 {#if collapse && ((note.text && note.renote) || !note.renote)}
-  <div class="card -mt-2 max-h-16 rounded-none overflow-hidden relative">
-    <div class="-my-6 -mx-4 card-body text-left">
+  <div class="card relative -mt-2 max-h-16 overflow-hidden rounded-none">
+    <div class="card-body -mx-4 -my-6 text-left">
       <div class="opacity-60">
         {#if note.text}
           <Mfm
@@ -128,16 +130,16 @@
     </div>
     <div class="absolute bottom-0 w-full">
       <button
-        class="btn btn-xs btn-block btn-info btn-outline bg-base-100 opacity-90"
+        class="btn-info btn-outline btn-block btn-xs btn bg-base-100 opacity-90"
         on:click={() => (collapse = false)}>ノートを開く</button
       >
     </div>
   </div>
 {:else if note.cw != null}
-  <button class="alert shadow-md mb-2" on:click={() => (showBody = !showBody)}>
+  <button class="alert mb-2 shadow-md" on:click={() => (showBody = !showBody)}>
     <div class="-m-2">
       <div class="badge badge-warning">CW</div>
-      <div class=" link link-hover overflow-x-hidden">
+      <div class=" link-hover link overflow-x-hidden">
         <Mfm
           bind:text={note.cw}
           hostUrl={user.hostUrl}
@@ -151,7 +153,7 @@
 {/if}
 {#if (note.cw == null || showBody) && !collapse}
   {#if note.text}
-    <p class="text-ellipsis overflow-hidden">
+    <p class="overflow-hidden text-ellipsis">
       <Mfm
         bind:text={note.text}
         hostUrl={user.hostUrl}
@@ -163,7 +165,7 @@
   {/if}
   {#if note.poll}
     <a
-      class="btn btn-xs btn-info"
+      class="btn-info btn-xs btn"
       href={`https://${user.hostUrl}/notes/${note.id}`}
       target="_blank"
       rel="noreferrer"
@@ -180,7 +182,7 @@
 
 {#if note.channelId}
   <a
-    class="text-xs link fill-base-content text-base-content opacity-40"
+    class="link fill-base-content text-xs text-base-content opacity-40"
     href={`https://${user.hostUrl}/channels/${note.channelId}`}
     target="_blank"
     rel="noreferrer"
@@ -192,7 +194,7 @@
   <!-- リノート内容 -->
   {#if note.renote && renoteCount > 0}
     <a
-      class="btn btn-outline btn-accent btn-sm btn-block"
+      class="btn-accent btn-outline btn-block btn-sm btn"
       href={`https://${user.hostUrl}/notes/${note.renote.id}`}
       target="_blank"
       rel="noreferrer"
@@ -200,7 +202,7 @@
       もっとリノートを見る
     </a>
   {:else if note.renote && (!collapse || !note.text)}
-    <div class="card card-bordered border-accent rounded p-1">
+    <div class="card-bordered card rounded border-accent p-1">
       <svelte:self
         {user}
         bind:note={note.renote}

@@ -52,11 +52,12 @@
         <div class="form-control flex-1">
           <span class="label-text">公開範囲</span>
           <select
-            class="select select-bordered select-sm"
+            class="select-bordered select select-sm"
             bind:value={postNote.visibility}
           >
             {#each noteVisibilityEnum as noteVisibility (noteVisibility.name)}
-              <option value={noteVisibility.value}>{noteVisibility.name}</option>
+              <option value={noteVisibility.value}>{noteVisibility.name}</option
+              >
             {/each}
           </select>
         </div>
@@ -85,7 +86,7 @@
       </div>
       <span class="label-text">ノートするユーザー(複数選択可)</span>
       <select
-        class="select select-lg select-bordered mb-2"
+        class="select-bordered select select-lg mb-2"
         multiple
         bind:value={selectedUsers}
       >
@@ -97,13 +98,13 @@
       {#if showCw}
         <input
           type="text"
-          class="input input-sm input-bordered"
+          class="input-bordered input input-sm"
           placeholder="CW"
           bind:value={postNote.cw}
         />
       {/if}
       <textarea
-        class="textarea textarea-bordered w-full"
+        class="textarea-bordered textarea w-full"
         bind:value={postNote.text}
         placeholder="ノートする内容を入力して下さい！"
       />
@@ -112,10 +113,12 @@
   <div class="modal-action flex">
     <label
       for="post-modal"
-      class="btn btn-primary flex-1 {postNote.text === '' ? 'btn-disabled' : ''}"
+      class="btn-primary btn flex-1 {postNote.text === ''
+        ? 'btn-disabled'
+        : ''}"
       on:click={sendNote}
       on:keydown={sendNote}>ノートする</label
     >
-    <label for="post-modal" class="btn btn-secondary btn-outline">閉じる</label>
+    <label for="post-modal" class="btn-secondary btn-outline btn">閉じる</label>
   </div>
 </label>

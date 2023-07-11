@@ -20,7 +20,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@misskey-js": ["misskey/packages/misskey-js/built/index.js"],
-      "@misskey-js/*": ["misskey/packages/misskey-js/built/*"],
+      "@misskey-js/*": ["misskey/packages/misskey-js/built/*"]
     }
   },
   "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],

@@ -55,7 +55,7 @@
 
   const openMiAuth = async () => {
     hostUrl = hostUrl.replace("https://", "");
-    if(hostUrl.endsWith("/")) hostUrl = hostUrl.slice(0, -1);
+    if (hostUrl.endsWith("/")) hostUrl = hostUrl.slice(0, -1);
     busy = true;
     try {
       const sessionId = await (
@@ -137,20 +137,20 @@ v1.2.1以前に本アプリを使用した事がある方は、権限設定が�
   <br />ユーザーデータがありません
 {/if}
 {#each $users as user, index (user.id)}
-  <div class="card bg-base-300 card-compact w-full my-2">
+  <div class="card card-compact my-2 w-full bg-base-300">
     <div class="card-body">
       <div class="card-actions flex">
-        <div class="flex-1 text-l font-bold">
+        <div class="text-l flex-1 font-bold">
           @{user.userName}@{user.hostUrl}
         </div>
         <button
-          class="btn btn-info btn-sm -my-2 {user.isOldVersion
+          class="btn-info btn-sm btn -my-2 {user.isOldVersion
             ? 'btn-disabled'
             : ''}"
           on:click={() => reAuthUser(index)}>再認証</button
         >
         <button
-          class="btn btn-error btn-sm -my-2"
+          class="btn-error btn-sm btn -my-2"
           on:click={() => deleteUser(index)}>連携解除</button
         >
       </div>
@@ -158,19 +158,19 @@ v1.2.1以前に本アプリを使用した事がある方は、権限設定が�
   </div>
 {/each}
 <div class="divider-vertical" />
-<div class="flex justify-center m-4">
-  <div class="card bg-base-300 w-full">
+<div class="m-4 flex justify-center">
+  <div class="card w-full bg-base-300">
     <div class="card-body">
       <div class="card-title -mt-4">
         <div class="flex flex-col">
           <h2 class="text-xl font-bold">ユーザーの追加</h2>
           <div class="tabs">
             <button
-              class="tab tab-bordered {selectedTab === 0 ? 'tab-active' : ''}"
+              class="tab-bordered tab {selectedTab === 0 ? 'tab-active' : ''}"
               on:click={() => (selectedTab = 0)}>MiAuth</button
             >
             <button
-              class="tab tab-bordered {selectedTab === 1 ? 'tab-active' : ''}"
+              class="tab-bordered tab {selectedTab === 1 ? 'tab-active' : ''}"
               on:click={() => (selectedTab = 1)}
               >アクセストークンの直接入力</button
             >
@@ -200,7 +200,7 @@ v1.2.1以前に本アプリを使用した事がある方は、権限設定が�
           type="submit"
           class={`${
             hostUrl === "" || busy ? "btn-disabled" : ""
-          } btn btn-primary btn-lg`}
+          } btn-primary btn-lg btn`}
           on:click={openMiAuth}
           value={busy ? "セッションID取得中..." : "認証する"}
         />
@@ -209,8 +209,9 @@ v1.2.1以前に本アプリを使用した事がある方は、権限設定が�
         <p>
           取得したアクセストークンを直接入力します。MiAuth認証に対応していない古いバージョンのMisskeyを使用する際に使用して下さい。
         </p>
-        <p class="text-warning font-bold">
-          現在、Misskey v11以前のサーバーでカスタム絵文字を正しく取得出来ない場合があります。
+        <p class="font-bold text-warning">
+          現在、Misskey
+          v11以前のサーバーでカスタム絵文字を正しく取得出来ない場合があります。
         </p>
         <div class="form-control">
           <span class="label-text">ホストURL</span>
@@ -235,7 +236,7 @@ v1.2.1以前に本アプリを使用した事がある方は、権限設定が�
             placeholder="アクセストークン"
           />
           <button
-            class="btn btn-primary btn-lg btn-block {hostUrl === '' ||
+            class="btn-primary btn-block btn-lg btn {hostUrl === '' ||
             directToken === '' ||
             directUserId === ''
               ? 'btn-disabled'

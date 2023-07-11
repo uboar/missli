@@ -51,7 +51,7 @@
   <div class="tabs">
     {#each tabs as tab, index (tab.value)}
       <button
-        class="tab tab-bordered {selectedTab === tab.value ? 'tab-active' : ''}"
+        class="tab-bordered tab {selectedTab === tab.value ? 'tab-active' : ''}"
         on:click={() => (selectedTab = tab.value)}
       >
         {tab.name}
@@ -64,36 +64,36 @@
     <UserSetting />
   {:else if selectedTab === 2}
     <span class="label-text">カラーテーマ</span>
-    <select bind:value={$settings.theme} class="select select-bordered w-full">
+    <select bind:value={$settings.theme} class="select-bordered select w-full">
       {#each themes as theme}
         <option>{theme}</option>
       {/each}
     </select>
   {:else if selectedTab === 3}
-    <h1 class="font-bold text-3xl">missLI {version}</h1>
-    <h2 class="font-bold text-lg">リポジトリ</h2>
+    <h1 class="text-3xl font-bold">missLI {version}</h1>
+    <h2 class="text-lg font-bold">リポジトリ</h2>
     <a
-      class="link link-accent"
+      class="link-accent link"
       href="https://github.com/uboar/missli"
       target="_blank"
       rel="noreferrer"
     >
       uboar/missli
     </a>
-    <h2 class="font-bold text-lg">不具合報告 / 不具合を探す</h2>
+    <h2 class="text-lg font-bold">不具合報告 / 不具合を探す</h2>
     <a
-      class="link link-accent"
+      class="link-accent link"
       href="https://github.com/uboar/missli/issues"
       target="_blank"
       rel="noreferrer"
     >
       uboar/missl/issues
     </a>
-    <h2 class="font-bold text-lg">連絡先</h2>
+    <h2 class="text-lg font-bold">連絡先</h2>
     <ul>
       <li>
         <a
-          class="link link-accent"
+          class="link-accent link"
           href="https://github.com/uboar"
           target="_blank"
           rel="noreferrer"
@@ -103,7 +103,7 @@
       </li>
       <li>
         <a
-          class="link link-accent"
+          class="link-accent link"
           href="https://nicomedkey.cc/@uboar"
           target="_blank"
           rel="noreferrer"
@@ -113,7 +113,7 @@
       </li>
       <li>
         <a
-          class="link link-accent"
+          class="link-accent link"
           href="https://misskey.io/@uboar"
           target="_blank"
           rel="noreferrer"
@@ -123,7 +123,7 @@
       </li>
       <li>
         <a
-          class="link link-accent"
+          class="link-accent link"
           href="https://twitter.com/_uboar_"
           target="_blank"
           rel="noreferrer"

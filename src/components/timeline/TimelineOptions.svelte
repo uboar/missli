@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import { users } from "@/lib/userdata";
-  import type {TimelineOptions} from "@/types/type";
+  import type { TimelineOptions } from "@/types/type";
   import ReactionDeck from "@/components/note/ReactionDeck.svelte";
 
   export let options: TimelineOptions;
@@ -68,7 +68,7 @@
   };
 </script>
 
-<div class="relative w-full p-2 mb-16">
+<div class="relative mb-16 w-full p-2">
   <h3 class="border-b">タイムライン設定</h3>
   {#if !showReactionDeck}
     <div class="form-control mt-4">
@@ -78,7 +78,7 @@
         class="input input-sm"
         bind:value={options.channelName}
       />
-      <div class="flex flex-row my-8">
+      <div class="my-8 flex flex-row">
         <span class="label-text mr-8">タイムラインの色</span>
         <input type="color" bind:value={options.color} />
       </div>
@@ -86,7 +86,7 @@
       <div class="btn-group">
         {#each timelineSizeEnum as timelineSize (timelineSize.name)}
           <button
-            class="btn btn-outline btn-sm w-1/5"
+            class="btn-outline btn-sm btn w-1/5"
             on:click={() => {
               options.width = timelineSize.value;
             }}>{timelineSize.name}</button
@@ -118,32 +118,62 @@
         bind:value={options.noteOption.mediaSize}
       />
       <label class="label cursor-pointer">
-        <span class="label-text">タイムラインをクリックした際に通知・ノート表示を畳む</span>
-        <input type="checkbox" bind:checked={options.autoCollapse} class="checkbox" />
+        <span class="label-text"
+          >タイムラインをクリックした際に通知・ノート表示を畳む</span
+        >
+        <input
+          type="checkbox"
+          bind:checked={options.autoCollapse}
+          class="checkbox"
+        />
       </label>
       <label class="label cursor-pointer">
         <span class="label-text">メディアを表示しない</span>
-        <input type="checkbox" bind:checked={options.noteOption.mediaHide} class="checkbox" />
+        <input
+          type="checkbox"
+          bind:checked={options.noteOption.mediaHide}
+          class="checkbox"
+        />
       </label>
       <label class="label cursor-pointer">
         <span class="label-text">リアクションを表示しない</span>
-        <input type="checkbox" bind:checked={options.noteOption.reactionHide} class="checkbox" />
+        <input
+          type="checkbox"
+          bind:checked={options.noteOption.reactionHide}
+          class="checkbox"
+        />
       </label>
       <label class="label cursor-pointer">
         <span class="label-text">CWを自動展開する</span>
-        <input type="checkbox" bind:checked={options.noteOption.cwShow} class="checkbox" />
+        <input
+          type="checkbox"
+          bind:checked={options.noteOption.cwShow}
+          class="checkbox"
+        />
       </label>
       <label class="label cursor-pointer">
         <span class="label-text">NSFWメディアを無視する</span>
-        <input type="checkbox" bind:checked={options.noteOption.nsfwShow} class="checkbox" />
+        <input
+          type="checkbox"
+          bind:checked={options.noteOption.nsfwShow}
+          class="checkbox"
+        />
       </label>
       <label class="label cursor-pointer">
         <span class="label-text">高さの大きいノートを自動で畳む</span>
-        <input type="checkbox" bind:checked={options.noteOption.noteCollapse} class="checkbox" />
+        <input
+          type="checkbox"
+          bind:checked={options.noteOption.noteCollapse}
+          class="checkbox"
+        />
       </label>
       <label class="label cursor-pointer">
         <span class="label-text">連続ノートを制限する(Misskey.io向け)</span>
-        <input type="checkbox" bind:checked={options.lowRate} class="checkbox" />
+        <input
+          type="checkbox"
+          bind:checked={options.lowRate}
+          class="checkbox"
+        />
       </label>
       <span class="label-text">ノートの最大高さ</span>
       <input
@@ -153,13 +183,13 @@
       />
       <div class="btn-group mt-4">
         <button
-          class="btn btn-outline w-1/2 btn-secondary"
+          class="btn-secondary btn-outline btn w-1/2"
           on:click={swapTimelineLeft}
         >
           左と入れ替え
         </button>
         <button
-          class="btn btn-outline w-1/2 btn-secondary"
+          class="btn-secondary btn-outline btn w-1/2"
           on:click={swapTimelineRight}
         >
           右と入れ替え
@@ -167,30 +197,30 @@
       </div>
 
       <button
-        class="btn btn-primary btn-block mt-4"
+        class="btn-primary btn-block btn mt-4"
         on:click={() => (showReactionDeck = !showReactionDeck)}
         >リアクションデッキを編集</button
       >
 
       {#if import.meta.env.MODE === "development"}
         <button
-          class="btn btn-outline btn-secondary mt-4 btn-sm"
+          class="btn-secondary btn-outline btn-sm btn mt-4"
           on:click={getNotesRequest}>ノートのバッファをコンソールに出力</button
         >
       {/if}
       {#if showDelete}
         <button
-          class="btn btn-primary btn-outline btn-block mt-16"
+          class="btn-primary btn-outline btn-block btn mt-16"
           on:click={() => {
             showDelete = false;
           }}>やめる</button
         >
         <button
-          class="btn btn-error btn-block mt-2 mb-16"
+          class="btn-error btn-block btn mb-16 mt-2"
           on:click={deleteRequest}>削除する</button
         >{:else}
         <button
-          class="btn btn-error btn-outline btn-block mt-16 mb-16"
+          class="btn-outline btn-error btn-block btn mb-16 mt-16"
           on:click={() => {
             showDelete = true;
           }}>タイムラインを削除する</button
@@ -210,11 +240,11 @@
         <div class="input-group mt-1">
           <input
             type="text"
-            class="input input-sm input-bordered w-full"
+            class="input-bordered input input-sm w-full"
             bind:value={reaction}
           />
           <button
-            class="btn btn-square btn-error btn-sm fill-error-content"
+            class="btn-error btn-square btn-sm btn fill-error-content"
             on:click={() => deleteReaction(index)}
           >
             <svg
@@ -230,16 +260,16 @@
       {/each}
       <span class="label-text">テキストからインポート</span>
       <textarea
-        class="textarea textarea-bordered"
+        class="textarea-bordered textarea"
         value={JSON.stringify(options.reactionDeck)}
         bind:this={importValue}
       />
       <button
-        class="btn btn-info btn-outline btn-sm btn-block"
+        class="btn-info btn-outline btn-block btn-sm btn"
         on:click={importReactionDeck}>インポート</button
       >
       <button
-        class="btn btn-primay btn-primary btn-block mt-16 mb-24"
+        class="btn-primay btn-primary btn-block btn mb-24 mt-16"
         on:click={() => (showReactionDeck = !showReactionDeck)}
       >
         戻る
