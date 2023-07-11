@@ -90,14 +90,12 @@
   {/if}
 </div>
 {#if files.length > 1}
-  <div class="alert z-10">
-    <div class="-my-2 flex w-full">
-      <button class="btn-sm btn w-1/3" on:click={previousFile}>❮</button>
-      <div class="w-1/3 text-center">
-        {index + 1} / {files.length}
-      </div>
-      <button class="btn-sm btn w-1/3" on:click={nextFile}>❯</button>
+  <div class="alert z-10 flex justify-between">
+    <button class="btn-sm btn -my-2 w-1/3" on:click={previousFile}>❮</button>
+    <div class="-my-1 text-center">
+      {index + 1} / {files.length}
     </div>
+    <button class="btn-sm btn -my-2 w-1/3" on:click={nextFile}>❯</button>
   </div>
 {/if}
 

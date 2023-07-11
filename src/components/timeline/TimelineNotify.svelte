@@ -143,53 +143,54 @@
 
 <div class="card card-compact">
   <div class="card-body h-96 overflow-y-scroll">
-    <ul class="menu bg-base-100">
+    <ul class="menu items-center">
       {#each user.notifyBuffer as notify (notify.id)}
-        <li class="w-full text-ellipsis">
-          <a href={getNotifyLink(notify)} target="_blank" rel="noreferrer">
-            <div class="flex w-full flex-col">
-              <div class="link-hover link flex gap-2">
-                {#if notify.type === "reaction"}
-                  <EmojiParser
-                    localEmojis={user.emojis.length === 0
-                      ? notify.note.emojis
-                      : user.emojis}
-                    text={notify.reaction}
-                    remoteEmojis={notify.note.reactionEmojis}
-                  />
-                {/if}
-                {#if new RegExp("reaction|renote|reply|quote|mention").test(notify.type)}
-                  <MfmLite
-                    text={getNotifyTypeName(notify)}
-                    localEmojis={user.emojis.length === 0
-                      ? notify.note.emojis
-                      : user.emojis}
-                    remoteEmojis={notify.user.emojis}
-                    emojiHeight="h-4"
-                    hostUrl={user.hostUrl}
-                  />
-                {:else}
-                  {getNotifyTypeName(notify)}
-                {/if}
-              </div>
-              {#if new RegExp("reaction|renote|reply|mention|quote|pollEnded").test(notify.type)}
-                <a
-                  href={`https://${user.hostUrl}/notes/${notify.note.id}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <div
-                    class="link-hover card-bordered card link card-compact border-base-content bg-base-100"
-                  >
-                    <div class="card-body -my-2">
-                      {noteText(notify)}
-                    </div>
-                  </div>
-                </a>
+        <li class="w-full">
+          <a
+            href={getNotifyLink(notify)}
+            class="flex w-full flex-col justify-items-stretch"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <!-- TODO:通知の幅をレスポンシブにする -->
+            <div class="link-hover link flex w-full gap-2 justify-self-start">
+              {#if notify.type === "reaction"}
+                <EmojiParser
+                  localEmojis={user.emojis.length === 0
+                    ? notify.note.emojis
+                    : user.emojis}
+                  text={notify.reaction}
+                  remoteEmojis={notify.note.reactionEmojis}
+                />
               {/if}
-              <div class="-mb-2 text-end text-sm">
-                {moment(notify.createdAt).fromNow()}
-              </div>
+              {#if new RegExp("reaction|renote|reply|quote|mention").test(notify.type)}
+                <MfmLite
+                  text={getNotifyTypeName(notify)}
+                  localEmojis={user.emojis.length === 0
+                    ? notify.note.emojis
+                    : user.emojis}
+                  remoteEmojis={notify.user.emojis}
+                  emojiHeight="h-4"
+                  hostUrl={user.hostUrl}
+                />
+              {:else}
+                {getNotifyTypeName(notify)}
+              {/if}
+            </div>
+            {#if new RegExp("reaction|renote|reply|mention|quote|pollEnded").test(notify.type)}
+              <a
+                class="link-hover card-bordered card link card-compact w-full border-base-content bg-base-100"
+                href={`https://${user.hostUrl}/notes/${notify.note.id}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div class="card-body -my-2">
+                  {noteText(notify)}
+                </div>
+              </a>
+            {/if}
+            <div class="-mb-2 w-full text-end text-sm">
+              {moment(notify.createdAt).fromNow()}
             </div>
           </a>
         </li>
