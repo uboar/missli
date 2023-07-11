@@ -14,11 +14,23 @@
   export let collapse = false;
   export let option: TimelineOptions["noteOption"];
 
-  let emojis: UserData["emojis"] =
-    user.emojis.length === 0 ? note.emojis : user.emojis;
-
+  let emojis: UserData["emojis"] = [];
   let showBody = false;
   const dispatch = createEventDispatcher();
+
+  // Calckey対応
+  if (user.emojis.length === 0) {
+    // Misskey v12
+    emojis = note.emojis;
+  } else if (Array.isArray(note.reactionEmojis)) {
+    // Calckey
+    emojis = [...note.emojis, ...note.reactionEmojis];
+    note.reactionEmojis = {};
+  } else {
+    // Misskey v13
+    emojis = user.emojis;
+  }
+
 
   const destroyEmoji = (emojiName: string, reactions: [key: number]) => {
     // console.log("break")
@@ -122,7 +134,8 @@
           <Mfm
             bind:text={note.text}
             hostUrl={user.hostUrl}
-            localEmojis={user.emojis.length === 0 ? note.emojis : user.emojis}
+            localEmojis={emojis}
+            remoteEmojis={note.emojis}
             on:unParsedMfm={() => dispatch("unParsedMfm")}
           />
         {/if}
@@ -149,7 +162,7 @@
       <Mfm
         bind:text={note.cw}
         hostUrl={user.hostUrl}
-        localEmojis={user.emojis.length === 0 ? note.emojis : user.emojis}
+        localEmojis={emojis}
         remoteEmojis={note.emojis}
         on:unParsedMfm={() => dispatch("unParsedMfm")}
       />
@@ -162,7 +175,7 @@
       <Mfm
         bind:text={note.text}
         hostUrl={user.hostUrl}
-        localEmojis={user.emojis.length === 0 ? note.emojis : user.emojis}
+        localEmojis={emojis}
         remoteEmojis={note.emojis}
         on:unParsedMfm={() => dispatch("unParsedMfm")}
       />
