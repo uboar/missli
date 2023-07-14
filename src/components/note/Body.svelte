@@ -14,23 +14,32 @@
   export let collapse = false;
   export let option: TimelineOptions["noteOption"];
 
-  let emojis: UserData["emojis"] = [];
   let showBody = false;
   const dispatch = createEventDispatcher();
 
-  // Calckey対応
-  if (user.emojis.length === 0) {
-    // Misskey v12
-    emojis = note.emojis;
-  } else if (Array.isArray(note.reactionEmojis)) {
-    // Calckey
-    emojis = [...note.emojis, ...note.reactionEmojis];
-    note.reactionEmojis = {};
-  } else {
-    // Misskey v13
-    emojis = user.emojis;
-  }
+  const emojis = () => {
+    // Calckey対応
+    if (user.emojis.length === 0) {
+      // Misskey v12
+      return note.emojis;
+    } else if (Array.isArray(note.reactionEmojis)) {
+      // Calckey
+      note.reactionEmojis = [];
+      return [...note.emojis, ...note.reactionEmojis, ...user.emojis];
+    } else {
+      // Misskey v13
+      return user.emojis;
+    }
+  };
 
+  // Calckey対応
+  if (note.user.emojis && Array.isArray(note.user.emojis)) {
+    let userEmojisBuffer: NoteType["user"]["emojis"] = [];
+    note.user.emojis.forEach((elem) => {
+      userEmojisBuffer[elem.name] = elem.url;
+    });
+    note.user.emojis = userEmojisBuffer;
+  }
 
   const destroyEmoji = (emojiName: string, reactions: [key: number]) => {
     // console.log("break")
@@ -134,7 +143,7 @@
           <Mfm
             bind:text={note.text}
             hostUrl={user.hostUrl}
-            localEmojis={emojis}
+            localEmojis={emojis()}
             remoteEmojis={note.emojis}
             on:unParsedMfm={() => dispatch("unParsedMfm")}
           />
@@ -162,7 +171,7 @@
       <Mfm
         bind:text={note.cw}
         hostUrl={user.hostUrl}
-        localEmojis={emojis}
+        localEmojis={emojis()}
         remoteEmojis={note.emojis}
         on:unParsedMfm={() => dispatch("unParsedMfm")}
       />
@@ -175,7 +184,7 @@
       <Mfm
         bind:text={note.text}
         hostUrl={user.hostUrl}
-        localEmojis={emojis}
+        localEmojis={emojis()}
         remoteEmojis={note.emojis}
         on:unParsedMfm={() => dispatch("unParsedMfm")}
       />
@@ -239,7 +248,7 @@
           {user}
           {name}
           {num}
-          {emojis}
+          emojis={emojis()}
           size={option.reactionSize}
           reactionEmojis={note.reactionEmojis || {}}
           on:destroy={() => {

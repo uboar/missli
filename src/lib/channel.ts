@@ -4,6 +4,7 @@ import type { Connection } from "@misskey-js/streaming";
 import type { TimelineOptions, UserData } from "../types/type";
 import uniqBy from "lodash/uniqBy";
 import remove from "lodash/remove";
+import findIndex from "lodash/findIndex";
 import type { NoteUpdatedEvent } from "@misskey-js/streaming.types";
 
 export const TimelineApiEndpoint: Record<string, keyof Endpoints> = {
@@ -56,7 +57,8 @@ export const initializeTimeline = async (
       );
 
       streamChannel = user.stream.useChannel(
-        timeline.channel
+        timeline.channel,
+        {}
       ) as unknown as Connection;
     } else if (ChannelApiEndPoint[timeline.channel] != null) {
       // チャンネル
@@ -343,21 +345,34 @@ const noteUpdateExecuter = (
         e.body.reaction.indexOf("@.") < 0 &&
         e.body.reaction.indexOf("@") >= 0
       ) {
-        note.reactionEmojis[e.body.emoji.name] = e.body.emoji.url;
-      } else {
-        if (note.reactions[e.body.reaction] == null) {
-          note.reactions[e.body.reaction] = 1;
+        // Calckey
+        if (Array.isArray(note.reactionEmojis)) {
+          if (findIndex(note.emojis, { name: e.body.emoji.name }) < 0) {
+            console.log({
+              name: e.body.emoji.name,
+              url: e.body.emoji.url,
+            });
+            note.emojis.push({
+              name: e.body.emoji.name,
+              url: e.body.emoji.url,
+            });
+          }
         } else {
-          note.reactions[e.body.reaction]++;
+          note.reactionEmojis[e.body.emoji.name] = e.body.emoji.url;
         }
       }
-    } else if (e.type === "unreacted") {
-      if (
-        e.body.reaction.indexOf("@.") < 0 &&
-        e.body.reaction.indexOf("@") >= 0
-      ) {
-        note.reactionEmojis[e.body.emoji.name] = e.body.emoji.url;
+      if (note.reactions[e.body.reaction] == null) {
+        note.reactions[e.body.reaction] = 1;
+      } else {
+        note.reactions[e.body.reaction]++;
       }
+    } else if (e.type === "unreacted") {
+      // if (
+      //   e.body.reaction.indexOf("@.") < 0 &&
+      //   e.body.reaction.indexOf("@") >= 0
+      // ) {
+      //     note.reactionEmojis[e.body.emoji.name] = e.body.emoji.url;
+      // }
       note.reactions[e.body.reaction]--;
     }
   } catch (e) {

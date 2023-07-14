@@ -4,7 +4,7 @@ import m from "moment/min/moment-with-locales.min.js";
 import uniqBy from "lodash/uniqBy";
 import "moment/locale/ja";
 import type { SettingsType, UserData, TimelineOptions } from "../types/type";
-import type { LiteInstanceMetadata } from "@misskey-js/entities";
+import type { LiteInstanceMetadata, Notification } from "@misskey-js/entities";
 
 m.locale("ja");
 
@@ -88,10 +88,14 @@ export const getCookie = async () => {
         usersBuff[i].notifyBuffer = await usersBuff[i].cli.request(
           "i/notifications"
         );
+        usersBuff[i].notifyBuffer.forEach((elem, index) => {
+          usersBuff[i].notifyBuffer[index] = convertNotify(elem);
+        });
         usersBuff[i].notifyUnOpen = false;
 
         usersBuff[i].mainConnection = usersBuff[i].stream.useChannel("main");
         usersBuff[i].mainConnection.on("notification", (notify) => {
+          notify = convertNotify(notify);
           usersBuff[i].notifyBuffer = uniqBy(
             [notify, ...usersBuff[i].notifyBuffer].slice(
               0,
@@ -276,5 +280,40 @@ export const getEmojis = async (user: UserData, ignoreCache = false) => {
     console.error(err);
     user.emojis = [];
     // window.alert("カスタム絵文字一覧の取得に失敗しました。")
+  }
+};
+
+/**
+ *
+ * @param notify
+ * @returns
+ */
+export const convertNotify = (notify: Notification): Notification => {
+  if (notify.user) {
+    notify.user.emojis = convertEmojiBuffer(notify.user.emojis);
+  }
+  console.log(notify.note.reactionEmojis);
+  if (notify.note.reactionEmojis) {
+    notify.note.reactionEmojis = convertEmojiBuffer(notify.note.reactionEmojis);
+  }
+  return notify;
+};
+
+/**
+ *
+ * @param input
+ * @returns
+ */
+const convertEmojiBuffer = (
+  input: UserData["emojis"] | Record<string, string>
+): Record<string, string> => {
+  if (Array.isArray(input)) {
+    let buffer: Record<string, string> = {};
+    input.forEach((elem) => {
+      buffer[elem.name] = elem.url;
+    });
+    return buffer;
+  } else {
+    return input;
   }
 };

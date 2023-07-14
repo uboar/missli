@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Notification } from "@misskey-js/entities";
   import { onMount } from "svelte";
-  import { moment } from "@/lib/userdata";
+  import { convertNotify, moment } from "@/lib/userdata";
   import type { UserData } from "@/types/type";
   import EmojiParser from "@/components/EmojiParser.svelte";
   import MfmLite from "@/components/MfmLite.svelte";
@@ -22,6 +22,7 @@
   onMount(() => {
     if (!user) return;
     user.notifyUnOpen = false;
+    console.log(user.notifyBuffer);
   });
 
   $: getNotifyTypeName = (notify: Notification) => {
@@ -134,6 +135,11 @@
   const moreNotify = async () => {
     const res = await user.cli.request("i/notifications", {
       untilId: user.notifyBuffer[user.notifyBuffer.length - 1].id,
+    });
+
+    //Calckey
+    res.forEach((elem, index) => {
+      res[index] = convertNotify(elem);
     });
 
     user.notifyBuffer = [...user.notifyBuffer, ...res];
