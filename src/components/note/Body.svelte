@@ -209,10 +209,11 @@
 
 {#if note.channelId}
   <a
-    class="link fill-base-content text-xs text-base-content opacity-40"
+    class="link text-xs opacity-40"
     href={`https://${user.hostUrl}/channels/${note.channelId}`}
     target="_blank"
     rel="noreferrer"
+    style="color: {note.channel.color}"
     >{note.channel.name}
   </a>
 {/if}
