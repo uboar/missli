@@ -102,9 +102,7 @@
       timeline.channel = channelTypes[selectedChannel].value;
     }
 
-    console.log(timeline);
     timelines.update((val) => [...val, timeline]);
-    console.log($timelines);
   };
 </script>
 

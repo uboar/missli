@@ -348,10 +348,6 @@ const noteUpdateExecuter = (
         // Calckey
         if (Array.isArray(note.reactionEmojis)) {
           if (findIndex(note.emojis, { name: e.body.emoji.name }) < 0) {
-            console.log({
-              name: e.body.emoji.name,
-              url: e.body.emoji.url,
-            });
             note.emojis.push({
               name: e.body.emoji.name,
               url: e.body.emoji.url,

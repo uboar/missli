@@ -22,7 +22,6 @@
   onMount(() => {
     if (!user) return;
     user.notifyUnOpen = false;
-    console.log(user.notifyBuffer);
   });
 
   $: getNotifyTypeName = (notify: Notification) => {
@@ -139,7 +138,7 @@
 
     //Calckey
     res.forEach((elem, index) => {
-      res[index] = convertNotify(elem);
+      elem = convertNotify(elem);
     });
 
     user.notifyBuffer = [...user.notifyBuffer, ...res];

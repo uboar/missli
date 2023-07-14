@@ -88,8 +88,8 @@ export const getCookie = async () => {
         usersBuff[i].notifyBuffer = await usersBuff[i].cli.request(
           "i/notifications"
         );
-        usersBuff[i].notifyBuffer.forEach((elem, index) => {
-          usersBuff[i].notifyBuffer[index] = convertNotify(elem);
+        usersBuff[i].notifyBuffer.forEach((elem) => {
+          elem = convertNotify(elem);
         });
         usersBuff[i].notifyUnOpen = false;
 
@@ -292,9 +292,12 @@ export const convertNotify = (notify: Notification): Notification => {
   if (notify.user) {
     notify.user.emojis = convertEmojiBuffer(notify.user.emojis);
   }
-  console.log(notify.note.reactionEmojis);
-  if (notify.note.reactionEmojis) {
-    notify.note.reactionEmojis = convertEmojiBuffer(notify.note.reactionEmojis);
+  if (notify.note) {
+    if (notify.note.reactionEmojis) {
+      notify.note.reactionEmojis = convertEmojiBuffer(
+        notify.note.reactionEmojis
+      );
+    }
   }
   return notify;
 };
