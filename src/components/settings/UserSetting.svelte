@@ -3,8 +3,11 @@
 
   let loading = false;
   let selectedUserNum = 0;
+  let isIgnoreCache = false;
 
-  const getSettings = () => {};
+  const getSettings = () => {
+    isIgnoreCache = $users[selectedUserNum].localStorageOptions?.ignoreCache || false;
+  };
 
   const reGetEmojis = async () => {
     loading = true;
@@ -32,7 +35,7 @@
     >
     <input
       type="checkbox"
-      bind:checked={$users[selectedUserNum].localStorageOptions.ignoreCache}
+      bind:checked={isIgnoreCache}
       class="checkbox"
     />
   </label>
