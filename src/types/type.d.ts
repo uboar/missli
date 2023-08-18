@@ -73,5 +73,7 @@ export type TimelineOptions = {
 
 export type SettingsType = {
   theme?: string;
+  insertSpaceBeforeEmoji: boolean;
+  insertSpaceAfterEmoji: boolean;
   notifyBufferNum: number;
 };

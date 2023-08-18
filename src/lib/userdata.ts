@@ -13,6 +13,8 @@ export const moment = m;
 export const settings = writable<SettingsType>({
   theme: "light",
   notifyBufferNum: 100,
+  insertSpaceBeforeEmoji: false,
+  insertSpaceAfterEmoji: true,
 });
 export const users = writable<Array<UserData>>([]);
 export const timelines = writable<Array<TimelineOptions>>([]);

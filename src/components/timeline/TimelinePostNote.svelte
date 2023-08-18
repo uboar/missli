@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Note as NoteType } from "@misskey-js/entities";
+  import { settings } from "@/lib/userdata";
   import { createEventDispatcher, onMount, tick } from "svelte";
   import type {
     PostNote as postNoteType,
@@ -104,7 +105,9 @@
   };
 
   const addEmoji = (e: CustomEvent) => {
+    if ($settings.insertSpaceBeforeEmoji) postNote.text += " ";
     postNote.text += e.detail.replace("@.", "");
+    if ($settings.insertSpaceAfterEmoji) postNote.text += " ";
     updateInput();
   };
 
@@ -121,7 +124,7 @@
   };
 </script>
 
-<div class="card card-compact">
+<div class="card-compact card">
   <div class="card-body">
     {#if replyNote || renoteNote}
       <div class="flex justify-between">
@@ -132,7 +135,7 @@
           <span class="badge badge-accent badge-outline mt-1">🔁リノート</span>
         {/if}
         <button
-          class="btn-warning btn-xs btn fill-warning-content"
+          class="btn btn-warning btn-xs fill-warning-content"
           on:click={deleteAttachNote}
         >
           <svg
@@ -194,7 +197,7 @@
       <div class="form-control flex-1">
         <span class="label-text">公開範囲</span>
         <select
-          class="select-bordered select select-sm"
+          class="select select-bordered select-sm"
           bind:value={postNote.visibility}
         >
           {#each noteVisibilityEnum as noteVisibility (noteVisibility.name)}
@@ -228,13 +231,13 @@
     {#if showCw}
       <input
         type="text"
-        class="input-bordered input input-sm"
+        class="input input-bordered input-sm"
         placeholder="CW"
         bind:value={postNote.cw}
       />
     {/if}
     <textarea
-      class="textarea-bordered textarea"
+      class="textarea textarea-bordered"
       bind:this={focusNoteText}
       bind:value={postNote.text}
       placeholder="ノートする内容を入力して下さい！"
@@ -255,14 +258,14 @@
         </div>
       {:else}
         <button
-          class="btn-outline btn-block btn-xs btn normal-case"
+          class="btn btn-outline btn-xs btn-block normal-case"
           on:click={() => {
             showReactionDeck = true;
           }}>絵文字を追加</button
         >
       {/if}
       <button
-        class="btn-block btn-sm btn {renoteNote
+        class="btn btn-sm btn-block {renoteNote
           ? 'btn-accent'
           : replyNote
           ? 'btn-info'

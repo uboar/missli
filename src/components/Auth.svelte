@@ -6,6 +6,9 @@
   import { Stream, api } from "@misskey-js";
 
   let hostUrl = "";
+  let applicationName = `MissLI${
+    import.meta.env.MODE === "development" ? "_Dev" : ""
+  }_${version}`;
   let busy = false;
 
   onMount(async () => {
@@ -62,9 +65,7 @@
         await fetch("https://www.uuidgenerator.net/api/version4/1")
       ).text();
 
-      const url = `https://${hostUrl}/miauth/${sessionId}?name=MissLI${
-        import.meta.env.MODE === "development" ? "_Dev" : ""
-      }_${version}&permission=write:notes,read:channels,write:channels,read:account,write:account,read:drive,write:drive,read:notifications,write:notifications,write:reactions,write:favorites,read:gallery-likes,write:gallery-likes&callback=${
+      const url = `https://${hostUrl}/miauth/${sessionId}?name=${applicationName}&permission=write:notes,read:channels,write:channels,read:account,write:account,read:drive,write:drive,read:notifications,write:notifications,write:reactions,write:favorites,read:gallery-likes,write:gallery-likes&callback=${
         window.location.origin + window.location.pathname
       }?authed=${encodeURIComponent(hostUrl)}`;
 
@@ -84,9 +85,7 @@
         await fetch("https://www.uuidgenerator.net/api/version4/1")
       ).text();
 
-      const url = `https://${hostUrl}/miauth/${sessionId}?name=MissLI${
-        import.meta.env.MODE === "development" ? "_Dev" : ""
-      }_${version}&permission=write:notes,read:channels,write:channels,read:account,write:account,read:drive,write:drive,read:notifications,write:notifications,write:reactions,write:favorites,read:gallery-likes,write:gallery-likes&callback=${
+      const url = `https://${hostUrl}/miauth/${sessionId}?name=${applicationName}&permission=write:notes,read:channels,write:channels,read:account,write:account,read:drive,write:drive,read:notifications,write:notifications,write:reactions,write:favorites,read:gallery-likes,write:gallery-likes&callback=${
         window.location.origin + window.location.pathname
       }?userdatanum=${index}%26authed=${encodeURIComponent(hostUrl)}`;
 
@@ -137,20 +136,20 @@ v1.2.1以前に本アプリを使用した事がある方は、権限設定が�
   <br />ユーザーデータがありません
 {/if}
 {#each $users as user, index (user.id)}
-  <div class="card card-compact my-2 w-full bg-base-300">
+  <div class="card-compact card my-2 w-full bg-base-300">
     <div class="card-body">
       <div class="card-actions flex">
         <div class="text-l flex-1 font-bold">
           @{user.userName}@{user.hostUrl}
         </div>
         <button
-          class="btn-info btn-sm btn -my-2 {user.isOldVersion
+          class="btn btn-info btn-sm -my-2 {user.isOldVersion
             ? 'btn-disabled'
             : ''}"
           on:click={() => reAuthUser(index)}>再認証</button
         >
         <button
-          class="btn-error btn-sm btn -my-2"
+          class="btn btn-error btn-sm -my-2"
           on:click={() => deleteUser(index)}>連携解除</button
         >
       </div>
@@ -166,11 +165,11 @@ v1.2.1以前に本アプリを使用した事がある方は、権限設定が�
           <h2 class="text-xl font-bold">ユーザーの追加</h2>
           <div class="tabs">
             <button
-              class="tab-bordered tab {selectedTab === 0 ? 'tab-active' : ''}"
+              class="tab tab-bordered {selectedTab === 0 ? 'tab-active' : ''}"
               on:click={() => (selectedTab = 0)}>MiAuth</button
             >
             <button
-              class="tab-bordered tab {selectedTab === 1 ? 'tab-active' : ''}"
+              class="tab tab-bordered {selectedTab === 1 ? 'tab-active' : ''}"
               on:click={() => (selectedTab = 1)}
               >アクセストークンの直接入力</button
             >
@@ -185,22 +184,32 @@ v1.2.1以前に本アプリを使用した事がある方は、権限設定が�
         <p class="text-error">
           サーバー側がAPIにCORS制限を設けている場合、本アプリを用いる事は出来ません。
         </p>
-        <input
-          type="text"
-          class="input"
-          disabled={busy}
-          bind:value={hostUrl}
-          on:keydown={(e) => {
-            if (e.code === "Enter") openMiAuth();
-          }}
-          placeholder="ホストURL"
-          tabindex="0"
-        />
+        <div class="form-control">
+          <span class="label-text">アプリケーション名</span>
+          <input
+            type="text"
+            class="input"
+            bind:value={applicationName}
+            placeholder="アプリケーション名"
+          />
+          <span class="label-text">ホストURL</span>
+          <input
+            type="text"
+            class="input"
+            disabled={busy}
+            bind:value={hostUrl}
+            on:keydown={(e) => {
+              if (e.code === "Enter") openMiAuth();
+            }}
+            placeholder="ホストURL"
+            tabindex="0"
+          />
+        </div>
         <input
           type="submit"
           class={`${
             hostUrl === "" || busy ? "btn-disabled" : ""
-          } btn-primary btn-lg btn`}
+          } btn btn-primary btn-lg`}
           on:click={openMiAuth}
           value={busy ? "セッションID取得中..." : "認証する"}
         />
@@ -236,7 +245,7 @@ v1.2.1以前に本アプリを使用した事がある方は、権限設定が�
             placeholder="アクセストークン"
           />
           <button
-            class="btn-primary btn-block btn-lg btn {hostUrl === '' ||
+            class="btn btn-primary btn-lg btn-block {hostUrl === '' ||
             directToken === '' ||
             directUserId === ''
               ? 'btn-disabled'

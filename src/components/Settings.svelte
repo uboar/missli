@@ -51,7 +51,7 @@
   <div class="tabs">
     {#each tabs as tab, index (tab.value)}
       <button
-        class="tab-bordered tab {selectedTab === tab.value ? 'tab-active' : ''}"
+        class="tab tab-bordered {selectedTab === tab.value ? 'tab-active' : ''}"
         on:click={() => (selectedTab = tab.value)}
       >
         {tab.name}
@@ -63,12 +63,37 @@
   {:else if selectedTab === 1}
     <UserSetting />
   {:else if selectedTab === 2}
-    <span class="label-text">カラーテーマ</span>
-    <select bind:value={$settings.theme} class="select-bordered select w-full">
-      {#each themes as theme}
-        <option>{theme}</option>
-      {/each}
-    </select>
+    <div class="form-control mt-2">
+      <span class="label-text">カラーテーマ</span>
+      <select
+        bind:value={$settings.theme}
+        class="select select-bordered w-full"
+      >
+        {#each themes as theme}
+          <option>{theme}</option>
+        {/each}
+      </select>
+      <label class="label cursor-pointer">
+        <span class="label-text"
+          >カスタム絵文字の挿入時に半角スペースを付与する（前）</span
+        >
+        <input
+          type="checkbox"
+          bind:checked={$settings.insertSpaceBeforeEmoji}
+          class="checkbox"
+        />
+      </label>
+      <label class="label cursor-pointer">
+        <span class="label-text"
+          >カスタム絵文字の挿入時に半角スペースを付与する（後）</span
+        >
+        <input
+          type="checkbox"
+          bind:checked={$settings.insertSpaceAfterEmoji}
+          class="checkbox"
+        />
+      </label>
+    </div>
   {:else if selectedTab === 3}
     <h1 class="text-3xl font-bold">missLI {version}</h1>
     <h2 class="text-lg font-bold">リポジトリ</h2>
