@@ -93,6 +93,16 @@
           class="checkbox"
         />
       </label>
+      <label class="label cursor-pointer">
+        <span class="label-text"
+          >仮想スクロールを有効にする（ノートの表示パフォーマンスが向上しますが、「高さの大きいノートを自動で畳む」機能が正しく動作しなくなります</span
+        >
+        <input
+          type="checkbox"
+          bind:checked={$settings.virtualScrollEnabled}
+          class="checkbox"
+        />
+      </label>
     </div>
   {:else if selectedTab === 3}
     <h1 class="text-3xl font-bold">missLI {version}</h1>

@@ -75,5 +75,6 @@ export type SettingsType = {
   theme?: string;
   insertSpaceBeforeEmoji: boolean;
   insertSpaceAfterEmoji: boolean;
+  virtualScrollEnabled: boolean;
   notifyBufferNum: number;
 };

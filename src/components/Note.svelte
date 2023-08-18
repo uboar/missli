@@ -2,7 +2,7 @@
   import type { Stream } from "@misskey-js";
   import type { Note } from "@misskey-js/entities";
   import { createEventDispatcher, onMount } from "svelte";
-  import { moment } from "@/lib/userdata";
+  import { moment, settings } from "@/lib/userdata";
   import type { UserData, TimelineOptions } from "@/types/type";
   import Body from "@/components/note/Body.svelte";
   import ReactionDeck from "@/components/note/ReactionDeck.svelte";
@@ -55,7 +55,9 @@
 </script>
 
 <div
-  class="card-bordered card w-full bg-base-100 shadow-sm"
+  class="card card-bordered w-full bg-base-100 shadow-sm {$settings.virtualScrollEnabled
+    ? 'v-scroll'
+    : ''}"
   bind:this={noteElement}
   style="border-color: {remoteColor}"
 >
@@ -73,7 +75,7 @@
       <div class="z-10 -mb-1 flex">
         <div class="tooltip basis-1/5" data-tip="返信">
           <button
-            class="btn-ghost btn-block btn-xs btn fill-base-content"
+            class="btn btn-ghost btn-xs btn-block fill-base-content"
             on:click={replyRequest}
           >
             <svg
@@ -88,7 +90,7 @@
         </div>
         <div class="tooltip basis-1/5" data-tip="リノート/引用リノート">
           <button
-            class="btn-ghost btn-block btn-xs btn fill-base-content"
+            class="btn btn-ghost btn-xs btn-block fill-base-content"
             on:click={renoteRequest}
             ><svg
               xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +104,7 @@
         </div>
         <div class="tooltip basis-1/5" data-tip="リアクション">
           <button
-            class="btn-ghost btn-block btn-xs btn fill-base-content"
+            class="btn btn-ghost btn-xs btn-block fill-base-content"
             on:click={() => (showReactionDeck = !showReactionDeck)}
             ><svg
               xmlns="http://www.w3.org/2000/svg"
@@ -146,6 +148,10 @@
 </div>
 
 <style>
+  .v-scroll {
+    content-visibility: auto;
+    contain-intrinsic-size: 100vw 170px;
+  }
   .text-xxs {
     font-size: 0.25rem /* 4px */;
   }

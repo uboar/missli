@@ -10,13 +10,27 @@ m.locale("ja");
 
 export const moment = m;
 
+// store系
+
+/**
+ * 全般設定
+ */
 export const settings = writable<SettingsType>({
   theme: "light",
   notifyBufferNum: 100,
   insertSpaceBeforeEmoji: false,
   insertSpaceAfterEmoji: true,
+  virtualScrollEnabled: false,
 });
+
+/**
+ * ユーザー設定
+ */
 export const users = writable<Array<UserData>>([]);
+
+/**
+ * タイムライン一覧
+ */
 export const timelines = writable<Array<TimelineOptions>>([]);
 
 /**
