@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { version } from "../../package.json";
+  import { version } from "../../../package.json";
   import { onMount } from "svelte";
   import { users, setCookie, deleteUser } from "@/lib/userdata";
   import type { UserData } from "@/types/type";

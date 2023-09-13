@@ -3,7 +3,7 @@
   import "../tailwind.css";
   export let Hst: Hst;
 
-  import Auth from "../components/Auth.svelte";
+  import Auth from "../components/settings/Auth.svelte";
 </script>
 
 <Hst.Story>
