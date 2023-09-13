@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Stream } from "@misskey-js";
-  import type { Note } from "@misskey-js/entities";
+  import type { NoteWrapper } from "@/wrapper/noteWrapper";
   import { createEventDispatcher, onMount } from "svelte";
   import { moment, settings } from "@/lib/userdata";
   import type { UserData, TimelineOptions } from "@/types/type";
@@ -8,7 +8,7 @@
   import ReactionDeck from "@/components/note/ReactionDeck.svelte";
 
   export let user: UserData;
-  export let note: Note;
+  export let note: NoteWrapper;
   export let stream: Stream = null;
   export let timelineOptions: TimelineOptions = null;
   export let compact = false;

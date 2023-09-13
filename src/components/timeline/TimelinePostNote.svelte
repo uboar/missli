@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Note as NoteType } from "@misskey-js/entities";
+  import type { NoteWrapper } from "@/wrapper/noteWrapper";
   import { settings } from "@/lib/userdata";
   import { createEventDispatcher, onMount, tick } from "svelte";
   import type {
@@ -13,8 +13,8 @@
 
   export let postNote: postNoteType;
   export let user: UserData | null = null;
-  export let replyNote: NoteType | null = null;
-  export let renoteNote: NoteType | null = null;
+  export let replyNote: NoteWrapper | null = null;
+  export let renoteNote: NoteWrapper | null = null;
   export let option: TimelineOptions = {
     id: 0,
     noteOption: {
@@ -124,7 +124,7 @@
   };
 </script>
 
-<div class="card-compact card">
+<div class="card card-compact">
   <div class="card-body">
     {#if replyNote || renoteNote}
       <div class="flex justify-between">

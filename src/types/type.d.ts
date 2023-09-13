@@ -1,5 +1,6 @@
 import type { Channels, NoteUpdatedEvent } from "@misskey-js/streaming.types";
 import type { Note, Notification } from "@misskey-js/entities";
+import type { NoteWrapper } from "@/wrapper/noteWrapper";
 import type { Connection } from "@misskey-js/streaming";
 import { Stream, api } from "@misskey-js";
 
@@ -53,11 +54,11 @@ export type TimelineOptions = {
   width?: string;
   showNoteNum?: number;
   bufferNoteNum?: number;
-  initialNotes?: Array<Note>;
+  initialNotes?: Array<NoteWrapper>;
   reactionDeck?: Array<string>;
   isCollapsed?: boolean;
   autoCollapse?: boolean;
-  notesBuffer?: Array<Note>;
+  notesBuffer?: Array<NoteWrapper>;
   lowRate?: boolean;
   noteOption?: {
     mediaHide: boolean;

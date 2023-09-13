@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { Note } from "@misskey-js/entities";
+  import type { NoteWrapper } from "@/wrapper/noteWrapper";
   import type { TimelineOptions } from "@/types/type";
 
-  export let files: Note["files"];
+  export let files: NoteWrapper["files"];
   export let option: TimelineOptions["noteOption"];
 
   $: file = files[index];
@@ -75,7 +75,7 @@
             class="absolute top-0 z-20 grid h-full w-full content-center justify-center"
           >
             <button
-              class="btn-warning btn w-32 shadow-md"
+              class="btn btn-warning w-32 shadow-md"
               on:click={() => (file.isSensitive = false)}>メディアを見る</button
             >
           </div>
@@ -83,7 +83,7 @@
       </div>
     {:else}
       <button
-        class="btn-info btn-block btn-sm btn my-1"
+        class="btn btn-info btn-sm btn-block my-1"
         on:click={() => (mediaHide = false)}>メディアを見る</button
       >
     {/if}
@@ -91,11 +91,11 @@
 </div>
 {#if files.length > 1}
   <div class="alert z-10 flex justify-between">
-    <button class="btn-sm btn -my-2 w-1/3" on:click={previousFile}>❮</button>
+    <button class="btn btn-sm -my-2 w-1/3" on:click={previousFile}>❮</button>
     <div class="-my-1 text-center">
       {index + 1} / {files.length}
     </div>
-    <button class="btn-sm btn -my-2 w-1/3" on:click={nextFile}>❯</button>
+    <button class="btn btn-sm -my-2 w-1/3" on:click={nextFile}>❯</button>
   </div>
 {/if}
 

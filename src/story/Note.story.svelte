@@ -1,12 +1,12 @@
 <script lang="ts">
   import type { Hst } from "@histoire/plugin-svelte";
   import "../tailwind.css";
-  import type { Note as NoteType } from "@misskey-js/entities";
+  import type { NoteWrapper } from "@/wrapper/noteWrapper";
   import Note from "../components/Note.svelte";
   import type { UserData } from "../types/type";
   export let Hst: Hst;
 
-  let note: NoteType = {
+  let note: NoteWrapper = {
     text: `<center>
 Hello $[tada everynyan! 🎉]
 

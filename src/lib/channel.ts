@@ -1,5 +1,5 @@
 import type { Endpoints } from "@misskey-js/api.types";
-import type { Note } from "@misskey-js/entities";
+import type { NoteWrapper } from "@/wrapper/noteWrapper";
 import type { Connection } from "@misskey-js/streaming";
 import type { TimelineOptions, UserData } from "../types/type";
 import uniqBy from "lodash/uniqBy";
@@ -43,7 +43,7 @@ export const initializeTimeline = async (
   subscribedNotesId: Array<string>,
   getNotesNum: number = 10
 ): Promise<Connection> => {
-  let notesBuffer: Array<Note> = [];
+  let notesBuffer: Array<NoteWrapper> = [];
   let streamChannel: Connection = null;
 
   try {
@@ -140,7 +140,7 @@ export const getOldNotes = async (
   untilId: string,
   getNotesNum: number = 10
 ) => {
-  let notesBuffer: Array<Note> = [];
+  let notesBuffer: Array<NoteWrapper> = [];
 
   try {
     if (TimelineApiEndpoint[timeline.channel] != null) {
@@ -245,7 +245,7 @@ export const onNote = (
   user: UserData,
   timeline: TimelineOptions,
   subscribedNotesId: Array<string>,
-  payload: Note
+  payload: NoteWrapper
 ) => {
   if (payload.reactionEmojis == null) payload.reactionEmojis = {};
   timeline.notesBuffer = [payload, ...timeline.notesBuffer];
@@ -263,7 +263,7 @@ export const subscribeNote = (
   user: UserData,
   timeline: TimelineOptions,
   subscribedNotesId: Array<string>,
-  note: Note
+  note: NoteWrapper
 ) => {
   if (!subscribedNotesId.includes(note.id)) {
     user.stream.send("subNote", {
@@ -285,7 +285,7 @@ export const unSubscribeNote = (
   user: UserData,
   timeline: TimelineOptions,
   subscribedNotesId: Array<string>,
-  note: Note
+  note: NoteWrapper
 ) => {
   user.stream.send("unsubNote", {
     id: note.id,
@@ -308,7 +308,7 @@ export const notesUpdate = (
   e: NoteUpdatedEvent
 ) => {
   if (e.type === "deleted") {
-    remove(timeline.notesBuffer, (v: Note) => v.id === e.id);
+    remove(timeline.notesBuffer, (v: NoteWrapper) => v.id === e.id);
     unSubscribeNote(user, timeline, subscribedNotesId, e.id);
   } else {
     timeline.notesBuffer.forEach((v, index, arr) => {
@@ -322,7 +322,7 @@ const noteUpdateExecuter = (
   timeline: TimelineOptions,
   subscribedNotesId: Array<string>,
   e: NoteUpdatedEvent,
-  note: Note
+  note: NoteWrapper
 ): boolean => {
   let renoteStatus = false;
 

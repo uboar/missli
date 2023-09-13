@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Note as NoteType } from "@misskey-js/entities";
+  import type { NoteWrapper } from "@/wrapper/noteWrapper";
   import type { TimelineOptions, UserData } from "@/types/type";
   import User from "@/components/note/User.svelte";
   import Mfm from "@/components/Mfm.svelte";
@@ -8,7 +8,7 @@
   import { createEventDispatcher, onMount } from "svelte";
 
   export let user: UserData;
-  export let note: NoteType;
+  export let note: NoteWrapper;
   export let compact = false;
   export let renoteCount = 0;
   export let collapse = false;
@@ -34,7 +34,7 @@
 
   // Calckey対応
   if (note.user.emojis && Array.isArray(note.user.emojis)) {
-    let userEmojisBuffer: NoteType["user"]["emojis"] = [];
+    let userEmojisBuffer: NoteWrapper["user"]["emojis"] = [];
     note.user.emojis.forEach((elem) => {
       userEmojisBuffer[elem.name] = elem.url;
     });

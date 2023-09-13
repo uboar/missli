@@ -6,8 +6,7 @@
     TimelineOptions as Option,
     PostNote as postNoteType,
   } from "../types/type";
-
-  import type { Note as NoteType } from "@misskey-js/entities";
+  import type {NoteWrapper} from "@/wrapper/noteWrapper"
   import type { Connection } from "@misskey-js/streaming";
   import { timelines, settings } from "@/lib/userdata";
   import TimelineOptions from "@/components/timeline/TimelineOptions.svelte";
@@ -156,7 +155,7 @@
     /**
      * ノートの受信
      */
-    streamChannel.on("note", async (payload: NoteType) => {
+    streamChannel.on("note", async (payload: NoteWrapper) => {
       onNote(user, options, subscribedNotesId, payload);
       options.notesBuffer = options.notesBuffer;
       if (options.isCollapsed) unRead = true;
@@ -229,7 +228,7 @@
    * @description リノートボタンが押された時
    * @param note
    */
-  const renoteRequest = async (note: NoteType) => {
+  const renoteRequest = async (note: NoteWrapper) => {
     renoteNote = null;
     replyNote = null;
     await tick();
@@ -244,13 +243,13 @@
     }
     showNav = NAV.note;
   };
-  let renoteNote: NoteType | null = null;
+  let renoteNote: NoteWrapper | null = null;
 
   /**
    * @description 返信ボタンが押された時
    * @param note
    */
-  const replyRequest = async (note: NoteType) => {
+  const replyRequest = async (note: NoteWrapper) => {
     renoteNote = null;
     replyNote = null;
     await tick();
@@ -280,7 +279,7 @@
     }
   };
 
-  let replyNote: NoteType | null = null;
+  let replyNote: NoteWrapper | null = null;
 
   $: iconSize = options.width !== "12rem" ? "8" : "4";
 </script>
