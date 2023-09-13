@@ -220,12 +220,14 @@ let userLocal = JSON.parse(localStorage.getItem("users")) as unknown as Array<
 >;
 
 if (settingsLocal) {
-  settingsLocal.globalWordMute = settingsLocal.globalWordMute.map((val) => {
-    return {
-      str: val.str,
-      regexp: new RegExp(val.regexp),
-    };
-  });
+  if (settingsLocal.globalWordMute) {
+    settingsLocal.globalWordMute = settingsLocal.globalWordMute.map((val) => {
+      return {
+        str: val.str,
+        regexp: new RegExp(val.regexp),
+      };
+    });
+  }
   settings.set({ ...get(settings), ...settingsLocal });
 }
 if (timelineLocal) timelines.set(timelineLocal);
