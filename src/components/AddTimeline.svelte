@@ -2,6 +2,7 @@
   import { TimelineApiEndpoint } from "@/lib/channel";
   import { users, timelines } from "@/lib/userdata";
   import type { TimelineOptions } from "@/types/type";
+  import uniqBy from "lodash/uniqBy";
 
   let selectedChannel = 0;
   let selectedUserNum = 0;
@@ -24,12 +25,18 @@
     try {
       if (channelTypes[selectedChannel].value === "channel") {
         // チャンネル
-        const buffer = await $users[selectedUserNum].cli.request(
+        const followedBuffer = await $users[selectedUserNum].cli.request(
           "channels/followed",
           {
             limit: 100,
           }
         );
+        const favoritedBuffer = await $users[selectedUserNum].cli.request(
+          "channels/my-favorites"
+        );
+
+        const buffer = uniqBy([...followedBuffer, ...favoritedBuffer], "id")
+
         userChannels = buffer.map((v) => {
           return { name: v.name, id: v.id };
         });
