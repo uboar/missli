@@ -73,4 +73,14 @@
       class="checkbox"
     />
   </label>
+  <label class="label cursor-pointer">
+    <span class="label-text"
+      >タイムラインを一番下までスクロールした時に、自動で古いノートを取得する</span
+    >
+    <input
+      type="checkbox"
+      bind:checked={$settings.autoGetOldNotes}
+      class="checkbox"
+    />
+  </label>
 </div>

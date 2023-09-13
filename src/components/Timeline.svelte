@@ -9,7 +9,7 @@
 
   import type { Note as NoteType } from "@misskey-js/entities";
   import type { Connection } from "@misskey-js/streaming";
-  import { timelines } from "@/lib/userdata";
+  import { timelines, settings } from "@/lib/userdata";
   import TimelineOptions from "@/components/timeline/TimelineOptions.svelte";
   import TimelinePostNote from "@/components/timeline/TimelinePostNote.svelte";
   import TimelineNotify from "@/components/timeline/TimelineNotify.svelte";
@@ -265,6 +265,21 @@
     }
     showNav = NAV.note;
   };
+
+  /**
+   * @description 一番下までスクロールした際に自動で次のノートを取得する
+   */
+  const autoGet = () => {
+    if ($settings.autoGetOldNotes) {
+      if (
+        scrollPos.scrollTop >=
+        scrollPos.scrollHeight - scrollPos.clientHeight
+      ) {
+        moreNote();
+      }
+    }
+  };
+
   let replyNote: NoteType | null = null;
 
   $: iconSize = options.width !== "12rem" ? "8" : "4";
@@ -278,7 +293,7 @@
     <div class="absolute z-10 flex w-full justify-center">
       <div class="tooltip tooltip-bottom" data-tip={getTimelineTip()}>
         <button
-          class="btn-outline btn-square btn-xs btn mx-3 my-1 bg-base-100"
+          class="btn btn-square btn-outline btn-xs mx-3 my-1 bg-base-100"
           style="color: {options.color}; fill:{options.color}"
         >
           <svg
@@ -290,7 +305,7 @@
       </div>
       <div class="flex w-full flex-col">
         <button
-          class="btn-outline btn-block btn-xs btn my-1 bg-base-100 normal-case"
+          class="btn btn-outline btn-xs btn-block my-1 bg-base-100 normal-case"
           style="color: {options.color}"
           on:click={() => (scrollPos.scrollTop = 0)}
         >
@@ -299,7 +314,7 @@
       </div>
       <div class="tooltip tooltip-bottom" data-tip="タイムラインを畳む">
         <button
-          class="btn-outline btn-square btn-xs btn mx-3 my-1 bg-base-100"
+          class="btn btn-square btn-outline btn-xs mx-3 my-1 bg-base-100"
           style="color: {options.color}"
           on:click={() => (options.isCollapsed = true)}
         >
@@ -310,6 +325,7 @@
     <div
       class="timeline-body absolute z-0 inline-flex h-full w-full overflow-x-hidden overflow-y-scroll overscroll-y-none overscroll-x-auto pt-8"
       bind:this={scrollPos}
+      on:scroll={autoGet}
       style:--color={options.color + "20"}
     >
       {#if !errFlg}
@@ -344,7 +360,7 @@
               </div>
             {/each}
             <button
-              class="btn-secondary btn-block btn my-2"
+              class="btn btn-secondary btn-block my-2"
               on:click={() => {
                 scrollPos.scrollTop = 0;
                 beginNotes = 0;
@@ -352,13 +368,13 @@
             >
             {#if options.notesBuffer.length > options.showNoteNum && options.notesBuffer.length - options.showNoteNum > beginNotes}
               <button
-                class="btn-primary btn-block btn my-2"
+                class="btn btn-primary btn-block my-2"
                 on:click={() => {
                   beginNotes += options.showNoteNum / 2;
                 }}>もっと表示</button
               >
             {:else}
-              <button class="btn-primary btn-block btn my-2" on:click={moreNote}
+              <button class="btn btn-primary btn-block my-2" on:click={moreNote}
                 >もっと表示(追加読み込み)</button
               >{/if}
             <div class="pt-16" />
@@ -395,7 +411,7 @@
         <div class="btn-group w-full">
           <!-- 通知ボタン -->
           <button
-            class="btn-outline btn tooltip w-1/3 fill-base-content hover:fill-base-100"
+            class="btn btn-outline tooltip w-1/3 fill-base-content hover:fill-base-100"
             data-tip={showNav === NAV.notify ? "閉じる" : "通知"}
             on:click={() =>
               (showNav = showNav === NAV.notify ? NAV.none : NAV.notify)}
@@ -427,7 +443,7 @@
           </button>
           <!-- ノートボタン -->
           <button
-            class="btn-primary btn tooltip w-1/3 fill-base-100"
+            class="btn btn-primary tooltip w-1/3 fill-base-100"
             on:click={() =>
               (showNav = showNav === NAV.note ? NAV.none : NAV.note)}
             data-tip={showNav === NAV.note ? "閉じる" : "ノート"}
@@ -445,7 +461,7 @@
           </button>
           <!-- リンクボタン -->
           <button
-            class="btn-outline btn tooltip w-1/6 fill-base-content hover:fill-base-100"
+            class="btn btn-outline tooltip w-1/6 fill-base-content hover:fill-base-100"
             data-tip={showNav === NAV.links ? "閉じる" : "リンク"}
             on:click={() =>
               (showNav = showNav === NAV.links ? NAV.none : NAV.links)}
@@ -463,7 +479,7 @@
           </button>
           <!-- 設定ボタン -->
           <button
-            class="btn-outline btn tooltip w-1/6 fill-base-content hover:fill-base-100"
+            class="btn btn-outline tooltip w-1/6 fill-base-content hover:fill-base-100"
             data-tip={showNav === NAV.settings
               ? "閉じる"
               : "タイムラインの設定"}
@@ -494,7 +510,7 @@
       data-tip="タイムラインを開く"
     >
       <button
-        class="btn-outline btn-square btn-xs btn mt-1"
+        class="btn btn-square btn-outline btn-xs mt-1"
         style="color: {options.color};"
         on:click={() => {
           options.isCollapsed = false;
@@ -514,7 +530,7 @@
         </span>
       {/if}
       <button
-        class="btn-outline no-animation btn-xs btn normal-case"
+        class="btn btn-outline no-animation btn-xs normal-case"
         style="color: {options.color}; width: 75vh"
         on:click={() => {
           options.isCollapsed = false;

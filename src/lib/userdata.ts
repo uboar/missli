@@ -21,6 +21,7 @@ export const settings = writable<SettingsType>({
   insertSpaceBeforeEmoji: false,
   insertSpaceAfterEmoji: true,
   virtualScrollEnabled: false,
+  autoGetOldNotes: true,
 });
 
 /**

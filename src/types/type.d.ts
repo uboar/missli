@@ -77,4 +77,5 @@ export type SettingsType = {
   insertSpaceAfterEmoji: boolean;
   virtualScrollEnabled: boolean;
   notifyBufferNum: number;
+  autoGetOldNotes: boolean;
 };
