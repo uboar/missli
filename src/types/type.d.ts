@@ -79,4 +79,13 @@ export type SettingsType = {
   virtualScrollEnabled: boolean;
   notifyBufferNum: number;
   autoGetOldNotes: boolean;
+  showMutedInfo: boolean;
+  globalUserMute: Array<{
+    username: string;
+    host: string;
+  }>;
+  globalWordMute: Array<{
+    regexp: RegExp;
+    str: string;
+  }>;
 };

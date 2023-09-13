@@ -3,6 +3,7 @@
   import UserSetting from "@/components/settings/UserSetting.svelte";
   import GeneralSetting from "./settings/GeneralSetting.svelte";
   import About from "./settings/About.svelte";
+  import GlobalMuteSetting from "./settings/GlobalMuteSetting.svelte";
 
   let selectedTab = 0;
 
@@ -10,7 +11,8 @@
     { name: "連携設定", value: 0 },
     { name: "ユーザー毎の設定", value: 1 },
     { name: "全般設定", value: 2 },
-    { name: "missLIについて", value: 3 },
+    { name: "グローバルミュート設定", value: 3 },
+    { name: "missLIについて", value: 4 },
   ];
 </script>
 
@@ -32,6 +34,8 @@
   {:else if selectedTab === 2}
     <GeneralSetting />
   {:else if selectedTab === 3}
+    <GlobalMuteSetting />
+  {:else if selectedTab === 4}
     <About />
   {/if}
 </div>

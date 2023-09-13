@@ -22,6 +22,9 @@ export const settings = writable<SettingsType>({
   insertSpaceAfterEmoji: true,
   virtualScrollEnabled: false,
   autoGetOldNotes: true,
+  showMutedInfo: false,
+  globalUserMute: [],
+  globalWordMute: [],
 });
 
 /**
@@ -216,7 +219,15 @@ let userLocal = JSON.parse(localStorage.getItem("users")) as unknown as Array<
   UserData["localStorageOptions"]
 >;
 
-if (settingsLocal) settings.set({ ...get(settings), ...settingsLocal });
+if (settingsLocal) {
+  settingsLocal.globalWordMute = settingsLocal.globalWordMute.map((val) => {
+    return {
+      str: val.str,
+      regexp: new RegExp(val.regexp),
+    };
+  });
+  settings.set({ ...get(settings), ...settingsLocal });
+}
 if (timelineLocal) timelines.set(timelineLocal);
 if (!userLocal) userLocal = [];
 

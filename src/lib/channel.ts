@@ -6,6 +6,8 @@ import uniqBy from "lodash/uniqBy";
 import remove from "lodash/remove";
 import findIndex from "lodash/findIndex";
 import type { NoteUpdatedEvent } from "@misskey-js/streaming.types";
+import { settings } from "./userdata";
+import { get } from "svelte/store";
 
 export const TimelineApiEndpoint: Record<string, keyof Endpoints> = {
   globalTimeline: "notes/global-timeline",
@@ -394,4 +396,58 @@ export const fixChannelData = (timeline: TimelineOptions): TimelineOptions => {
   }
 
   return timeline;
+};
+
+/**
+ * @description ノートがグローバルミュート対象かどうかを判別する
+ * @param note
+ */
+export const isMuted = (note: NoteWrapper, hostUrl: string): boolean => {
+  const { globalUserMute, globalWordMute } = get(settings);
+  if (globalUserMute.length > 0) {
+    // ユーザーミュート判定
+    const userMuteTest = globalUserMute.every((val) => {
+      if (
+        val.username === note.user.username &&
+        (val.host === note.user.host || val.host === hostUrl)
+      )
+        return false;
+
+      // メンション
+      if (note.text) {
+        if (val.host === hostUrl) {
+          if (note.text.indexOf("@" + val.username) >= 0) return false;
+        } else {
+          if (note.text.indexOf("@" + val.username + "@" + val.host) >= 0)
+            return false;
+        }
+      }
+
+      return true;
+    });
+
+    if (!userMuteTest) return true;
+  }
+
+  if (globalWordMute.length > 0 && note.text) {
+    // ワードミュート判定
+    const wordMuteTest = globalWordMute.every((val) => {
+      if (note.text.match(val.regexp)) return false;
+      if (note.cw && note.cw.match(val.regexp)) return false;
+      return true;
+    });
+    if (!wordMuteTest) return true;
+  }
+
+  // リノート
+  if (note.renote) {
+    if (isMuted(note.renote, hostUrl)) return true;
+  }
+
+  // リプライ
+  if (note.reply) {
+    if (isMuted(note.reply, hostUrl)) return true;
+  }
+
+  return false;
 };
