@@ -63,6 +63,7 @@
   {:else if selectedTab === 1}
     <UserSetting />
   {:else if selectedTab === 2}
+    <h1 class="mb-2 text-2xl font-bold">全般設定</h1>
     <div class="form-control mt-2">
       <span class="label-text">カラーテーマ</span>
       <select
@@ -105,7 +106,7 @@
       </label>
     </div>
   {:else if selectedTab === 3}
-    <h1 class="text-3xl font-bold">missLI {version}</h1>
+    <h1 class="mb-2 text-2xl font-bold">missLI {version}</h1>
     <h2 class="text-lg font-bold">リポジトリ</h2>
     <a
       class="link-accent link"

@@ -6,7 +6,8 @@
   let isIgnoreCache = false;
 
   const getSettings = () => {
-    isIgnoreCache = $users[selectedUserNum].localStorageOptions?.ignoreCache || false;
+    isIgnoreCache =
+      $users[selectedUserNum].localStorageOptions?.ignoreCache || false;
   };
 
   const reGetEmojis = async () => {
@@ -17,11 +18,11 @@
 </script>
 
 <div>
-  <h1 class="text-2xl">ユーザー毎の設定</h1>
+  <h1 class="mb-2 text-2xl font-bold">ユーザー毎の設定</h1>
   <span class="label-text">ユーザー</span>
   <select
     bind:value={selectedUserNum}
-    class="select-bordered select mb-4 w-full"
+    class="select select-bordered mb-4 w-full"
     on:change={getSettings}
   >
     {#each $users as user, index (user.id)}
@@ -33,14 +34,10 @@
     <span class="label-text"
       >カスタム絵文字データを常に最新にする(起動時間が長くなります)</span
     >
-    <input
-      type="checkbox"
-      bind:checked={isIgnoreCache}
-      class="checkbox"
-    />
+    <input type="checkbox" bind:checked={isIgnoreCache} class="checkbox" />
   </label>
   <button
-    class="btn-secondary btn-block btn mt-4"
+    class="btn btn-secondary btn-block mt-4"
     disabled={loading}
     on:click={reGetEmojis}>カスタム絵文字データの再取得</button
   >
